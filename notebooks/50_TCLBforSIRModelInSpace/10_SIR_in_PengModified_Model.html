@@ -1,0 +1,2003 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Notes on LBM dt in nonlinear reactions &#8212; Modelling of epidemic spreading with Lattice Boltzmann Method</title>
+    
+  <link href="../../_static/css/theme.css" rel="stylesheet">
+  <link href="../../_static/css/index.ff1ffe594081f20da1ef19478df9384b.css" rel="stylesheet">
+
+    
+  <link rel="stylesheet"
+    href="../../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    
+      
+
+    
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-book-theme.css?digest=c3fdc42140077d1ad13ad2f1588a4309" />
+    <link rel="stylesheet" type="text/css" href="../../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/panels-main.c949a650a448cc0ae9fd3441c0e17fb0.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/panels-variables.06eb56fa6e07937060861dad626602ad.css" />
+    
+  <link rel="preload" as="script" href="../../_static/js/index.be7d3bbb2ef33a8344ce.js">
+
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/togglebutton.js"></script>
+    <script src="../../_static/clipboard.min.js"></script>
+    <script src="../../_static/copybutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <script src="../../_static/sphinx-book-theme.12a9622fbb08dcb3a2a40b2c02b83a57.js"></script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script async="async" src="https://unpkg.com/thebe@0.5.1/lib/index.js"></script>
+    <script>
+        const thebe_selector = ".thebe"
+        const thebe_selector_input = "pre"
+        const thebe_selector_output = ".output"
+    </script>
+    <script async="async" src="../../_static/sphinx-thebe.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="prev" title="First shot: spatially variable SIR model with uniform IC" href="../40_IntroTCLB/15_d2q9_diffusion_SpatialSIR_model.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="None">
+    
+
+    <!-- Google Analytics -->
+    
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<div class="col-12 col-md-3 bd-sidebar site-navigation show" id="site-navigation">
+    
+        <div class="navbar-brand-box">
+    <a class="navbar-brand text-wrap" href="../../index.html">
+      
+        <!-- `logo` is deprecated in Sphinx 4.0, so remove this when we stop supporting 3 -->
+        
+      
+      
+      <img src="../../_static/cfd-go.png" class="logo" alt="logo">
+      
+      
+      <h1 class="site-logo" id="site-title">Modelling of epidemic spreading with Lattice Boltzmann Method</h1>
+      
+    </a>
+</div><form class="bd-search d-flex align-items-center" action="../../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item active">
+        <p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  SIR 0D
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../20_SIR_0D/part1_SIR_0D_SOLUTION.html">
+   The simplest, SIR model
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../20_SIR_0D/part2_SIR_0D_stability_SOLUTION.html">
+   Under which conditions one may be lucky enough to not get infected?
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../20_SIR_0D/part3_SIR_0D_streamlines_SOLUTION.html">
+   Plotting a vector field
+  </a>
+ </li>
+</ul>
+<p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Diffusion FD
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../25_diffusion_FD/part1_diffusion_and_convolution_SOLUTION.html">
+   Diffusion part 1: the fundamental solution
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../25_diffusion_FD/part2_diffusion_matrix_approach_SOLUTION.html">
+   Diffusion part 2: matrix approach; implicit and explicit scheme
+  </a>
+ </li>
+</ul>
+<p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  SIR 1D
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../30_SIRModelInSpace/part1_SIR_1D_SOLUTION.html">
+   The simple spatial SIR model
+  </a>
+ </li>
+</ul>
+<p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Introduction to TCLB solver
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../40_IntroTCLB/10_SimpleDiffusion.html">
+   Diffusion equation in TCLB solver
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../40_IntroTCLB/11_Dispersion.html">
+   Prepare FD and LBM solution
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../40_IntroTCLB/15_d2q9_diffusion_SpatialSIR_model.html">
+   First shot: spatially variable SIR model with uniform IC
+  </a>
+ </li>
+</ul>
+<p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Solving spatial SIR system in TCLB
+ </span>
+</p>
+<ul class="current nav bd-sidenav">
+ <li class="toctree-l1 current active">
+  <a class="current reference internal" href="#">
+   Notes on LBM dt in nonlinear reactions
+  </a>
+ </li>
+</ul>
+
+    </div>
+</nav> <!-- To handle the deprecated key -->
+
+<div class="navbar_extra_footer">
+  Powered by <a href="https://jupyterbook.org">Jupyter Book</a>
+</div>
+
+</div>
+
+
+          
+
+
+          
+<main class="col py-md-3 pl-md-4 bd-content overflow-auto" role="main">
+    
+    <div class="topbar container-xl fixed-top">
+    <div class="topbar-contents row">
+        <div class="col-12 col-md-3 bd-topbar-whitespace site-navigation show"></div>
+        <div class="col pl-md-4 topbar-main">
+            
+            <button id="navbar-toggler" class="navbar-toggler ml-0" type="button" data-toggle="collapse"
+                data-toggle="tooltip" data-placement="bottom" data-target=".site-navigation" aria-controls="navbar-menu"
+                aria-expanded="true" aria-label="Toggle navigation" aria-controls="site-navigation"
+                title="Toggle navigation" data-toggle="tooltip" data-placement="left">
+                <i class="fas fa-bars"></i>
+                <i class="fas fa-arrow-left"></i>
+                <i class="fas fa-arrow-up"></i>
+            </button>
+            
+            
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn" aria-label="Download this page"><i
+            class="fas fa-download"></i></button>
+
+    <div class="dropdown-buttons">
+        <!-- ipynb file if we had a myst markdown file -->
+        
+        <!-- Download raw file -->
+        <a class="dropdown-buttons" href="../../_sources/notebooks/50_TCLBforSIRModelInSpace/10_SIR_in_PengModified_Model.ipynb"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Download source file" data-toggle="tooltip"
+                data-placement="left">.ipynb</button></a>
+        <!-- Download PDF via print -->
+        <button type="button" id="download-print" class="btn btn-secondary topbarbtn" title="Print to PDF"
+            onClick="window.print()" data-toggle="tooltip" data-placement="left">.pdf</button>
+    </div>
+</div>
+
+            <!-- Source interaction buttons -->
+
+            <!-- Full screen (wrap in <a> to have style consistency -->
+
+<a class="full-screen-button"><button type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip"
+        data-placement="bottom" onclick="toggleFullScreen()" aria-label="Fullscreen mode"
+        title="Fullscreen mode"><i
+            class="fas fa-expand"></i></button></a>
+
+            <!-- Launch buttons -->
+
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn"
+        aria-label="Launch interactive content"><i class="fas fa-rocket"></i></button>
+    <div class="dropdown-buttons">
+        
+        <a class="binder-button" href="https://mybinder.org/v2/gh/CFD-GO/TCLB_Workshop_2021/master?urlpath=tree/mini_book/notebooks/50_TCLBforSIRModelInSpace/10_SIR_in_PengModified_Model.ipynb"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Launch Binder" data-toggle="tooltip"
+                data-placement="left"><img class="binder-button-logo"
+                    src="../../_static/images/logo_binder.svg"
+                    alt="Interact on binder">Binder</button></a>
+        
+        
+        
+        
+    </div>
+</div>
+
+        </div>
+
+        <!-- Table of contents -->
+        <div class="d-none d-md-block col-md-2 bd-toc show">
+            
+            <div class="tocsection onthispage pt-5 pb-3">
+                <i class="fas fa-list"></i> Contents
+            </div>
+            <nav id="bd-toc-nav" aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#">
+   Notes on LBM dt in nonlinear reactions
+  </a>
+  <ul class="visible nav section-nav flex-column">
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#d2q9-reaction-diffusion-system-sir-modifiedpeng">
+     d2q9_reaction_diffusion_system_SIR_ModifiedPeng
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#we-could-use-build-in-ivp-solvers-for-such-prepared-stencil">
+     We could use build-in IVP solvers for such prepared stencil
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#explicit-euler-and-rk45-solutions-are-close-to-identical">
+   Explicit Euler and RK45 solutions are close-to-identical
+  </a>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#let-s-build-lbm-solution-using-tclb-and-d2q9-reaction-diffusion-system-sir-modifiedpeng-model">
+   Let’s build LBM solution using TCLB and
+   <em>
+    d2q9_reaction_diffusion_system_SIR_ModifiedPeng
+   </em>
+   model
+  </a>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#we-could-also-compare-evolution-of-sir-variables-at-point-in-space">
+   We could also compare evolution of SIR variables at point in space
+  </a>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#read-wall-map-into-tclb">
+   Read “wall” map into TCLB
+  </a>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#we-will-use-tclb-to-blurr-image-a-little-while-obeying-bc">
+   We will use TCLB to blurr image a little, while obeying BC
+  </a>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#modified-sir-model-by-peng">
+   Modified SIR model by Peng
+  </a>
+  <ul class="visible nav section-nav flex-column">
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id1">
+     d2q9_reaction_diffusion_system_SIR_ModifiedPeng
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#simple-xml-example">
+     Simple XML example
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#let-s-embed-it-all-in-function-call">
+   Let’s embed it all in function call
+  </a>
+ </li>
+</ul>
+
+            </nav>
+        </div>
+    </div>
+</div>
+    <div id="main-content" class="row">
+        <div class="col-12 col-md-9 pl-md-3 pr-md-0">
+        
+              <div>
+                
+  <div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">h5py</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">CLB.CLBXMLWriter</span> <span class="k">as</span> <span class="nn">CLBXML</span>   
+<span class="kn">import</span> <span class="nn">tempfile</span>
+<span class="kn">import</span> <span class="nn">scipy.optimize</span> <span class="k">as</span> <span class="nn">so</span>
+<span class="kn">from</span> <span class="nn">display_xml</span> <span class="kn">import</span> <span class="n">XML</span>
+<span class="kn">import</span> <span class="nn">sympy</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="tex2jax_ignore mathjax_ignore section" id="notes-on-lbm-dt-in-nonlinear-reactions">
+<h1>Notes on LBM dt in nonlinear reactions<a class="headerlink" href="#notes-on-lbm-dt-in-nonlinear-reactions" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="d2q9-reaction-diffusion-system-sir-modifiedpeng">
+<h2>d2q9_reaction_diffusion_system_SIR_ModifiedPeng<a class="headerlink" href="#d2q9-reaction-diffusion-system-sir-modifiedpeng" title="Permalink to this headline">¶</a></h2>
+<p>or the WSIR model, aleready referenced in this workshop</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\frac{\partial}{\partial t} W = \beta_W \left[\frac{r^2}{8}W + (I-W) \right] \\
+\frac{\partial}{\partial t} S = - \beta \frac{S}{N}W\\
+\frac{\partial}{\partial t} I = \beta \frac{S}{N}W - \gamma I \\
+\frac{\partial}{\partial t} R = \gamma I
+\end{split}\]</div>
+<p><span class="math notranslate nohighlight">\( t = \tilde{t}*\delta t \)</span></p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\frac{\partial}{\partial \tilde{t}} W = \frac{\beta_W}{\delta t} \left[\frac{r^2}{8}W + (I-W) \right] \\
+\frac{\partial}{\partial \tilde{t}} S = - \frac{\beta}{\delta t}\frac{S}{N}W\\
+\frac{\partial}{\partial \tilde{t}} I = \frac{\beta}{\delta t} \frac{S}{N}W - \gamma I \\
+\frac{\partial}{\partial \tilde{t}} R = \frac{\gamma}{\delta t} I
+\end{split}\]</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">sys</span>
+<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;..&quot;</span><span class="p">)</span>
+<span class="kn">from</span> <span class="nn">utils.sir_plot_utils</span> <span class="kn">import</span> <span class="o">*</span>
+
+<span class="k">def</span> <span class="nf">WSIR_1D_FD</span><span class="p">(</span><span class="n">S</span><span class="p">,</span> <span class="n">I</span><span class="p">,</span> <span class="n">R</span><span class="p">,</span> <span class="n">nx</span><span class="p">,</span> <span class="n">dx</span><span class="p">,</span> <span class="n">r0</span><span class="p">,</span> <span class="n">beta_sir</span><span class="p">,</span> <span class="n">gamma_sir</span><span class="p">,</span> <span class="n">nt</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="n">beta_W</span><span class="o">=</span><span class="mf">1e2</span><span class="p">):</span>
+    <span class="n">W</span> <span class="o">=</span> <span class="n">I</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+    <span class="n">N</span> <span class="o">=</span> <span class="n">S</span> <span class="o">+</span> <span class="n">I</span> <span class="o">+</span> <span class="n">R</span>
+    <span class="n">c_ind</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">nx</span><span class="p">)</span>
+    <span class="n">l_ind</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">roll</span><span class="p">(</span><span class="n">c_ind</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">r_ind</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">roll</span><span class="p">(</span><span class="n">c_ind</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nt</span><span class="p">):</span>  <span class="c1"># iterate through time</span>
+        <span class="n">lap_W</span> <span class="o">=</span> <span class="p">(</span><span class="n">W</span><span class="p">[</span><span class="n">l_ind</span><span class="p">]</span> <span class="o">-</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">W</span><span class="p">[</span><span class="n">c_ind</span><span class="p">]</span> <span class="o">+</span> <span class="n">W</span><span class="p">[</span><span class="n">r_ind</span><span class="p">])</span> <span class="o">/</span> <span class="n">dx</span> <span class="o">**</span> <span class="mi">2</span>
+        <span class="n">qW_spatial</span> <span class="o">=</span> <span class="p">(</span><span class="n">r0</span> <span class="o">*</span> <span class="n">r0</span> <span class="o">/</span> <span class="mf">8.</span><span class="p">)</span><span class="o">*</span><span class="n">lap_W</span>
+        <span class="c1"># qW_spatial = np.zeros(nx)</span>
+
+        <span class="n">qW</span> <span class="o">=</span> <span class="n">dt</span> <span class="o">*</span> <span class="n">beta_W</span> <span class="o">*</span> <span class="p">(</span><span class="n">qW_spatial</span> <span class="o">+</span> <span class="p">(</span><span class="n">I</span> <span class="o">-</span> <span class="n">W</span><span class="p">))</span>
+        <span class="n">qS2I</span> <span class="o">=</span> <span class="n">dt</span> <span class="o">*</span> <span class="n">beta_sir</span> <span class="o">*</span> <span class="n">S</span> <span class="o">*</span> <span class="n">W</span><span class="o">/</span><span class="n">N</span>
+        <span class="n">qI2R</span> <span class="o">=</span> <span class="n">dt</span> <span class="o">*</span> <span class="n">gamma_sir</span> <span class="o">*</span> <span class="n">I</span>
+
+        <span class="n">W</span> <span class="o">=</span> <span class="n">W</span> <span class="o">+</span> <span class="n">qW</span>
+        <span class="n">S</span> <span class="o">=</span> <span class="n">S</span> <span class="o">-</span> <span class="n">qS2I</span>
+        <span class="n">I</span> <span class="o">=</span> <span class="n">I</span> <span class="o">+</span> <span class="n">qS2I</span> <span class="o">-</span> <span class="n">qI2R</span>
+        <span class="n">R</span> <span class="o">=</span> <span class="n">R</span> <span class="o">+</span> <span class="n">qI2R</span>
+        
+    <span class="k">return</span> <span class="n">S</span><span class="p">,</span> <span class="n">I</span><span class="p">,</span> <span class="n">R</span><span class="p">,</span> <span class="n">W</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="we-could-use-build-in-ivp-solvers-for-such-prepared-stencil">
+<h2>We could use build-in IVP solvers for such prepared stencil<a class="headerlink" href="#we-could-use-build-in-ivp-solvers-for-such-prepared-stencil" title="Permalink to this headline">¶</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">scipy.integrate</span> <span class="kn">import</span> <span class="n">solve_ivp</span>
+
+<span class="n">nx</span> <span class="o">=</span> <span class="mi">128</span>
+<span class="n">domain_length</span> <span class="o">=</span> <span class="mi">64</span>
+<span class="n">dx</span> <span class="o">=</span> <span class="n">domain_length</span> <span class="o">/</span> <span class="p">(</span><span class="n">nx</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">xspace</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">domain_length</span><span class="p">,</span> <span class="n">nx</span><span class="p">)</span>
+
+<span class="c1"># r0 = 5.5  # infectious radius</span>
+<span class="c1"># beta_sir = 3.01  # the average number of contacts per person per time</span>
+<span class="c1"># gamma_sir = 1/2.8  # 1 over days to recovery</span>
+<span class="c1"># beta_W = 1e3</span>
+
+<span class="n">r0</span> <span class="o">=</span> <span class="mf">5.5</span>  <span class="c1"># infectious radius</span>
+<span class="n">gamma_sir</span> <span class="o">=</span> <span class="mf">0.25</span>  <span class="c1"># 1 over days to recovery</span>
+<span class="n">beta_sir</span> <span class="o">=</span> <span class="mf">3.01</span> <span class="o">*</span> <span class="mf">2.8</span> <span class="o">*</span> <span class="n">gamma_sir</span>
+<span class="n">t_scale</span> <span class="o">=</span> <span class="mi">1</span> <span class="c1">#gamma_sir / (1./2.8)</span>
+<span class="n">beta_W</span> <span class="o">=</span> <span class="mf">1e3</span> <span class="o">/</span> <span class="n">t_scale</span>
+
+
+
+
+<span class="n">total_time</span> <span class="o">=</span> <span class="mf">1e-0</span>
+<span class="n">dt</span> <span class="o">=</span> <span class="mf">1e-5</span>
+<span class="n">ntimesteps</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">total_time</span> <span class="o">/</span> <span class="n">dt</span><span class="p">)</span>
+<span class="n">N</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">nx</span><span class="p">)</span> 
+<span class="n">N</span><span class="p">[</span><span class="nb">int</span><span class="p">((</span><span class="n">nx</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">/</span><span class="mi">4</span><span class="p">):</span><span class="nb">int</span><span class="p">(</span><span class="n">nx</span><span class="o">/</span><span class="mi">2</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)]</span> <span class="o">*=</span> <span class="mi">10</span>
+
+<span class="n">I_IC</span> <span class="o">=</span> <span class="mf">0.05</span><span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">nx</span><span class="p">)</span>
+<span class="n">I_IC</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="mi">3</span><span class="o">*</span><span class="p">(</span><span class="n">nx</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">/</span><span class="mi">8</span><span class="p">):</span><span class="nb">int</span><span class="p">(</span><span class="mi">6</span><span class="o">*</span><span class="n">nx</span><span class="o">/</span><span class="mi">8</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)]</span> <span class="o">*=</span> <span class="mi">10</span> 
+
+<span class="n">S_IC</span> <span class="o">=</span> <span class="n">N</span> <span class="o">-</span> <span class="n">I_IC</span>
+<span class="n">R_IC</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">nx</span><span class="p">)</span>
+
+<span class="n">y_lim</span>  <span class="o">=</span> <span class="p">[</span><span class="o">-</span><span class="mf">0.05</span><span class="p">,</span> <span class="mf">1.05</span><span class="o">*</span><span class="nb">max</span><span class="p">(</span><span class="n">N</span><span class="p">)]</span>
+
+
+<span class="n">c_ind</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">nx</span><span class="p">)</span>
+<span class="n">l_ind</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">roll</span><span class="p">(</span><span class="n">c_ind</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">r_ind</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">roll</span><span class="p">(</span><span class="n">c_ind</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">WSIR_1D_FD_VRK</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">nx</span><span class="p">,</span> <span class="n">dx</span><span class="p">,</span> <span class="n">r0</span><span class="p">,</span> <span class="n">beta_sir</span><span class="p">,</span> <span class="n">gamma_sir</span><span class="p">,</span> <span class="n">beta_W</span><span class="p">):</span>
+
+    <span class="n">tmp</span> <span class="o">=</span> <span class="n">z</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="mi">4</span><span class="p">,</span><span class="nb">int</span><span class="p">(</span><span class="n">z</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">/</span><span class="mi">4</span><span class="p">)))</span>
+    
+    <span class="n">W</span> <span class="o">=</span> <span class="n">tmp</span><span class="p">[</span><span class="mi">0</span><span class="p">,:]</span>
+    <span class="n">S</span> <span class="o">=</span> <span class="n">tmp</span><span class="p">[</span><span class="mi">1</span><span class="p">,:]</span>
+    <span class="n">I</span> <span class="o">=</span> <span class="n">tmp</span><span class="p">[</span><span class="mi">2</span><span class="p">,:]</span>
+    <span class="n">R</span> <span class="o">=</span> <span class="n">tmp</span><span class="p">[</span><span class="mi">3</span><span class="p">,:]</span>
+    
+    <span class="n">lap_W</span> <span class="o">=</span> <span class="p">(</span><span class="n">W</span><span class="p">[</span><span class="n">l_ind</span><span class="p">]</span> <span class="o">-</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">W</span><span class="p">[</span><span class="n">c_ind</span><span class="p">]</span> <span class="o">+</span> <span class="n">W</span><span class="p">[</span><span class="n">r_ind</span><span class="p">])</span> <span class="o">/</span> <span class="n">dx</span> <span class="o">**</span> <span class="mi">2</span>
+    <span class="n">qW_spatial</span> <span class="o">=</span> <span class="p">(</span><span class="n">r0</span> <span class="o">*</span> <span class="n">r0</span> <span class="o">/</span> <span class="mf">8.</span><span class="p">)</span><span class="o">*</span><span class="n">lap_W</span>
+
+    <span class="n">qW</span> <span class="o">=</span>  <span class="n">beta_W</span> <span class="o">*</span> <span class="p">(</span><span class="n">qW_spatial</span> <span class="o">+</span> <span class="p">(</span><span class="n">I</span> <span class="o">-</span> <span class="n">W</span><span class="p">))</span>
+    <span class="n">qS2I</span> <span class="o">=</span>  <span class="n">beta_sir</span> <span class="o">*</span> <span class="n">S</span> <span class="o">*</span> <span class="n">W</span><span class="o">/</span><span class="n">N</span>
+    <span class="n">qI2R</span> <span class="o">=</span>  <span class="n">gamma_sir</span> <span class="o">*</span> <span class="n">I</span>
+       
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">qW</span><span class="p">,</span> <span class="o">-</span> <span class="n">qS2I</span><span class="p">,</span> <span class="n">qS2I</span> <span class="o">-</span> <span class="n">qI2R</span><span class="p">,</span> <span class="n">qI2R</span><span class="p">])</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="mi">4</span><span class="o">*</span><span class="n">nx</span><span class="p">))</span>
+
+
+
+
+
+<span class="n">IC</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">I_IC</span><span class="p">,</span> <span class="n">S_IC</span><span class="p">,</span> <span class="n">I_IC</span><span class="p">,</span> <span class="n">R_IC</span><span class="p">])</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="mi">4</span><span class="o">*</span><span class="n">nx</span><span class="p">))</span>
+
+<span class="n">days_to_simulate</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="n">sol</span> <span class="o">=</span> <span class="n">solve_ivp</span><span class="p">(</span><span class="n">WSIR_1D_FD_VRK</span><span class="p">,</span>
+                <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">days_to_simulate</span><span class="p">],</span>
+                <span class="n">IC</span><span class="p">,</span>
+                <span class="n">method</span><span class="o">=</span><span class="s1">&#39;RK45&#39;</span><span class="p">,</span>
+                <span class="n">args</span><span class="o">=</span><span class="p">[</span><span class="n">nx</span><span class="p">,</span> <span class="n">dx</span><span class="p">,</span> <span class="n">r0</span><span class="p">,</span> <span class="n">beta_sir</span><span class="p">,</span> <span class="n">gamma_sir</span><span class="p">,</span> <span class="n">beta_W</span><span class="p">],</span>
+                <span class="n">dense_output</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="n">t</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">days_to_simulate</span><span class="p">,</span> <span class="mi">21</span><span class="p">)</span>
+<span class="n">z</span> <span class="o">=</span> <span class="n">sol</span><span class="o">.</span><span class="n">sol</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">tmp</span> <span class="o">=</span> <span class="n">z</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="mi">4</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="n">z</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">/</span><span class="mi">4</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">t</span><span class="p">)))</span>
+<span class="n">W_rk45</span> <span class="o">=</span> <span class="n">tmp</span><span class="p">[</span><span class="mi">0</span><span class="p">,:,:]</span>
+<span class="n">S_rk45</span> <span class="o">=</span> <span class="n">tmp</span><span class="p">[</span><span class="mi">1</span><span class="p">,:,:]</span>
+<span class="n">I_rk45</span> <span class="o">=</span> <span class="n">tmp</span><span class="p">[</span><span class="mi">2</span><span class="p">,:,:]</span>
+<span class="n">R_rk45</span> <span class="o">=</span> <span class="n">tmp</span><span class="p">[</span><span class="mi">3</span><span class="p">,:,:]</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="tex2jax_ignore mathjax_ignore section" id="explicit-euler-and-rk45-solutions-are-close-to-identical">
+<h1>Explicit Euler and RK45 solutions are close-to-identical<a class="headerlink" href="#explicit-euler-and-rk45-solutions-are-close-to-identical" title="Permalink to this headline">¶</a></h1>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">utils.sir_plot_utils</span> <span class="kn">import</span> <span class="n">make_wsir_plot_1D</span>
+<span class="n">make_wsir_plot_1D</span><span class="p">(</span><span class="n">S_IC</span><span class="p">,</span> <span class="n">I_IC</span><span class="p">,</span> <span class="n">R_IC</span><span class="p">,</span> <span class="n">xspace</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;SIR IC&#39;</span><span class="p">,</span> <span class="n">w</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">y_lim</span><span class="o">=</span><span class="n">y_lim</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../../_images/10_SIR_in_PengModified_Model_8_0.png" src="../../_images/10_SIR_in_PengModified_Model_8_0.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">Sw</span><span class="p">,</span> <span class="n">Iw</span><span class="p">,</span> <span class="n">Rw</span><span class="p">,</span> <span class="n">Ww</span> <span class="o">=</span> <span class="n">WSIR_1D_FD</span><span class="p">(</span><span class="n">S_IC</span><span class="p">,</span> <span class="n">I_IC</span><span class="p">,</span> <span class="n">R_IC</span><span class="p">,</span> <span class="n">nx</span><span class="p">,</span> <span class="n">dx</span><span class="p">,</span> <span class="n">r0</span><span class="p">,</span> <span class="n">beta_sir</span><span class="p">,</span> <span class="n">gamma_sir</span><span class="p">,</span> <span class="n">ntimesteps</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="n">beta_W</span><span class="p">)</span>
+<span class="n">make_wsir_plot_1D</span><span class="p">(</span><span class="n">Sw</span><span class="p">,</span> <span class="n">Iw</span><span class="p">,</span> <span class="n">Rw</span><span class="p">,</span> <span class="n">xspace</span><span class="p">,</span> <span class="n">ntimesteps</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="s1">&#39;WSIR 1D - RK45&#39;</span><span class="p">,</span>  <span class="n">y_lim</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">12</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../../_images/10_SIR_in_PengModified_Model_9_0.png" src="../../_images/10_SIR_in_PengModified_Model_9_0.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">make_wsir_plot_1D</span><span class="p">(</span><span class="n">S_rk45</span><span class="p">[:,</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">I_rk45</span><span class="p">[:,</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">R_rk45</span><span class="p">[:,</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">xspace</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span> <span class="s1">&#39;WSIR 1D - RK45&#39;</span><span class="p">,</span>  <span class="n">y_lim</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">12</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../../_images/10_SIR_in_PengModified_Model_10_0.png" src="../../_images/10_SIR_in_PengModified_Model_10_0.png" />
+</div>
+</div>
+</div>
+<div class="tex2jax_ignore mathjax_ignore section" id="let-s-build-lbm-solution-using-tclb-and-d2q9-reaction-diffusion-system-sir-modifiedpeng-model">
+<h1>Let’s build LBM solution using TCLB and <em>d2q9_reaction_diffusion_system_SIR_ModifiedPeng</em> model<a class="headerlink" href="#let-s-build-lbm-solution-using-tclb-and-d2q9-reaction-diffusion-system-sir-modifiedpeng-model" title="Permalink to this headline">¶</a></h1>
+<p>There is gonna be units change: LBM has “dt” equall 1, while we obsiously need some small dt in <em>real</em> units - for example expressed as a fraction of specific time <span class="math notranslate nohighlight">\(1/\gamma\)</span>. Please also be carefull at:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="mi">1</span> <span class="o">/</span> <span class="mf">1e-5</span>
+<span class="mi">1</span> <span class="o">/</span> <span class="p">(</span><span class="n">dt_LBM</span> <span class="o">*</span> <span class="mf">1e6</span><span class="p">)</span> <span class="o">*</span> <span class="mf">1e6</span>
+</pre></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">np</span><span class="o">.</span><span class="n">savetxt</span><span class="p">(</span><span class="s2">&quot;S_IC.csv&quot;</span><span class="p">,</span> <span class="n">S_IC</span><span class="p">,</span> <span class="n">delimiter</span><span class="o">=</span><span class="s2">&quot;,&quot;</span><span class="p">)</span>
+<span class="n">np</span><span class="o">.</span><span class="n">savetxt</span><span class="p">(</span><span class="s2">&quot;I_IC.csv&quot;</span><span class="p">,</span> <span class="n">I_IC</span><span class="p">,</span> <span class="n">delimiter</span><span class="o">=</span><span class="s2">&quot;,&quot;</span><span class="p">)</span>
+<span class="n">np</span><span class="o">.</span><span class="n">savetxt</span><span class="p">(</span><span class="s2">&quot;R_IC.csv&quot;</span><span class="p">,</span> <span class="n">R_IC</span><span class="p">,</span> <span class="n">delimiter</span><span class="o">=</span><span class="s2">&quot;,&quot;</span><span class="p">)</span>
+
+
+<span class="n">dt_LBM</span> <span class="o">=</span> <span class="mf">1.e-5</span>
+
+<span class="n">R_LBM</span> <span class="o">=</span> <span class="n">r0</span> <span class="o">/</span> <span class="n">dx</span>
+<span class="n">Beta_LBM</span> <span class="o">=</span> <span class="n">beta_sir</span> <span class="o">*</span> <span class="n">dt_LBM</span>
+<span class="n">Beta_w_LBM</span> <span class="o">=</span> <span class="n">beta_W</span> <span class="o">*</span> <span class="n">dt_LBM</span>
+<span class="n">Gamma_LBM</span> <span class="o">=</span> <span class="n">gamma_sir</span> <span class="o">*</span> <span class="n">dt_LBM</span> 
+
+
+<span class="n">CLBc</span> <span class="o">=</span> <span class="n">CLBXML</span><span class="o">.</span><span class="n">CLBConfigWriter</span><span class="p">(</span> <span class="p">)</span>
+
+<span class="n">CLBc</span><span class="o">.</span><span class="n">addGeomParam</span><span class="p">(</span><span class="s1">&#39;nx&#39;</span><span class="p">,</span> <span class="n">S_IC</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+<span class="n">CLBc</span><span class="o">.</span><span class="n">addGeomParam</span><span class="p">(</span><span class="s1">&#39;ny&#39;</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+
+
+<span class="n">CLBc</span><span class="o">.</span><span class="n">addRunR</span><span class="p">(</span><span class="nb">eval</span><span class="o">=</span>\
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    init = read.table(&quot;S_IC.csv&quot;, header = FALSE, sep = &quot;&quot;, dec = &quot;.&quot;);</span>
+<span class="sd">    Solver$Fields$Init_ODE_1_External[] = init[,1];</span>
+<span class="sd">    </span>
+<span class="sd">    init = read.table(&quot;I_IC.csv&quot;, header = FALSE, sep = &quot;&quot;, dec = &quot;.&quot;);</span>
+<span class="sd">    Solver$Fields$Init_ODE_2_External[] = init[,1];</span>
+<span class="sd">    Solver$Fields$Init_DRE_1_External[] = init[,1];</span>
+
+
+<span class="sd">    init = read.table(&quot;R_IC.csv&quot;, header = FALSE, sep = &quot;&quot;, dec = &quot;.&quot;);</span>
+<span class="sd">    Solver$Fields$Init_ODE_3_External[] = init[,1];</span>
+
+<span class="sd">    # and N</span>
+<span class="sd">    Solver$Fields$Init_ODE_4_External[] = Solver$Fields$Init_ODE_1_External[] + Solver$Fields$Init_ODE_2_External[] + Solver$Fields$Init_ODE_3_External[];</span>
+
+
+<span class="sd">    Solver$Actions$InitFromExternalAction();</span>
+<span class="sd">&quot;&quot;&quot;</span><span class="p">)</span>
+
+    
+<span class="n">params</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;Diffusivity_DRE_1&quot;</span><span class="p">:</span> <span class="n">Beta_w_LBM</span> <span class="o">*</span> <span class="n">R_LBM</span><span class="o">**</span><span class="mi">2</span> <span class="o">/</span> <span class="mf">8.</span><span class="p">,</span>
+        <span class="s2">&quot;Init_ODE_1&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+        <span class="s2">&quot;Init_ODE_2&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+        <span class="s2">&quot;Init_ODE_3&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+        <span class="s2">&quot;Init_ODE_4&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+        <span class="s2">&quot;C_1&quot;</span><span class="p">:</span> <span class="n">Beta_LBM</span><span class="p">,</span>
+        <span class="s2">&quot;C_2&quot;</span><span class="p">:</span> <span class="n">Beta_w_LBM</span><span class="p">,</span>
+        <span class="s2">&quot;C_3&quot;</span><span class="p">:</span> <span class="n">Gamma_LBM</span><span class="p">,</span>
+<span class="p">}</span>
+
+<span class="n">CLBc</span><span class="o">.</span><span class="n">addModelParams</span><span class="p">(</span><span class="n">params</span><span class="p">)</span>
+
+<span class="n">T</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span> <span class="mi">1</span> <span class="o">/</span> <span class="p">(</span><span class="n">dt_LBM</span> <span class="o">*</span> <span class="mf">1e6</span><span class="p">)</span> <span class="o">*</span> <span class="mf">1e6</span> <span class="p">)</span>
+
+<span class="n">CLBc</span><span class="o">.</span><span class="n">addHDF5</span><span class="p">()</span>
+<span class="n">solve</span> <span class="o">=</span> <span class="n">CLBc</span><span class="o">.</span><span class="n">addSolve</span><span class="p">(</span><span class="n">iterations</span><span class="o">=</span><span class="n">T</span><span class="p">)</span>
+<span class="n">CLBc</span><span class="o">.</span><span class="n">addHDF5</span><span class="p">(</span><span class="n">Iterations</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">T</span><span class="o">/</span><span class="mi">10</span><span class="p">),</span> <span class="n">parent</span><span class="o">=</span><span class="n">solve</span><span class="p">)</span>
+   
+<span class="n">CLBc</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;run.xml&#39;</span><span class="p">)</span>
+
+<span class="n">f</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;run.xml&#39;</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span>
+<span class="n">XML</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">readlines</span><span class="p">()))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html">
+    <div class=a36391753-167c-4c24-a01d-7e0552fe2f54> 
+        <style>
+            div.a36391753-167c-4c24-a01d-7e0552fe2f54 pre { line-height: 125%; }
+div.a36391753-167c-4c24-a01d-7e0552fe2f54 td.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+div.a36391753-167c-4c24-a01d-7e0552fe2f54 span.linenos { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+div.a36391753-167c-4c24-a01d-7e0552fe2f54 td.linenos .special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+div.a36391753-167c-4c24-a01d-7e0552fe2f54 span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+div.a36391753-167c-4c24-a01d-7e0552fe2f54 .hll { background-color: #ffffcc }
+div.a36391753-167c-4c24-a01d-7e0552fe2f54 .c { color: #408080; font-style: italic } /* Comment */
+div.a36391753-167c-4c24-a01d-7e0552fe2f54 .err { border: 1px solid #FF0000 } /* Error */
+div.a36391753-167c-4c24-a01d-7e0552fe2f54 .k { color: #008000; font-weight: bold } /* Keyword */
+div.a36391753-167c-4c24-a01d-7e0552fe2f54 .o { color: #666666 } /* Operator */
+div.a36391753-167c-4c24-a01d-7e0552fe2f54 .ch { color: #408080; font-style: italic } /* Comment.Hashbang */
+div.a36391753-167c-4c24-a01d-7e0552fe2f54 .cm { color: #408080; font-style: italic } /* Comment.Multiline */
+div.a36391753-167c-4c24-a01d-7e0552fe2f54 .cp { color: #BC7A00 } /* Comment.Preproc */
+div.a36391753-167c-4c24-a01d-7e0552fe2f54 .cpf { color: #408080; font-style: italic } /* Comment.PreprocFile */
+div.a36391753-167c-4c24-a01d-7e0552fe2f54 .c1 { color: #408080; font-style: italic } /* Comment.Single */
+div.a36391753-167c-4c24-a01d-7e0552fe2f54 .cs { color: #408080; font-style: italic } /* Comment.Special */
+div.a36391753-167c-4c24-a01d-7e0552fe2f54 .gd { color: #A00000 } /* Generic.Deleted */
+div.a36391753-167c-4c24-a01d-7e0552fe2f54 .ge { font-style: italic } /* Generic.Emph */
+div.a36391753-167c-4c24-a01d-7e0552fe2f54 .gr { color: #FF0000 } /* Generic.Error */
+div.a36391753-167c-4c24-a01d-7e0552fe2f54 .gh { color: #000080; font-weight: bold } /* Generic.Heading */
+div.a36391753-167c-4c24-a01d-7e0552fe2f54 .gi { color: #00A000 } /* Generic.Inserted */
+div.a36391753-167c-4c24-a01d-7e0552fe2f54 .go { color: #888888 } /* Generic.Output */
+div.a36391753-167c-4c24-a01d-7e0552fe2f54 .gp { color: #000080; font-weight: bold } /* Generic.Prompt */
+div.a36391753-167c-4c24-a01d-7e0552fe2f54 .gs { font-weight: bold } /* Generic.Strong */
+div.a36391753-167c-4c24-a01d-7e0552fe2f54 .gu { color: #800080; font-weight: bold } /* Generic.Subheading */
+div.a36391753-167c-4c24-a01d-7e0552fe2f54 .gt { color: #0044DD } /* Generic.Traceback */
+div.a36391753-167c-4c24-a01d-7e0552fe2f54 .kc { color: #008000; font-weight: bold } /* Keyword.Constant */
+div.a36391753-167c-4c24-a01d-7e0552fe2f54 .kd { color: #008000; font-weight: bold } /* Keyword.Declaration */
+div.a36391753-167c-4c24-a01d-7e0552fe2f54 .kn { color: #008000; font-weight: bold } /* Keyword.Namespace */
+div.a36391753-167c-4c24-a01d-7e0552fe2f54 .kp { color: #008000 } /* Keyword.Pseudo */
+div.a36391753-167c-4c24-a01d-7e0552fe2f54 .kr { color: #008000; font-weight: bold } /* Keyword.Reserved */
+div.a36391753-167c-4c24-a01d-7e0552fe2f54 .kt { color: #B00040 } /* Keyword.Type */
+div.a36391753-167c-4c24-a01d-7e0552fe2f54 .m { color: #666666 } /* Literal.Number */
+div.a36391753-167c-4c24-a01d-7e0552fe2f54 .s { color: #BA2121 } /* Literal.String */
+div.a36391753-167c-4c24-a01d-7e0552fe2f54 .na { color: #7D9029 } /* Name.Attribute */
+div.a36391753-167c-4c24-a01d-7e0552fe2f54 .nb { color: #008000 } /* Name.Builtin */
+div.a36391753-167c-4c24-a01d-7e0552fe2f54 .nc { color: #0000FF; font-weight: bold } /* Name.Class */
+div.a36391753-167c-4c24-a01d-7e0552fe2f54 .no { color: #880000 } /* Name.Constant */
+div.a36391753-167c-4c24-a01d-7e0552fe2f54 .nd { color: #AA22FF } /* Name.Decorator */
+div.a36391753-167c-4c24-a01d-7e0552fe2f54 .ni { color: #999999; font-weight: bold } /* Name.Entity */
+div.a36391753-167c-4c24-a01d-7e0552fe2f54 .ne { color: #D2413A; font-weight: bold } /* Name.Exception */
+div.a36391753-167c-4c24-a01d-7e0552fe2f54 .nf { color: #0000FF } /* Name.Function */
+div.a36391753-167c-4c24-a01d-7e0552fe2f54 .nl { color: #A0A000 } /* Name.Label */
+div.a36391753-167c-4c24-a01d-7e0552fe2f54 .nn { color: #0000FF; font-weight: bold } /* Name.Namespace */
+div.a36391753-167c-4c24-a01d-7e0552fe2f54 .nt { color: #008000; font-weight: bold } /* Name.Tag */
+div.a36391753-167c-4c24-a01d-7e0552fe2f54 .nv { color: #19177C } /* Name.Variable */
+div.a36391753-167c-4c24-a01d-7e0552fe2f54 .ow { color: #AA22FF; font-weight: bold } /* Operator.Word */
+div.a36391753-167c-4c24-a01d-7e0552fe2f54 .w { color: #bbbbbb } /* Text.Whitespace */
+div.a36391753-167c-4c24-a01d-7e0552fe2f54 .mb { color: #666666 } /* Literal.Number.Bin */
+div.a36391753-167c-4c24-a01d-7e0552fe2f54 .mf { color: #666666 } /* Literal.Number.Float */
+div.a36391753-167c-4c24-a01d-7e0552fe2f54 .mh { color: #666666 } /* Literal.Number.Hex */
+div.a36391753-167c-4c24-a01d-7e0552fe2f54 .mi { color: #666666 } /* Literal.Number.Integer */
+div.a36391753-167c-4c24-a01d-7e0552fe2f54 .mo { color: #666666 } /* Literal.Number.Oct */
+div.a36391753-167c-4c24-a01d-7e0552fe2f54 .sa { color: #BA2121 } /* Literal.String.Affix */
+div.a36391753-167c-4c24-a01d-7e0552fe2f54 .sb { color: #BA2121 } /* Literal.String.Backtick */
+div.a36391753-167c-4c24-a01d-7e0552fe2f54 .sc { color: #BA2121 } /* Literal.String.Char */
+div.a36391753-167c-4c24-a01d-7e0552fe2f54 .dl { color: #BA2121 } /* Literal.String.Delimiter */
+div.a36391753-167c-4c24-a01d-7e0552fe2f54 .sd { color: #BA2121; font-style: italic } /* Literal.String.Doc */
+div.a36391753-167c-4c24-a01d-7e0552fe2f54 .s2 { color: #BA2121 } /* Literal.String.Double */
+div.a36391753-167c-4c24-a01d-7e0552fe2f54 .se { color: #BB6622; font-weight: bold } /* Literal.String.Escape */
+div.a36391753-167c-4c24-a01d-7e0552fe2f54 .sh { color: #BA2121 } /* Literal.String.Heredoc */
+div.a36391753-167c-4c24-a01d-7e0552fe2f54 .si { color: #BB6688; font-weight: bold } /* Literal.String.Interpol */
+div.a36391753-167c-4c24-a01d-7e0552fe2f54 .sx { color: #008000 } /* Literal.String.Other */
+div.a36391753-167c-4c24-a01d-7e0552fe2f54 .sr { color: #BB6688 } /* Literal.String.Regex */
+div.a36391753-167c-4c24-a01d-7e0552fe2f54 .s1 { color: #BA2121 } /* Literal.String.Single */
+div.a36391753-167c-4c24-a01d-7e0552fe2f54 .ss { color: #19177C } /* Literal.String.Symbol */
+div.a36391753-167c-4c24-a01d-7e0552fe2f54 .bp { color: #008000 } /* Name.Builtin.Pseudo */
+div.a36391753-167c-4c24-a01d-7e0552fe2f54 .fm { color: #0000FF } /* Name.Function.Magic */
+div.a36391753-167c-4c24-a01d-7e0552fe2f54 .vc { color: #19177C } /* Name.Variable.Class */
+div.a36391753-167c-4c24-a01d-7e0552fe2f54 .vg { color: #19177C } /* Name.Variable.Global */
+div.a36391753-167c-4c24-a01d-7e0552fe2f54 .vi { color: #19177C } /* Name.Variable.Instance */
+div.a36391753-167c-4c24-a01d-7e0552fe2f54 .vm { color: #19177C } /* Name.Variable.Magic */
+div.a36391753-167c-4c24-a01d-7e0552fe2f54 .il { color: #666666 } /* Literal.Number.Integer.Long */
+        </style>
+        <div class="highlight"><pre><span></span><span class="nt">&lt;CLBConfig</span> <span class="na">version=</span><span class="s">&quot;2.0&quot;</span> <span class="na">output=</span><span class="s">&quot;output/&quot;</span><span class="nt">&gt;</span>
+  <span class="c">&lt;!--Created using CLBConfigWriter--&gt;</span>
+  <span class="nt">&lt;Geometry</span> <span class="na">predef=</span><span class="s">&quot;none&quot;</span> <span class="na">model=</span><span class="s">&quot;MRT&quot;</span> <span class="na">nx=</span><span class="s">&quot;128.0000000000000000&quot;</span> <span class="na">ny=</span><span class="s">&quot;2.0000000000000000&quot;</span><span class="nt">/&gt;</span>
+  <span class="nt">&lt;Model&gt;</span>
+    <span class="nt">&lt;Param</span> <span class="na">name=</span><span class="s">&quot;Diffusivity_DRE_1&quot;</span> <span class="na">value=</span><span class="s">&quot;0.1488959503173828&quot;</span><span class="nt">/&gt;</span>
+    <span class="nt">&lt;Param</span> <span class="na">name=</span><span class="s">&quot;Init_ODE_1&quot;</span> <span class="na">value=</span><span class="s">&quot;1.0000000000000000&quot;</span><span class="nt">/&gt;</span>
+    <span class="nt">&lt;Param</span> <span class="na">name=</span><span class="s">&quot;Init_ODE_2&quot;</span> <span class="na">value=</span><span class="s">&quot;0.0000000000000000&quot;</span><span class="nt">/&gt;</span>
+    <span class="nt">&lt;Param</span> <span class="na">name=</span><span class="s">&quot;Init_ODE_3&quot;</span> <span class="na">value=</span><span class="s">&quot;0.0000000000000000&quot;</span><span class="nt">/&gt;</span>
+    <span class="nt">&lt;Param</span> <span class="na">name=</span><span class="s">&quot;Init_ODE_4&quot;</span> <span class="na">value=</span><span class="s">&quot;1.0000000000000000&quot;</span><span class="nt">/&gt;</span>
+    <span class="nt">&lt;Param</span> <span class="na">name=</span><span class="s">&quot;C_1&quot;</span> <span class="na">value=</span><span class="s">&quot;0.0000210700000000&quot;</span><span class="nt">/&gt;</span>
+    <span class="nt">&lt;Param</span> <span class="na">name=</span><span class="s">&quot;C_2&quot;</span> <span class="na">value=</span><span class="s">&quot;0.0100000000000000&quot;</span><span class="nt">/&gt;</span>
+    <span class="nt">&lt;Param</span> <span class="na">name=</span><span class="s">&quot;C_3&quot;</span> <span class="na">value=</span><span class="s">&quot;0.0000025000000000&quot;</span><span class="nt">/&gt;</span>
+  <span class="nt">&lt;/Model&gt;</span>
+  <span class="nt">&lt;RunR&gt;</span>
+    init = read.table(&quot;S_IC.csv&quot;, header = FALSE, sep = &quot;&quot;, dec = &quot;.&quot;);
+    Solver$Fields$Init_ODE_1_External[] = init[,1];
+
+    init = read.table(&quot;I_IC.csv&quot;, header = FALSE, sep = &quot;&quot;, dec = &quot;.&quot;);
+    Solver$Fields$Init_ODE_2_External[] = init[,1];
+    Solver$Fields$Init_DRE_1_External[] = init[,1];
+
+
+    init = read.table(&quot;R_IC.csv&quot;, header = FALSE, sep = &quot;&quot;, dec = &quot;.&quot;);
+    Solver$Fields$Init_ODE_3_External[] = init[,1];
+
+    # and N
+    Solver$Fields$Init_ODE_4_External[] = Solver$Fields$Init_ODE_1_External[] + Solver$Fields$Init_ODE_2_External[] + Solver$Fields$Init_ODE_3_External[];
+
+
+    Solver$Actions$InitFromExternalAction();
+<span class="nt">&lt;/RunR&gt;</span>
+  <span class="nt">&lt;HDF5/&gt;</span>
+  <span class="nt">&lt;Solve</span> <span class="na">Iterations=</span><span class="s">&quot;100000&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;HDF5</span> <span class="na">Iterations=</span><span class="s">&quot;10000&quot;</span><span class="nt">/&gt;</span>
+  <span class="nt">&lt;/Solve&gt;</span>
+<span class="nt">&lt;/CLBConfig&gt;</span>
+</pre></div>
+
+    </div>
+</div></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">!</span> <span class="nv">OMP_NUM_THREADS</span><span class="o">=</span><span class="m">8</span> tclb d2q9_reaction_diffusion_system_SIR_ModifiedPeng run.xml   <span class="o">&amp;&amp;</span> <span class="nb">echo</span> <span class="s1">&#39;DONE!&#39;</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>MPMD: TCLB: local:0/1 work:0/1 ---  connected to:
+[  ] <span class=" -Color -Color-Bold -Color-Bold-Green">-------------------------------------------------------------------------</span>
+[  ] <span class=" -Color -Color-Bold -Color-Bold-Green">-  CLB version:   v6.0-beta-1716-g8e58bf9                               -</span>
+[  ] <span class=" -Color -Color-Bold -Color-Bold-Green">-        Model: d2q9_reaction_diffusion_system_SIR_ModifiedPeng                 </span>
+[  ] <span class=" -Color -Color-Bold -Color-Bold-Green">              -</span>
+[  ] <span class=" -Color -Color-Bold -Color-Bold-Green">-------------------------------------------------------------------------</span>
+[  ] <span class=" -Color -Color-Bold -Color-Bold-Green">Setting output path to: run</span>
+[  ] <span class=" -Color -Color-Bold">Discarding 1 comments</span>
+[ 0] <span class=" -Color -Color-Bold">Running on CPU</span>
+[ 0] <span class=" -Color -Color-Yellow">WARNING: </span><span class=" -Color -Color-Bold -Color-Bold-Yellow">No &quot;Units&quot; element in config file</span>
+[  ] <span class=" -Color -Color-Green">Mesh size in config file: 128x2x1</span>
+[  ] <span class=" -Color -Color-Bold">Global lattice size: 128x2x1</span>
+[  ] <span class=" -Color -Color-Green">Max region size: 256. Mesh size 256. Overhead:  0%</span>
+[  ] <span class=" -Color -Color-Bold">Local lattice size: 128x2x1</span>
+Hello allocator!
+[  ] <span class=" -Color -Color-Bold">  Threads  |      Action</span>
+[  ] <span class=" -Color -Color-Bold">    1x1    | Primal , NoGlobals , InitFromExternal</span>
+[  ] <span class=" -Color -Color-Bold">    1x1    | Tangent , NoGlobals , InitFromExternal</span>
+[  ] <span class=" -Color -Color-Bold">    1x1    | Optimize , NoGlobals , InitFromExternal</span>
+[  ] <span class=" -Color -Color-Bold">    1x1    | SteadyAdjoint , NoGlobals , InitFromExternal</span>
+[  ] <span class=" -Color -Color-Bold">    1x1    | Primal , IntegrateGlobals , InitFromExternal</span>
+[  ] <span class=" -Color -Color-Bold">    1x1    | Tangent , IntegrateGlobals , InitFromExternal</span>
+[  ] <span class=" -Color -Color-Bold">    1x1    | Optimize , IntegrateGlobals , InitFromExternal</span>
+[  ] <span class=" -Color -Color-Bold">    1x1    | SteadyAdjoint , IntegrateGlobals , InitFromExternal</span>
+[  ] <span class=" -Color -Color-Bold">    1x1    | Primal , OnlyObjective , InitFromExternal</span>
+[  ] <span class=" -Color -Color-Bold">    1x1    | Tangent , OnlyObjective , InitFromExternal</span>
+[  ] <span class=" -Color -Color-Bold">    1x1    | Optimize , OnlyObjective , InitFromExternal</span>
+[  ] <span class=" -Color -Color-Bold">    1x1    | SteadyAdjoint , OnlyObjective , InitFromExternal</span>
+[  ] <span class=" -Color -Color-Bold">    1x1    | Primal , NoGlobals , BaseIteration</span>
+[  ] <span class=" -Color -Color-Bold">    1x1    | Tangent , NoGlobals , BaseIteration</span>
+[  ] <span class=" -Color -Color-Bold">    1x1    | Optimize , NoGlobals , BaseIteration</span>
+[  ] <span class=" -Color -Color-Bold">    1x1    | SteadyAdjoint , NoGlobals , BaseIteration</span>
+[  ] <span class=" -Color -Color-Bold">    1x1    | Primal , IntegrateGlobals , BaseIteration</span>
+[  ] <span class=" -Color -Color-Bold">    1x1    | Tangent , IntegrateGlobals , BaseIteration</span>
+[  ] <span class=" -Color -Color-Bold">    1x1    | Optimize , IntegrateGlobals , BaseIteration</span>
+[  ] <span class=" -Color -Color-Bold">    1x1    | SteadyAdjoint , IntegrateGlobals , BaseIteration</span>
+[  ] <span class=" -Color -Color-Bold">    1x1    | Primal , OnlyObjective , BaseIteration</span>
+[  ] <span class=" -Color -Color-Bold">    1x1    | Tangent , OnlyObjective , BaseIteration</span>
+[  ] <span class=" -Color -Color-Bold">    1x1    | Optimize , OnlyObjective , BaseIteration</span>
+[  ] <span class=" -Color -Color-Bold">    1x1    | SteadyAdjoint , OnlyObjective , BaseIteration</span>
+[  ] <span class=" -Color -Color-Bold">    1x1    | Primal , NoGlobals , BaseInit</span>
+[  ] <span class=" -Color -Color-Bold">    1x1    | Tangent , NoGlobals , BaseInit</span>
+[  ] <span class=" -Color -Color-Bold">    1x1    | Optimize , NoGlobals , BaseInit</span>
+[  ] <span class=" -Color -Color-Bold">    1x1    | SteadyAdjoint , NoGlobals , BaseInit</span>
+[  ] <span class=" -Color -Color-Bold">    1x1    | Primal , IntegrateGlobals , BaseInit</span>
+[  ] <span class=" -Color -Color-Bold">    1x1    | Tangent , IntegrateGlobals , BaseInit</span>
+[  ] <span class=" -Color -Color-Bold">    1x1    | Optimize , IntegrateGlobals , BaseInit</span>
+[  ] <span class=" -Color -Color-Bold">    1x1    | SteadyAdjoint , IntegrateGlobals , BaseInit</span>
+[  ] <span class=" -Color -Color-Bold">    1x1    | Primal , OnlyObjective , BaseInit</span>
+[  ] <span class=" -Color -Color-Bold">    1x1    | Tangent , OnlyObjective , BaseInit</span>
+[  ] <span class=" -Color -Color-Bold">    1x1    | Optimize , OnlyObjective , BaseInit</span>
+[  ] <span class=" -Color -Color-Bold">    1x1    | SteadyAdjoint , OnlyObjective , BaseInit</span>
+[  ] <span class=" -Color -Color-Bold -Color-Bold-Green">[0] Cumulative allocation of 103424 b (103.4 kB)</span>
+[  ] <span class=" -Color -Color-Bold">Creating geom size:256</span>
+[  ] <span class=" -Color -Color-Bold -Color-Bold-Green">Setting output path to: run</span>
+[  ] <span class=" -Color -Color-Bold -Color-Bold-Green">Setting output path to: output/run</span>
+[  ] <span class=" -Color -Color-Bold">loading geometry ...</span>
+[  ] <span class=" -Color -Color-Bold">Setting number of zones to 1</span>
+[  ] <span class=" -Color -Color-Bold">Setting Diffusivity_DRE_1 to 0.1488959503173828 (0.148896)</span>
+[  ] <span class=" -Color -Color-Bold">[0] Settings [Diffusivity for  DRE_1] to 0.148896</span>
+[  ] <span class=" -Color -Color-Bold">Setting Init_ODE_1 in zone  (-1) to 1.0000000000000000 (1.000000)</span>
+[  ] <span class=" -Color -Color-Bold">Setting Init_ODE_2 in zone  (-1) to 0.0000000000000000 (0.000000)</span>
+[  ] <span class=" -Color -Color-Bold">Setting Init_ODE_3 in zone  (-1) to 0.0000000000000000 (0.000000)</span>
+[  ] <span class=" -Color -Color-Bold">Setting Init_ODE_4 in zone  (-1) to 1.0000000000000000 (1.000000)</span>
+[  ] <span class=" -Color -Color-Bold">Setting C_1 to 0.0000210700000000 (0.000021)</span>
+[  ] <span class=" -Color -Color-Bold">[0] Settings [Model parameter C_1] to 0.000021</span>
+[  ] <span class=" -Color -Color-Bold">Setting C_2 to 0.0100000000000000 (0.010000)</span>
+[  ] <span class=" -Color -Color-Bold">[0] Settings [Model parameter C_2] to 0.010000</span>
+[  ] <span class=" -Color -Color-Bold">Setting C_3 to 0.0000025000000000 (0.000003)</span>
+[  ] <span class=" -Color -Color-Bold">[0] Settings [Model parameter C_3] to 0.000003</span>
+[  ] <span class=" -Color -Color-Bold">Initializing Lattice ...</span>
+[  ] <span class=" -Color -Color-Bold">Callback RunR with no Iterations attribute</span>==] 1482h 41m
+[  ] <span class=" -Color -Color-Green">R: Initializing R environment ...</span>
+[  ] <span class=" -Color -Color-Bold">cdata</span>
+[  ] <span class=" -Color -Color-Bold">       0 it Running R ...</span>
+[  ] <span class=" -Color -Color-Bold">----- RunR -----</span>
+[  ] <span class=" -Color -Color-Bold"></span>
+<span class=" -Color -Color-Bold">    init = read.table(&quot;S_IC.csv&quot;, header = FALSE, sep = &quot;&quot;, dec = &quot;.&quot;);</span>
+<span class=" -Color -Color-Bold">    Sol</span>
+[  ] <span class=" -Color -Color-Bold">ver$Fields$Init_ODE_1_External[] = init[,1];</span>
+<span class=" -Color -Color-Bold">    </span>
+<span class=" -Color -Color-Bold">    init = read.table(&quot;I_IC.cs</span>
+[  ] <span class=" -Color -Color-Bold">v&quot;, header = FALSE, sep = &quot;&quot;, dec = &quot;.&quot;);</span>
+<span class=" -Color -Color-Bold">    Solver$Fields$Init_ODE_2_External[</span>
+[  ] <span class=" -Color -Color-Bold">] = init[,1];</span>
+<span class=" -Color -Color-Bold">    Solver$Fields$Init_DRE_1_External[] = init[,1];</span>
+
+
+<span class=" -Color -Color-Bold">    init = r</span>
+[  ] <span class=" -Color -Color-Bold">ead.table(&quot;R_IC.csv&quot;, header = FALSE, sep = &quot;&quot;, dec = &quot;.&quot;);</span>
+<span class=" -Color -Color-Bold">    Solver$Fields$In</span>
+[  ] <span class=" -Color -Color-Bold">it_ODE_3_External[] = init[,1];</span>
+
+<span class=" -Color -Color-Bold">    # and N</span>
+<span class=" -Color -Color-Bold">    Solver$Fields$Init_ODE_4_Extern</span>
+[  ] <span class=" -Color -Color-Bold">al[] = Solver$Fields$Init_ODE_1_External[] + Solver$Fields$Init_ODE_2_External[]</span>
+[  ] <span class=" -Color -Color-Bold"> + Solver$Fields$Init_ODE_3_External[];</span>
+
+
+<span class=" -Color -Color-Bold">    Solver$Actions$InitFromExternalAct</span>
+[  ] <span class=" -Color -Color-Bold">ion();</span>
+
+[  ] <span class=" -Color -Color-Bold">----------------</span>
+[  ] <span class=" -Color -Color-Bold -Color-Bold-Green">You can run interactive R session with Ctrl+X</span>
+[  ] <span class=" -Color -Color-Bold">Callback HDF5 with no Iterations attribute</span>
+[  ] <span class=" -Color -Color-Bold">Negotiated HDF5 chunks: 1x2x128[x3]</span>
+[  ] <span class=" -Color -Color-Bold">       0 it writing hdf5</span>
+[  ] <span class=" -Color -Color-Bold">Setting action Solve at 100000.000000 iterations</span>
+[  ] <span class=" -Color -Color-Bold">Setting callback HDF5 at 10000.000000 iterations</span>
+[  ] <span class=" -Color -Color-Bold">Negotiated HDF5 chunks: 1x2x128[x3]</span>
+[  ] <span class=" -Color -Color-Bold">Adding HDF5 to the solver hands</span>
+[  ] <span class=" -Color -Color-Bold">     1.1 MLBUps      0.24 GB/s [====================]</span>1m
+[  ] <span class=" -Color -Color-Bold">   10000 it writing hdf5</span>
+[  ] <span class=" -Color -Color-Bold">     1.0 MLBUps      0.23 GB/s [====================]</span>
+[  ] <span class=" -Color -Color-Bold">   20000 it writing hdf5</span>
+[  ] <span class=" -Color -Color-Bold">     0.9 MLBUps      0.21 GB/s [====================]</span>
+[  ] <span class=" -Color -Color-Bold">   30000 it writing hdf5</span>
+[  ] <span class=" -Color -Color-Bold">     1.0 MLBUps      0.22 GB/s [====================]</span>
+[  ] <span class=" -Color -Color-Bold">   40000 it writing hdf5</span>
+[  ] <span class=" -Color -Color-Bold">     1.0 MLBUps      0.22 GB/s [====================]</span>
+[  ] <span class=" -Color -Color-Bold">   50000 it writing hdf5</span>
+[  ] <span class=" -Color -Color-Bold">     1.0 MLBUps      0.22 GB/s [====================]</span>
+[  ] <span class=" -Color -Color-Bold">   60000 it writing hdf5</span>
+[  ] <span class=" -Color -Color-Bold">     0.9 MLBUps      0.21 GB/s [====================]</span>
+[  ] <span class=" -Color -Color-Bold">   70000 it writing hdf5</span>
+[  ] <span class=" -Color -Color-Bold">     0.9 MLBUps      0.20 GB/s [====================]</span>
+[  ] <span class=" -Color -Color-Bold">   80000 it writing hdf5</span>
+[  ] <span class=" -Color -Color-Bold">     0.8 MLBUps      0.18 GB/s [====================]</span>
+[  ] <span class=" -Color -Color-Bold">   90000 it writing hdf5</span>
+[  ] <span class=" -Color -Color-Bold">     0.9 MLBUps      0.21 GB/s [====================]</span>
+[  ] <span class=" -Color -Color-Bold">  100000 it writing hdf5</span>
+[  ] <span class=" -Color -Color-Bold">Total duration: 214.139449 s = 3.568991 min = 0.059483 h</span>
+DONE!
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">24</span><span class="p">,</span><span class="mi">16</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">221</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Suscpecitble population&#39;</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">S_rk45</span><span class="p">[:,::</span><span class="mi">4</span><span class="p">],</span> <span class="s1">&#39;k-&#39;</span><span class="p">)</span>
+
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">T</span><span class="p">,</span><span class="n">T</span><span class="o">/</span><span class="mi">10</span><span class="p">)[::</span><span class="mi">4</span><span class="p">]:</span>
+    <span class="n">f</span> <span class="o">=</span> <span class="n">h5py</span><span class="o">.</span><span class="n">File</span><span class="p">(</span><span class="s1">&#39;./output/run_HDF5_</span><span class="si">%08d</span><span class="s1">.h5&#39;</span><span class="o">%</span><span class="k">i</span>)    
+    <span class="c1">#plt.plot(f[&#39;ODE_1&#39;][0,0,:], &#39;--&#39;)</span>
+    <span class="c1">#plt.plot(f[&#39;ODE_2&#39;][0,0,:], &#39;--&#39;)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">f</span><span class="p">[</span><span class="s1">&#39;ODE_1&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,:],</span> <span class="s1">&#39;--&#39;</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="sa">r</span><span class="s1">&#39;$t=</span><span class="si">%.2f</span><span class="s1">$&#39;</span><span class="o">%</span><span class="p">(</span><span class="n">i</span><span class="o">*</span><span class="n">dt_LBM</span><span class="p">))</span>         
+    
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">which</span><span class="o">=</span><span class="s1">&#39;both&#39;</span><span class="p">)</span>
+
+
+
+<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">222</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Infected population&#39;</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">I_rk45</span><span class="p">[:,::</span><span class="mi">4</span><span class="p">],</span> <span class="s1">&#39;k-&#39;</span><span class="p">)</span>
+
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">T</span><span class="p">,</span><span class="n">T</span><span class="o">/</span><span class="mi">10</span><span class="p">)[::</span><span class="mi">4</span><span class="p">]:</span>
+    <span class="n">f</span> <span class="o">=</span> <span class="n">h5py</span><span class="o">.</span><span class="n">File</span><span class="p">(</span><span class="s1">&#39;./output/run_HDF5_</span><span class="si">%08d</span><span class="s1">.h5&#39;</span><span class="o">%</span><span class="k">i</span>)    
+    <span class="c1">#plt.plot(f[&#39;ODE_1&#39;][0,0,:], &#39;--&#39;)</span>
+    <span class="c1">#plt.plot(f[&#39;ODE_2&#39;][0,0,:], &#39;--&#39;)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">f</span><span class="p">[</span><span class="s1">&#39;ODE_2&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,:],</span> <span class="s1">&#39;--&#39;</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="sa">r</span><span class="s1">&#39;$t=</span><span class="si">%.2f</span><span class="s1">$&#39;</span><span class="o">%</span><span class="p">(</span><span class="n">i</span><span class="o">*</span><span class="n">dt_LBM</span><span class="p">))</span>         
+    
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">which</span><span class="o">=</span><span class="s1">&#39;both&#39;</span><span class="p">)</span>
+
+
+
+<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">223</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Removed population&#39;</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">R_rk45</span><span class="p">[:,::</span><span class="mi">4</span><span class="p">],</span> <span class="s1">&#39;k-&#39;</span><span class="p">)</span>
+
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">T</span><span class="p">,</span><span class="n">T</span><span class="o">/</span><span class="mi">10</span><span class="p">)[::</span><span class="mi">4</span><span class="p">]:</span>
+    <span class="n">f</span> <span class="o">=</span> <span class="n">h5py</span><span class="o">.</span><span class="n">File</span><span class="p">(</span><span class="s1">&#39;./output/run_HDF5_</span><span class="si">%08d</span><span class="s1">.h5&#39;</span><span class="o">%</span><span class="k">i</span>)    
+    <span class="c1">#plt.plot(f[&#39;ODE_1&#39;][0,0,:], &#39;--&#39;)</span>
+    <span class="c1">#plt.plot(f[&#39;ODE_2&#39;][0,0,:], &#39;--&#39;)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">f</span><span class="p">[</span><span class="s1">&#39;ODE_3&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,:],</span> <span class="s1">&#39;--&#39;</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="sa">r</span><span class="s1">&#39;$t=</span><span class="si">%.2f</span><span class="s1">$&#39;</span><span class="o">%</span><span class="p">(</span><span class="n">i</span><span class="o">*</span><span class="n">dt_LBM</span><span class="p">))</span>         
+    
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">which</span><span class="o">=</span><span class="s1">&#39;both&#39;</span><span class="p">)</span>
+
+
+<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">224</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;W-load&#39;</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">W_rk45</span><span class="p">[:,::</span><span class="mi">4</span><span class="p">],</span> <span class="s1">&#39;k-&#39;</span><span class="p">)</span>
+
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">T</span><span class="p">,</span><span class="n">T</span><span class="o">/</span><span class="mi">10</span><span class="p">)[::</span><span class="mi">4</span><span class="p">]:</span>
+    <span class="n">f</span> <span class="o">=</span> <span class="n">h5py</span><span class="o">.</span><span class="n">File</span><span class="p">(</span><span class="s1">&#39;./output/run_HDF5_</span><span class="si">%08d</span><span class="s1">.h5&#39;</span><span class="o">%</span><span class="k">i</span>)    
+    <span class="c1">#plt.plot(f[&#39;ODE_1&#39;][0,0,:], &#39;--&#39;)</span>
+    <span class="c1">#plt.plot(f[&#39;ODE_2&#39;][0,0,:], &#39;--&#39;)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">f</span><span class="p">[</span><span class="s1">&#39;DRE_1&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,:],</span> <span class="s1">&#39;--&#39;</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="sa">r</span><span class="s1">&#39;$t=</span><span class="si">%.2f</span><span class="s1">$&#39;</span><span class="o">%</span><span class="p">(</span><span class="n">i</span><span class="o">*</span><span class="n">dt_LBM</span><span class="p">))</span>         
+    
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">which</span><span class="o">=</span><span class="s1">&#39;both&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../../_images/10_SIR_in_PengModified_Model_14_0.png" src="../../_images/10_SIR_in_PengModified_Model_14_0.png" />
+</div>
+</div>
+</div>
+<div class="tex2jax_ignore mathjax_ignore section" id="we-could-also-compare-evolution-of-sir-variables-at-point-in-space">
+<h1>We could also compare evolution of SIR variables at point in space<a class="headerlink" href="#we-could-also-compare-evolution-of-sir-variables-at-point-in-space" title="Permalink to this headline">¶</a></h1>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#make_wsir_plot_1D(Sw, Iw, Rw, xspace, ntimesteps, dt, &#39;WSIR 1D&#39;,  y_lim=(0,12))</span>
+
+<span class="c1">#plt.plot(Sw, &#39;-&#39;)</span>
+<span class="c1">#plt.plot(Iw, &#39;-&#39;)</span>
+<span class="c1">#plt.plot(t, S_rk45[0,:], &#39;-&#39;)</span>
+<span class="c1">#plt.plot(t, I_rk45[0,:], &#39;-&#39;)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">t</span><span class="p">,</span><span class="n">R_rk45</span><span class="p">[</span><span class="mi">0</span><span class="p">,:],</span> <span class="s1">&#39;k-&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">t</span><span class="p">,</span><span class="n">R_rk45</span><span class="p">[</span><span class="mi">50</span><span class="p">,:],</span> <span class="s1">&#39;r-&#39;</span><span class="p">)</span>
+
+
+<span class="c1">#plt.plot(S)</span>
+<span class="c1">#plt.plot(I)</span>
+<span class="c1">#plt.plot(R, &#39;o-&#39;)</span>
+<span class="c1">#plt.plot(W)</span>
+<span class="n">j</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">t</span><span class="o">/</span><span class="p">(</span><span class="n">dt_LBM</span><span class="o">*</span><span class="mf">1e6</span><span class="p">)</span><span class="o">*</span><span class="mf">1e6</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)[::</span><span class="mi">2</span><span class="p">]:</span>
+    <span class="n">f</span> <span class="o">=</span> <span class="n">h5py</span><span class="o">.</span><span class="n">File</span><span class="p">(</span><span class="s1">&#39;./output/run_HDF5_</span><span class="si">%08d</span><span class="s1">.h5&#39;</span><span class="o">%</span><span class="k">i</span>)    
+    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">i</span><span class="o">*</span><span class="n">dt_LBM</span><span class="p">,</span> <span class="n">f</span><span class="p">[</span><span class="s1">&#39;ODE_3&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span> <span class="s1">&#39;ko&#39;</span><span class="p">)</span>         
+    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">i</span><span class="o">*</span><span class="n">dt_LBM</span><span class="p">,</span> <span class="n">f</span><span class="p">[</span><span class="s1">&#39;ODE_3&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">50</span><span class="p">],</span> <span class="s1">&#39;ro&#39;</span><span class="p">)</span>         
+    
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Time&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;R&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">which</span><span class="o">=</span><span class="s1">&#39;both&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../../_images/10_SIR_in_PengModified_Model_16_0.png" src="../../_images/10_SIR_in_PengModified_Model_16_0.png" />
+</div>
+</div>
+</div>
+<div class="tex2jax_ignore mathjax_ignore section" id="read-wall-map-into-tclb">
+<h1>Read “wall” map into TCLB<a class="headerlink" href="#read-wall-map-into-tclb" title="Permalink to this headline">¶</a></h1>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">!</span> pip install -U scikit-image
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Requirement already up-to-date: scikit-image in /home/mdzik/.local/lib/python3.8/site-packages (0.18.3)
+Requirement already satisfied, skipping upgrade: tifffile&gt;=2019.7.26 in /home/mdzik/.local/lib/python3.8/site-packages (from scikit-image) (2021.8.30)
+Requirement already satisfied, skipping upgrade: pillow!=7.1.0,!=7.1.1,&gt;=4.3.0 in /usr/local/lib/python3.8/dist-packages (from scikit-image) (8.3.1)
+Requirement already satisfied, skipping upgrade: imageio&gt;=2.3.0 in /home/mdzik/.local/lib/python3.8/site-packages (from scikit-image) (2.9.0)
+Requirement already satisfied, skipping upgrade: numpy&gt;=1.16.5 in /usr/local/lib/python3.8/dist-packages (from scikit-image) (1.21.2)
+Requirement already satisfied, skipping upgrade: matplotlib!=3.0.0,&gt;=2.0.0 in /usr/local/lib/python3.8/dist-packages (from scikit-image) (3.4.3)
+Requirement already satisfied, skipping upgrade: scipy&gt;=1.0.1 in /usr/local/lib/python3.8/dist-packages (from scikit-image) (1.7.1)
+Requirement already satisfied, skipping upgrade: networkx&gt;=2.0 in /home/mdzik/.local/lib/python3.8/site-packages (from scikit-image) (2.6.3)
+Requirement already satisfied, skipping upgrade: PyWavelets&gt;=1.1.1 in /home/mdzik/.local/lib/python3.8/site-packages (from scikit-image) (1.1.1)
+Requirement already satisfied, skipping upgrade: python-dateutil&gt;=2.7 in /usr/local/lib/python3.8/dist-packages (from matplotlib!=3.0.0,&gt;=2.0.0-&gt;scikit-image) (2.8.2)
+Requirement already satisfied, skipping upgrade: kiwisolver&gt;=1.0.1 in /usr/local/lib/python3.8/dist-packages (from matplotlib!=3.0.0,&gt;=2.0.0-&gt;scikit-image) (1.3.1)
+Requirement already satisfied, skipping upgrade: cycler&gt;=0.10 in /usr/local/lib/python3.8/dist-packages (from matplotlib!=3.0.0,&gt;=2.0.0-&gt;scikit-image) (0.10.0)
+Requirement already satisfied, skipping upgrade: pyparsing&gt;=2.2.1 in /usr/local/lib/python3.8/dist-packages (from matplotlib!=3.0.0,&gt;=2.0.0-&gt;scikit-image) (2.4.7)
+Requirement already satisfied, skipping upgrade: six&gt;=1.5 in /usr/lib/python3/dist-packages (from python-dateutil&gt;=2.7-&gt;matplotlib!=3.0.0,&gt;=2.0.0-&gt;scikit-image) (1.14.0)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">skimage</span> <span class="kn">import</span> <span class="n">data</span><span class="p">,</span> <span class="n">filters</span><span class="p">,</span> <span class="n">color</span><span class="p">,</span> <span class="n">morphology</span>
+<span class="kn">from</span> <span class="nn">skimage.transform</span> <span class="kn">import</span> <span class="n">rescale</span><span class="p">,</span> <span class="n">resize</span><span class="p">,</span> <span class="n">downscale_local_mean</span>
+<span class="kn">from</span> <span class="nn">skimage.segmentation</span> <span class="kn">import</span> <span class="n">flood</span><span class="p">,</span> <span class="n">flood_fill</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">PIL</span> <span class="kn">import</span> <span class="n">Image</span>
+<span class="kn">import</span> <span class="nn">requests</span>
+<span class="kn">from</span> <span class="nn">io</span> <span class="kn">import</span> <span class="n">BytesIO</span>
+
+
+<span class="c1">#url = &#39;https://upload.wikimedia.org/wikipedia/commons/f/fc/Poland_wordmark2.png&#39;</span>
+<span class="c1">#response = requests.get(url)</span>
+<span class="c1">#img = Image.open(BytesIO(response.content))</span>
+<span class="n">img_org</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">Image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s1">&#39;512px-Population_density_in_Poland.png&#39;</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">10</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">img_org</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.image.AxesImage at 0x7ff3b8bc3790&gt;
+</pre></div>
+</div>
+<img alt="../../_images/10_SIR_in_PengModified_Model_20_1.png" src="../../_images/10_SIR_in_PengModified_Model_20_1.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">10</span><span class="p">))</span>
+<span class="n">img</span> <span class="o">=</span> <span class="n">img_org</span><span class="p">[</span><span class="mi">45</span><span class="p">:</span><span class="mi">500</span><span class="p">,</span><span class="mi">15</span><span class="p">:</span><span class="mi">500</span><span class="p">,:]</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">img</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.image.AxesImage at 0x7ff3b8b39ee0&gt;
+</pre></div>
+</div>
+<img alt="../../_images/10_SIR_in_PengModified_Model_21_1.png" src="../../_images/10_SIR_in_PengModified_Model_21_1.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">10</span><span class="p">))</span>
+
+<span class="n">legend</span> <span class="o">=</span> <span class="n">img_org</span><span class="p">[</span><span class="mi">520</span><span class="p">:</span><span class="mi">522</span><span class="p">,</span><span class="mi">90</span><span class="p">:</span><span class="mi">390</span><span class="p">,:]</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">legend</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.image.AxesImage at 0x7ff368a33310&gt;
+</pre></div>
+</div>
+<img alt="../../_images/10_SIR_in_PengModified_Model_22_1.png" src="../../_images/10_SIR_in_PengModified_Model_22_1.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">legend</span><span class="p">[</span><span class="mi">0</span><span class="p">,:,</span><span class="mi">0</span><span class="p">],</span><span class="s1">&#39;r&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">legend</span><span class="p">[</span><span class="mi">0</span><span class="p">,:,</span><span class="mi">1</span><span class="p">],</span><span class="s1">&#39;g&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">legend</span><span class="p">[</span><span class="mi">0</span><span class="p">,:,</span><span class="mi">2</span><span class="p">],</span> <span class="s1">&#39;b&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[&lt;matplotlib.lines.Line2D at 0x7ff36899b730&gt;]
+</pre></div>
+</div>
+<img alt="../../_images/10_SIR_in_PengModified_Model_23_1.png" src="../../_images/10_SIR_in_PengModified_Model_23_1.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">10</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">img</span><span class="p">[:,:,</span><span class="mi">2</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.image.AxesImage at 0x7ff3689704c0&gt;
+</pre></div>
+</div>
+<img alt="../../_images/10_SIR_in_PengModified_Model_24_1.png" src="../../_images/10_SIR_in_PengModified_Model_24_1.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">10</span><span class="p">))</span>
+<span class="n">img</span><span class="p">[</span><span class="mi">445</span><span class="p">:,:</span><span class="mi">300</span><span class="p">,:]</span> <span class="o">=</span> <span class="n">img</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,:]</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">img</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.image.AxesImage at 0x7ff36894fca0&gt;
+</pre></div>
+</div>
+<img alt="../../_images/10_SIR_in_PengModified_Model_25_1.png" src="../../_images/10_SIR_in_PengModified_Model_25_1.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">10</span><span class="p">))</span>
+
+<span class="n">country_map_zero</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">img</span><span class="p">)</span> 
+<span class="c1">#country_map[ (img[:,:,2] == img[0,0,2]) * (img[:,:,1] == img[0,0,1]) ] = -1</span>
+<span class="n">country_map_zero</span> <span class="o">=</span> <span class="n">country_map_zero</span><span class="p">[:,:,</span><span class="mi">2</span><span class="p">]</span>
+<span class="c1">#</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">country_map_zero</span><span class="p">[:,:])</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">colorbar</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.colorbar.Colorbar at 0x7ff36885d580&gt;
+</pre></div>
+</div>
+<img alt="../../_images/10_SIR_in_PengModified_Model_26_1.png" src="../../_images/10_SIR_in_PengModified_Model_26_1.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">country_map</span> <span class="o">=</span> <span class="n">rescale</span><span class="p">(</span><span class="n">country_map_zero</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">,</span><span class="n">anti_aliasing</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">10</span><span class="p">))</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">country_map</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">colorbar</span><span class="p">()</span>
+<span class="n">country_map_binary</span> <span class="o">=</span> <span class="n">flood_fill</span><span class="p">(</span><span class="n">country_map</span> <span class="o">&gt;=</span> <span class="mf">245.</span><span class="o">/</span><span class="mf">255.</span><span class="p">,</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">),</span> <span class="mi">1</span><span class="p">)</span> 
+
+
+<span class="n">country_map_binary</span> <span class="o">=</span> <span class="n">morphology</span><span class="o">.</span><span class="n">binary_opening</span><span class="p">(</span><span class="n">country_map_binary</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">)))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">10</span><span class="p">))</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">country_map_binary</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.image.AxesImage at 0x7ff368770d90&gt;
+</pre></div>
+</div>
+<img alt="../../_images/10_SIR_in_PengModified_Model_27_1.png" src="../../_images/10_SIR_in_PengModified_Model_27_1.png" />
+<img alt="../../_images/10_SIR_in_PengModified_Model_27_2.png" src="../../_images/10_SIR_in_PengModified_Model_27_2.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">np</span><span class="o">.</span><span class="n">savetxt</span><span class="p">(</span><span class="s1">&#39;input.txt&#39;</span><span class="p">,</span><span class="n">country_map_binary</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">fmt</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">%d</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">density_map</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">country_map</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+<span class="n">density_map</span><span class="p">[</span><span class="n">country_map_binary</span><span class="o">==</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">10</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">density_map</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.image.AxesImage at 0x7ff3686fd910&gt;
+</pre></div>
+</div>
+<img alt="../../_images/10_SIR_in_PengModified_Model_29_1.png" src="../../_images/10_SIR_in_PengModified_Model_29_1.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">init_binfile</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;init.bin&#39;</span><span class="p">,</span> <span class="s1">&#39;wb&#39;</span><span class="p">)</span>
+<span class="n">init_binfile</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">density_map</span><span class="p">)</span>
+<span class="n">init_binfile</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="tex2jax_ignore mathjax_ignore section" id="we-will-use-tclb-to-blurr-image-a-little-while-obeying-bc">
+<h1>We will use TCLB to blurr image a little, while obeying BC<a class="headerlink" href="#we-will-use-tclb-to-blurr-image-a-little-while-obeying-bc" title="Permalink to this headline">¶</a></h1>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">CLBc</span> <span class="o">=</span> <span class="n">CLBXML</span><span class="o">.</span><span class="n">CLBConfigWriter</span><span class="p">(</span> <span class="p">)</span>
+
+<span class="n">CLBc</span><span class="o">.</span><span class="n">addGeomParam</span><span class="p">(</span><span class="s1">&#39;nx&#39;</span><span class="p">,</span> <span class="n">country_map_binary</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+<span class="n">CLBc</span><span class="o">.</span><span class="n">addGeomParam</span><span class="p">(</span><span class="s1">&#39;ny&#39;</span><span class="p">,</span> <span class="n">country_map_binary</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+
+<span class="n">CLBc</span><span class="o">.</span><span class="n">addWall</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;foreign&#39;</span><span class="p">)</span>
+<span class="n">CLBc</span><span class="o">.</span><span class="n">addText</span><span class="p">(</span><span class="n">file</span><span class="o">=</span><span class="s1">&#39;input.txt&#39;</span><span class="p">)</span>
+
+
+<span class="n">params</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;Diffusivity_DRE_1&quot;</span> <span class="p">:</span> <span class="mf">1.</span><span class="o">/</span><span class="mf">6.</span><span class="p">,</span>
+        <span class="s2">&quot;Init_DRE_1&quot;</span><span class="p">:</span><span class="mf">0.0</span><span class="p">,</span>
+<span class="p">}</span>
+
+
+<span class="n">dim</span> <span class="o">=</span> <span class="n">country_map_binary</span><span class="o">.</span><span class="n">shape</span>
+<span class="n">CLBc</span><span class="o">.</span><span class="n">addModelParams</span><span class="p">(</span><span class="n">params</span><span class="p">)</span>
+
+<span class="n">params</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;Diffusivity_DRE_1&quot;</span> <span class="p">:</span> <span class="mf">1.</span><span class="o">/</span><span class="mf">6.</span><span class="p">,</span>
+        <span class="s2">&quot;Init_DRE_1&quot;</span><span class="p">:</span><span class="mi">0</span><span class="p">,</span>
+<span class="p">}</span>
+
+<span class="n">CLBc</span><span class="o">.</span><span class="n">addModelParams</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">zone</span><span class="o">=</span><span class="s1">&#39;foreign&#39;</span><span class="p">)</span>
+
+
+<span class="n">CLBc</span><span class="o">.</span><span class="n">addRunR</span><span class="p">(</span><span class="nb">eval</span><span class="o">=</span>\
+ <span class="sa">f</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">     infile &lt;- &quot;init.bin&quot;</span>
+<span class="s2">     con &lt;- file(infile, &quot;rb&quot;)</span>
+<span class="s2">     pic &lt;- matrix( readBin(con, &quot;numeric&quot;, prod(</span><span class="si">{</span><span class="n">dim</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="n">dim</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s2">)), </span><span class="si">{</span><span class="n">dim</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s2">,</span><span class="si">{</span><span class="n">dim</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2">)</span>
+<span class="s2">     </span>
+<span class="s2">     close(con)</span>
+<span class="s2">     Solver$Fields$Init_DRE_1_External[] = pic;</span>
+
+<span class="s2">    </span>
+<span class="s2">    </span>
+<span class="s2">     Solver$Actions$InitFromExternalAction();</span>
+<span class="s2"> &quot;&quot;&quot;</span><span class="p">)</span>
+
+<span class="n">CLBc</span><span class="o">.</span><span class="n">addHDF5</span><span class="p">()</span>
+<span class="n">T</span><span class="o">=</span><span class="mi">5</span>
+<span class="n">solve</span> <span class="o">=</span> <span class="n">CLBc</span><span class="o">.</span><span class="n">addSolve</span><span class="p">(</span><span class="n">iterations</span><span class="o">=</span><span class="n">T</span><span class="p">)</span>
+<span class="n">CLBc</span><span class="o">.</span><span class="n">addHDF5</span><span class="p">()</span>
+   
+<span class="n">CLBc</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;run-blurr.xml&#39;</span><span class="p">)</span>
+
+<span class="o">!</span> tclb d2q9_reaction_diffusion_system_SimpleDiffusion run-blurr.xml &gt; /dev/null <span class="o">&amp;&amp;</span> <span class="nb">echo</span> <span class="s2">&quot;DONE&quot;</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">10</span><span class="p">))</span>
+<span class="n">i</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="n">f</span> <span class="o">=</span> <span class="n">h5py</span><span class="o">.</span><span class="n">File</span><span class="p">(</span><span class="s1">&#39;./output/run-blurr_HDF5_</span><span class="si">%08d</span><span class="s1">.h5&#39;</span><span class="o">%</span><span class="k">i</span>)    
+<span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">f</span><span class="p">[</span><span class="s1">&#39;DRE_1&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">,:,:])</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">colorbar</span><span class="p">()</span>
+
+
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">10</span><span class="p">))</span>
+<span class="n">i</span> <span class="o">=</span> <span class="n">T</span>
+<span class="n">f</span> <span class="o">=</span> <span class="n">h5py</span><span class="o">.</span><span class="n">File</span><span class="p">(</span><span class="s1">&#39;./output/run-blurr_HDF5_</span><span class="si">%08d</span><span class="s1">.h5&#39;</span><span class="o">%</span><span class="k">i</span>)    
+<span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">f</span><span class="p">[</span><span class="s1">&#39;DRE_1&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">,:,:])</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">colorbar</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Hello allocator!
+DONE
+</pre></div>
+</div>
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;Figure size 1008x576 with 0 Axes&gt;
+</pre></div>
+</div>
+<img alt="../../_images/10_SIR_in_PengModified_Model_32_2.png" src="../../_images/10_SIR_in_PengModified_Model_32_2.png" />
+<img alt="../../_images/10_SIR_in_PengModified_Model_32_3.png" src="../../_images/10_SIR_in_PengModified_Model_32_3.png" />
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;Figure size 1008x576 with 0 Axes&gt;
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">i</span> <span class="o">=</span> <span class="n">T</span>
+<span class="n">f</span> <span class="o">=</span> <span class="n">h5py</span><span class="o">.</span><span class="n">File</span><span class="p">(</span><span class="s1">&#39;./output/run-blurr_HDF5_</span><span class="si">%08d</span><span class="s1">.h5&#39;</span><span class="o">%</span><span class="k">i</span>)    
+
+<span class="n">blured</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">f</span><span class="p">[</span><span class="s1">&#39;DRE_1&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">,:,:])</span> <span class="o">+</span> <span class="mf">0.1</span>
+<span class="n">N0</span> <span class="o">=</span> <span class="mi">50</span>
+<span class="n">X0</span><span class="o">=</span><span class="mf">0.1</span><span class="o">*</span><span class="n">blured</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">Y0</span><span class="o">=</span><span class="mf">0.3</span><span class="o">*</span><span class="n">blured</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+<span class="n">r_sick</span> <span class="o">=</span> <span class="mf">0.1</span><span class="o">*</span><span class="n">blured</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+
+<span class="n">X</span><span class="p">,</span><span class="n">Y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">meshgrid</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">blured</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">blured</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+
+<span class="n">R</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">((</span><span class="n">X</span><span class="o">-</span><span class="n">X0</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="o">+</span><span class="p">(</span><span class="n">Y</span><span class="o">-</span><span class="n">Y0</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+
+<span class="c1">#init_binfile = open(&#39;init-blured.bin&#39;, &#39;wb&#39;)</span>
+<span class="c1">#init_binfile.write()</span>
+<span class="c1">#init_binfile.close()</span>
+<span class="n">I0_map</span> <span class="o">=</span> <span class="n">blured</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">R</span><span class="o">/</span><span class="n">r_sick</span><span class="p">)</span><span class="o">*</span><span class="n">N0</span><span class="o">*</span><span class="mf">0.1</span>
+<span class="n">R0_map</span> <span class="o">=</span> <span class="n">blured</span><span class="o">*</span><span class="mf">0.1</span> <span class="o">+</span> <span class="mf">0.1</span>
+<span class="n">S0_map</span> <span class="o">=</span> <span class="p">(</span><span class="n">blured</span><span class="o">-</span><span class="mf">0.1</span><span class="p">)</span><span class="o">*</span><span class="n">N0</span> <span class="o">-</span> <span class="n">I0_map</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">10</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">221</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;N&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">S0_map</span><span class="o">+</span><span class="n">I0_map</span><span class="o">+</span><span class="n">R0_map</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">colorbar</span><span class="p">()</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">222</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;S&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">S0_map</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">colorbar</span><span class="p">()</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">223</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;I&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">I0_map</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">colorbar</span><span class="p">()</span>
+
+
+<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">224</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;R&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">R0_map</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">colorbar</span><span class="p">()</span>
+
+
+
+
+<span class="n">init_binfile</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;init-map-S.bin&#39;</span><span class="p">,</span> <span class="s1">&#39;wb&#39;</span><span class="p">)</span>
+<span class="n">init_binfile</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">S0_map</span><span class="p">)</span>
+<span class="n">init_binfile</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+
+<span class="n">init_binfile</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;init-map-I.bin&#39;</span><span class="p">,</span> <span class="s1">&#39;wb&#39;</span><span class="p">)</span>
+<span class="n">init_binfile</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">I0_map</span><span class="p">)</span>
+<span class="n">init_binfile</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+
+<span class="n">init_binfile</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;init-map-R.bin&#39;</span><span class="p">,</span> <span class="s1">&#39;wb&#39;</span><span class="p">)</span>
+<span class="n">init_binfile</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">R0_map</span><span class="p">)</span>
+<span class="n">init_binfile</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+
+<span class="n">init_binfile</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;init-map-N.bin&#39;</span><span class="p">,</span> <span class="s1">&#39;wb&#39;</span><span class="p">)</span>
+<span class="n">init_binfile</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">S0_map</span><span class="o">+</span><span class="n">R0_map</span><span class="o">+</span><span class="n">I0_map</span><span class="p">)</span>
+<span class="n">init_binfile</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../../_images/10_SIR_in_PengModified_Model_33_0.png" src="../../_images/10_SIR_in_PengModified_Model_33_0.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">dt_LBM</span> <span class="o">=</span> <span class="mf">1.e-6</span>
+
+<span class="n">R_LBM</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mf">8.</span><span class="o">/</span><span class="mf">6.</span><span class="o">/</span><span class="n">Beta_w_LBM</span><span class="p">)</span> 
+
+<span class="n">Beta_LBM</span> <span class="o">=</span> <span class="n">beta_sir</span> <span class="o">*</span> <span class="n">dt_LBM</span> 
+<span class="n">Beta_w_LBM</span> <span class="o">=</span> <span class="n">beta_W</span> <span class="o">*</span> <span class="n">dt_LBM</span> 
+<span class="n">Gamma_LBM</span> <span class="o">=</span> <span class="n">gamma_sir</span> <span class="o">*</span> <span class="n">dt_LBM</span>  
+
+
+
+<span class="n">CLBc</span> <span class="o">=</span> <span class="n">CLBXML</span><span class="o">.</span><span class="n">CLBConfigWriter</span><span class="p">(</span> <span class="p">)</span>
+
+<span class="n">CLBc</span><span class="o">.</span><span class="n">addGeomParam</span><span class="p">(</span><span class="s1">&#39;nx&#39;</span><span class="p">,</span> <span class="n">country_map_binary</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+<span class="n">CLBc</span><span class="o">.</span><span class="n">addGeomParam</span><span class="p">(</span><span class="s1">&#39;ny&#39;</span><span class="p">,</span> <span class="n">country_map_binary</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+
+<span class="n">CLBc</span><span class="o">.</span><span class="n">addWall</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;foreign&#39;</span><span class="p">)</span>
+<span class="n">CLBc</span><span class="o">.</span><span class="n">addText</span><span class="p">(</span><span class="n">file</span><span class="o">=</span><span class="s1">&#39;input.txt&#39;</span><span class="p">)</span>
+
+<span class="n">dim</span> <span class="o">=</span> <span class="n">country_map_binary</span><span class="o">.</span><span class="n">shape</span>
+
+<span class="n">CLBc</span><span class="o">.</span><span class="n">addRunR</span><span class="p">(</span><span class="nb">eval</span><span class="o">=</span>\
+<span class="sa">f</span><span class="s2">&quot;&quot;&quot;</span>
+
+<span class="s2">    con &lt;- file(&quot;init-map-S.bin&quot;, &quot;rb&quot;)</span>
+<span class="s2">    init &lt;- matrix( readBin(con, &quot;numeric&quot;, prod(</span><span class="si">{</span><span class="n">dim</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="n">dim</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s2">)), </span><span class="si">{</span><span class="n">dim</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s2">,</span><span class="si">{</span><span class="n">dim</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2">)</span>
+<span class="s2">    close(con)</span>
+<span class="s2">    Solver$Fields$Init_ODE_1_External[] = init;</span>
+<span class="s2">    </span>
+
+<span class="s2">    con &lt;- file(&quot;init-map-I.bin&quot;, &quot;rb&quot;)</span>
+<span class="s2">    init &lt;- matrix( readBin(con, &quot;numeric&quot;, prod(</span><span class="si">{</span><span class="n">dim</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="n">dim</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s2">)), </span><span class="si">{</span><span class="n">dim</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s2">,</span><span class="si">{</span><span class="n">dim</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2">)</span>
+<span class="s2">    close(con)</span>
+<span class="s2">    Solver$Fields$Init_ODE_2_External[] = init;</span>
+<span class="s2">    Solver$Fields$Init_DRE_1_External[] = init;</span>
+
+
+<span class="s2">    con &lt;- file(&quot;init-map-R.bin&quot;, &quot;rb&quot;)</span>
+<span class="s2">    init &lt;- matrix( readBin(con, &quot;numeric&quot;, prod(</span><span class="si">{</span><span class="n">dim</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="n">dim</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s2">)), </span><span class="si">{</span><span class="n">dim</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s2">,</span><span class="si">{</span><span class="n">dim</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2">)</span>
+<span class="s2">    close(con)</span>
+<span class="s2">    Solver$Fields$Init_ODE_3_External[] = init;</span>
+
+<span class="s2">    # and N</span>
+<span class="s2">    Solver$Fields$Init_ODE_4_External[] = Solver$Fields$Init_ODE_1_External[] + Solver$Fields$Init_ODE_2_External[] + Solver$Fields$Init_ODE_3_External[];</span>
+
+
+<span class="s2">    Solver$Actions$InitFromExternalAction();</span>
+<span class="s2">&quot;&quot;&quot;</span><span class="p">)</span>
+
+    
+<span class="n">params</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;Diffusivity_DRE_1&quot;</span><span class="p">:</span> <span class="n">Beta_w_LBM</span> <span class="o">*</span> <span class="n">R_LBM</span><span class="o">**</span><span class="mi">2</span> <span class="o">/</span> <span class="mf">8.</span><span class="p">,</span>
+        <span class="s2">&quot;Init_DRE_1&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>    
+        <span class="s2">&quot;Init_ODE_1&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+        <span class="s2">&quot;Init_ODE_2&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+        <span class="s2">&quot;Init_ODE_3&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+        <span class="s2">&quot;Init_ODE_4&quot;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span>
+        <span class="s2">&quot;C_1&quot;</span><span class="p">:</span> <span class="n">Beta_LBM</span><span class="p">,</span>
+        <span class="s2">&quot;C_2&quot;</span><span class="p">:</span> <span class="n">Beta_w_LBM</span><span class="p">,</span>
+        <span class="s2">&quot;C_3&quot;</span><span class="p">:</span> <span class="n">Gamma_LBM</span><span class="p">,</span>
+<span class="p">}</span>
+
+<span class="n">CLBc</span><span class="o">.</span><span class="n">addModelParams</span><span class="p">(</span><span class="n">params</span><span class="p">)</span>
+
+<span class="n">T</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span> <span class="mi">1</span> <span class="o">/</span> <span class="p">(</span><span class="n">dt_LBM</span> <span class="o">*</span> <span class="mf">1e6</span><span class="p">)</span> <span class="o">*</span> <span class="mf">1e6</span> <span class="p">)</span>
+<span class="c1">#T = 100000</span>
+
+<span class="n">CLBc</span><span class="o">.</span><span class="n">addHDF5</span><span class="p">()</span>
+<span class="n">solve</span> <span class="o">=</span> <span class="n">CLBc</span><span class="o">.</span><span class="n">addSolve</span><span class="p">(</span><span class="n">iterations</span><span class="o">=</span><span class="n">T</span><span class="p">,</span> 
+                      <span class="n">failcheck_dx</span><span class="o">=</span><span class="n">dim</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> 
+                      <span class="n">failcheck_dy</span><span class="o">=</span><span class="n">dim</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span>
+                      <span class="n">failcheck_nx</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> 
+                      <span class="n">failcheck_ny</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
+                      <span class="n">failcheck</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">T</span><span class="o">/</span><span class="mi">60</span><span class="p">),</span> 
+                      <span class="n">failcheck_fields</span><span class="o">=</span><span class="s1">&#39;DRE_1&#39;</span>
+<span class="p">)</span>
+<span class="n">CLBc</span><span class="o">.</span><span class="n">addHDF5</span><span class="p">(</span><span class="n">Iterations</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">T</span><span class="o">/</span><span class="mi">30</span><span class="p">),</span> <span class="n">parent</span><span class="o">=</span><span class="n">solve</span><span class="p">)</span>
+   
+    
+<span class="n">CLBc</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;run.xml&#39;</span><span class="p">)</span>
+
+<span class="n">f</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;run.xml&#39;</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">readlines</span><span class="p">()))</span>
+<span class="o">!</span> tclb d2q9_reaction_diffusion_system_SIR_ModifiedPeng run.xml <span class="o">&amp;&amp;</span> <span class="nb">echo</span> <span class="s2">&quot;DONE&quot;</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;CLBConfig version=&quot;2.0&quot; output=&quot;output/&quot;&gt;
+  &lt;!--Created using CLBConfigWriter--&gt;
+  &lt;Geometry predef=&quot;none&quot; model=&quot;MRT&quot; nx=&quot;97.0000000000000000&quot; ny=&quot;91.0000000000000000&quot;&gt;
+    &lt;Wall name=&quot;foreign&quot; mask=&quot;ALL&quot;&gt;
+      &lt;Text file=&quot;input.txt&quot;/&gt;
+    &lt;/Wall&gt;
+  &lt;/Geometry&gt;
+  &lt;Model&gt;
+    &lt;Param name=&quot;Diffusivity_DRE_1&quot; value=&quot;0.0166666666666667&quot;/&gt;
+    &lt;Param name=&quot;Init_DRE_1&quot; value=&quot;1.0000000000000000&quot;/&gt;
+    &lt;Param name=&quot;Init_ODE_1&quot; value=&quot;1.0000000000000000&quot;/&gt;
+    &lt;Param name=&quot;Init_ODE_2&quot; value=&quot;1.0000000000000000&quot;/&gt;
+    &lt;Param name=&quot;Init_ODE_3&quot; value=&quot;1.0000000000000000&quot;/&gt;
+    &lt;Param name=&quot;Init_ODE_4&quot; value=&quot;3.0000000000000000&quot;/&gt;
+    &lt;Param name=&quot;C_1&quot; value=&quot;0.0000021070000000&quot;/&gt;
+    &lt;Param name=&quot;C_2&quot; value=&quot;0.0010000000000000&quot;/&gt;
+    &lt;Param name=&quot;C_3&quot; value=&quot;0.0000002500000000&quot;/&gt;
+  &lt;/Model&gt;
+  &lt;RunR&gt;&lt;![CDATA[
+
+    con &lt;- file(&quot;init-map-S.bin&quot;, &quot;rb&quot;)
+    init &lt;- matrix( readBin(con, &quot;numeric&quot;, prod(8827)), 97,91)
+    close(con)
+    Solver$Fields$Init_ODE_1_External[] = init;
+    
+
+    con &lt;- file(&quot;init-map-I.bin&quot;, &quot;rb&quot;)
+    init &lt;- matrix( readBin(con, &quot;numeric&quot;, prod(8827)), 97,91)
+    close(con)
+    Solver$Fields$Init_ODE_2_External[] = init;
+    Solver$Fields$Init_DRE_1_External[] = init;
+
+
+    con &lt;- file(&quot;init-map-R.bin&quot;, &quot;rb&quot;)
+    init &lt;- matrix( readBin(con, &quot;numeric&quot;, prod(8827)), 97,91)
+    close(con)
+    Solver$Fields$Init_ODE_3_External[] = init;
+
+    # and N
+    Solver$Fields$Init_ODE_4_External[] = Solver$Fields$Init_ODE_1_External[] + Solver$Fields$Init_ODE_2_External[] + Solver$Fields$Init_ODE_3_External[];
+
+
+    Solver$Actions$InitFromExternalAction();
+]]&gt;&lt;/RunR&gt;
+  &lt;HDF5/&gt;
+  &lt;Solve Iterations=&quot;1000000&quot;&gt;
+    &lt;Failcheck Iterations=&quot;16666&quot; nx=&quot;10&quot; ny=&quot;10&quot; nz=&quot;1&quot; dx=&quot;45.5&quot; dy=&quot;48.5&quot; dz=&quot;1&quot; what=&quot;DRE_1&quot;&gt;
+      &lt;VTK/&gt;
+    &lt;/Failcheck&gt;
+    &lt;HDF5 Iterations=&quot;33333&quot;/&gt;
+  &lt;/Solve&gt;
+&lt;/CLBConfig&gt;
+
+MPMD: TCLB: local:0/1 work:0/1 ---  connected to:
+[  ] <span class=" -Color -Color-Bold -Color-Bold-Green">-------------------------------------------------------------------------</span>
+[  ] <span class=" -Color -Color-Bold -Color-Bold-Green">-  CLB version:   v6.0-beta-1716-g8e58bf9                               -</span>
+[  ] <span class=" -Color -Color-Bold -Color-Bold-Green">-        Model: d2q9_reaction_diffusion_system_SIR_ModifiedPeng                 </span>
+[  ] <span class=" -Color -Color-Bold -Color-Bold-Green">              -</span>
+[  ] <span class=" -Color -Color-Bold -Color-Bold-Green">-------------------------------------------------------------------------</span>
+[  ] <span class=" -Color -Color-Bold -Color-Bold-Green">Setting output path to: run</span>
+[  ] <span class=" -Color -Color-Bold">Discarding 1 comments</span>
+[ 0] <span class=" -Color -Color-Bold">Running on CPU</span>
+[ 0] <span class=" -Color -Color-Yellow">WARNING: </span><span class=" -Color -Color-Bold -Color-Bold-Yellow">No &quot;Units&quot; element in config file</span>
+[  ] <span class=" -Color -Color-Green">Mesh size in config file: 97x91x1</span>
+[  ] <span class=" -Color -Color-Bold">Global lattice size: 97x91x1</span>
+[  ] <span class=" -Color -Color-Green">Max region size: 8827. Mesh size 8827. Overhead:  0%</span>
+[  ] <span class=" -Color -Color-Bold">Local lattice size: 97x91x1</span>
+Hello allocator!
+[  ] <span class=" -Color -Color-Bold">  Threads  |      Action</span>
+[  ] <span class=" -Color -Color-Bold">    1x1    | Primal , NoGlobals , InitFromExternal</span>
+[  ] <span class=" -Color -Color-Bold">    1x1    | Tangent , NoGlobals , InitFromExternal</span>
+[  ] <span class=" -Color -Color-Bold">    1x1    | Optimize , NoGlobals , InitFromExternal</span>
+[  ] <span class=" -Color -Color-Bold">    1x1    | SteadyAdjoint , NoGlobals , InitFromExternal</span>
+[  ] <span class=" -Color -Color-Bold">    1x1    | Primal , IntegrateGlobals , InitFromExternal</span>
+[  ] <span class=" -Color -Color-Bold">    1x1    | Tangent , IntegrateGlobals , InitFromExternal</span>
+[  ] <span class=" -Color -Color-Bold">    1x1    | Optimize , IntegrateGlobals , InitFromExternal</span>
+[  ] <span class=" -Color -Color-Bold">    1x1    | SteadyAdjoint , IntegrateGlobals , InitFromExternal</span>
+[  ] <span class=" -Color -Color-Bold">    1x1    | Primal , OnlyObjective , InitFromExternal</span>
+[  ] <span class=" -Color -Color-Bold">    1x1    | Tangent , OnlyObjective , InitFromExternal</span>
+[  ] <span class=" -Color -Color-Bold">    1x1    | Optimize , OnlyObjective , InitFromExternal</span>
+[  ] <span class=" -Color -Color-Bold">    1x1    | SteadyAdjoint , OnlyObjective , InitFromExternal</span>
+[  ] <span class=" -Color -Color-Bold">    1x1    | Primal , NoGlobals , BaseIteration</span>
+[  ] <span class=" -Color -Color-Bold">    1x1    | Tangent , NoGlobals , BaseIteration</span>
+[  ] <span class=" -Color -Color-Bold">    1x1    | Optimize , NoGlobals , BaseIteration</span>
+[  ] <span class=" -Color -Color-Bold">    1x1    | SteadyAdjoint , NoGlobals , BaseIteration</span>
+[  ] <span class=" -Color -Color-Bold">    1x1    | Primal , IntegrateGlobals , BaseIteration</span>
+[  ] <span class=" -Color -Color-Bold">    1x1    | Tangent , IntegrateGlobals , BaseIteration</span>
+[  ] <span class=" -Color -Color-Bold">    1x1    | Optimize , IntegrateGlobals , BaseIteration</span>
+[  ] <span class=" -Color -Color-Bold">    1x1    | SteadyAdjoint , IntegrateGlobals , BaseIteration</span>
+[  ] <span class=" -Color -Color-Bold">    1x1    | Primal , OnlyObjective , BaseIteration</span>
+[  ] <span class=" -Color -Color-Bold">    1x1    | Tangent , OnlyObjective , BaseIteration</span>
+[  ] <span class=" -Color -Color-Bold">    1x1    | Optimize , OnlyObjective , BaseIteration</span>
+[  ] <span class=" -Color -Color-Bold">    1x1    | SteadyAdjoint , OnlyObjective , BaseIteration</span>
+[  ] <span class=" -Color -Color-Bold">    1x1    | Primal , NoGlobals , BaseInit</span>
+[  ] <span class=" -Color -Color-Bold">    1x1    | Tangent , NoGlobals , BaseInit</span>
+[  ] <span class=" -Color -Color-Bold">    1x1    | Optimize , NoGlobals , BaseInit</span>
+[  ] <span class=" -Color -Color-Bold">    1x1    | SteadyAdjoint , NoGlobals , BaseInit</span>
+[  ] <span class=" -Color -Color-Bold">    1x1    | Primal , IntegrateGlobals , BaseInit</span>
+[  ] <span class=" -Color -Color-Bold">    1x1    | Tangent , IntegrateGlobals , BaseInit</span>
+[  ] <span class=" -Color -Color-Bold">    1x1    | Optimize , IntegrateGlobals , BaseInit</span>
+[  ] <span class=" -Color -Color-Bold">    1x1    | SteadyAdjoint , IntegrateGlobals , BaseInit</span>
+[  ] <span class=" -Color -Color-Bold">    1x1    | Primal , OnlyObjective , BaseInit</span>
+[  ] <span class=" -Color -Color-Bold">    1x1    | Tangent , OnlyObjective , BaseInit</span>
+[  ] <span class=" -Color -Color-Bold">    1x1    | Optimize , OnlyObjective , BaseInit</span>
+[  ] <span class=" -Color -Color-Bold">    1x1    | SteadyAdjoint , OnlyObjective , BaseInit</span>
+[  ] <span class=" -Color -Color-Bold -Color-Bold-Green">[0] Cumulative allocation of 2585344 b (2.6 MB)</span>
+[  ] <span class=" -Color -Color-Bold">Creating geom size:8827</span>
+[  ] <span class=" -Color -Color-Bold -Color-Bold-Green">Setting output path to: run</span>
+[  ] <span class=" -Color -Color-Bold -Color-Bold-Green">Setting output path to: output/run</span>
+[  ] <span class=" -Color -Color-Bold">loading geometry ...</span>
+Region: 97x91x1 + 0,0,0
+[  ] <span class=" -Color -Color-Bold">Reading file input.txt</span>
+[  ] <span class=" -Color -Color-Bold">Setting number of zones to 2</span>
+[  ] <span class=" -Color -Color-Bold">Setting Diffusivity_DRE_1 to 0.0166666666666667 (0.016667)</span>
+[  ] <span class=" -Color -Color-Bold">[0] Settings [Diffusivity for  DRE_1] to 0.016667</span>
+[  ] <span class=" -Color -Color-Bold">Setting Init_DRE_1 in zone  (-1) to 1.0000000000000000 (1.000000)</span>
+[  ] <span class=" -Color -Color-Bold">Setting Init_ODE_1 in zone  (-1) to 1.0000000000000000 (1.000000)</span>
+[  ] <span class=" -Color -Color-Bold">Setting Init_ODE_2 in zone  (-1) to 1.0000000000000000 (1.000000)</span>
+[  ] <span class=" -Color -Color-Bold">Setting Init_ODE_3 in zone  (-1) to 1.0000000000000000 (1.000000)</span>
+[  ] <span class=" -Color -Color-Bold">Setting Init_ODE_4 in zone  (-1) to 3.0000000000000000 (3.000000)</span>
+[  ] <span class=" -Color -Color-Bold">Setting C_1 to 0.0000021070000000 (0.000002)</span>
+[  ] <span class=" -Color -Color-Bold">[0] Settings [Model parameter C_1] to 0.000002</span>
+[  ] <span class=" -Color -Color-Bold">Setting C_2 to 0.0010000000000000 (0.001000)</span>
+[  ] <span class=" -Color -Color-Bold">[0] Settings [Model parameter C_2] to 0.001000</span>
+[  ] <span class=" -Color -Color-Bold">Setting C_3 to 0.0000002500000000 (0.000000)</span>
+[  ] <span class=" -Color -Color-Bold">[0] Settings [Model parameter C_3] to 0.000000</span>
+[  ] <span class=" -Color -Color-Bold">Initializing Lattice ...</span>
+[  ] <span class=" -Color -Color-Bold">Callback RunR with no Iterations attribute</span>==] 1482h 43m
+[  ] <span class=" -Color -Color-Green">R: Initializing R environment ...</span>
+[  ] <span class=" -Color -Color-Bold">cdata</span>
+[  ] <span class=" -Color -Color-Bold">       0 it Running R ...</span>
+[  ] <span class=" -Color -Color-Bold">----- RunR -----</span>
+[  ] <span class=" -Color -Color-Bold"></span>
+
+<span class=" -Color -Color-Bold">    con &lt;- file(&quot;init-map-S.bin&quot;, &quot;rb&quot;)</span>
+<span class=" -Color -Color-Bold">    init &lt;- matrix( readBin(con, &quot;nume</span>
+[  ] <span class=" -Color -Color-Bold">ric&quot;, prod(8827)), 97,91)</span>
+<span class=" -Color -Color-Bold">    close(con)</span>
+<span class=" -Color -Color-Bold">    Solver$Fields$Init_ODE_1_External[]</span>
+[  ] <span class=" -Color -Color-Bold"> = init;</span>
+<span class=" -Color -Color-Bold">    </span>
+
+<span class=" -Color -Color-Bold">    con &lt;- file(&quot;init-map-I.bin&quot;, &quot;rb&quot;)</span>
+<span class=" -Color -Color-Bold">    init &lt;- matrix( readB</span>
+[  ] <span class=" -Color -Color-Bold">in(con, &quot;numeric&quot;, prod(8827)), 97,91)</span>
+<span class=" -Color -Color-Bold">    close(con)</span>
+<span class=" -Color -Color-Bold">    Solver$Fields$Init_ODE</span>
+[  ] <span class=" -Color -Color-Bold">_2_External[] = init;</span>
+<span class=" -Color -Color-Bold">    Solver$Fields$Init_DRE_1_External[] = init;</span>
+
+
+<span class=" -Color -Color-Bold">    con </span>
+[  ] <span class=" -Color -Color-Bold">&lt;- file(&quot;init-map-R.bin&quot;, &quot;rb&quot;)</span>
+<span class=" -Color -Color-Bold">    init &lt;- matrix( readBin(con, &quot;numeric&quot;, prod</span>
+[  ] <span class=" -Color -Color-Bold">(8827)), 97,91)</span>
+<span class=" -Color -Color-Bold">    close(con)</span>
+<span class=" -Color -Color-Bold">    Solver$Fields$Init_ODE_3_External[] = init;</span>
+
+
+[  ] <span class=" -Color -Color-Bold">    # and N</span>
+<span class=" -Color -Color-Bold">    Solver$Fields$Init_ODE_4_External[] = Solver$Fields$Init_ODE_1_E</span>
+[  ] <span class=" -Color -Color-Bold">xternal[] + Solver$Fields$Init_ODE_2_External[] + Solver$Fields$Init_ODE_3_Exter</span>
+[  ] <span class=" -Color -Color-Bold">nal[];</span>
+
+
+<span class=" -Color -Color-Bold">    Solver$Actions$InitFromExternalAction();</span>
+
+[  ] <span class=" -Color -Color-Bold">----------------</span>
+[  ] <span class=" -Color -Color-Bold -Color-Bold-Green">You can run interactive R session with Ctrl+X</span>
+[  ] <span class=" -Color -Color-Bold">Callback HDF5 with no Iterations attribute</span>
+[  ] <span class=" -Color -Color-Bold">Negotiated HDF5 chunks: 1x91x97[x3]</span>
+[  ] <span class=" -Color -Color-Bold">       0 it writing hdf5</span>
+[  ] <span class=" -Color -Color-Bold">Setting action Solve at 1000000.000000 iterations</span>
+[  ] <span class=" -Color -Color-Bold">Setting callback Failcheck at 16666.000000 iterations</span>
+[  ] <span class=" -Color -Color-Bold">Adding Failcheck to the solver hands</span>
+[  ] <span class=" -Color -Color-Bold">Setting callback HDF5 at 33333.000000 iterations</span>
+[  ] <span class=" -Color -Color-Bold">Negotiated HDF5 chunks: 1x91x97[x3]</span>
+[  ] <span class=" -Color -Color-Bold">Adding HDF5 to the solver hands</span>
+[  ] <span class=" -Color -Color-Bold">    23.7 MLBUps      5.35 GB/s [====================]</span>3m
+[  ] <span class=" -Color -Color-Bold">    25.2 MLBUps      5.69 GB/s [====================]</span>
+[  ] <span class=" -Color -Color-Bold">    17.5 MLBUps      3.95 GB/s [====================]</span>
+[  ] <span class=" -Color -Color-Bold">   33333 it writing hdf5</span>
+[  ] <span class=" -Color -Color-Bold">    23.5 MLBUps      5.30 GB/s [====================]</span>
+[  ] <span class=" -Color -Color-Bold">    24.7 MLBUps      5.59 GB/s [====================]</span>
+[  ] <span class=" -Color -Color-Bold">     4.9 MLBUps      1.12 GB/s [====================]</span>
+[  ] <span class=" -Color -Color-Bold">   66666 it writing hdf5</span>
+[  ] <span class=" -Color -Color-Bold">    21.9 MLBUps      4.94 GB/s [====================]</span>
+[  ] <span class=" -Color -Color-Bold">    24.8 MLBUps      5.62 GB/s [====================]</span>
+[  ] <span class=" -Color -Color-Bold">    24.0 MLBUps      5.43 GB/s [====================]</span>
+[  ] <span class=" -Color -Color-Bold">   99999 it writing hdf5</span>
+[  ] <span class=" -Color -Color-Bold">    20.4 MLBUps      4.62 GB/s [====================]</span>
+[  ] <span class=" -Color -Color-Bold">    25.4 MLBUps      5.74 GB/s [====================]</span>
+[  ] <span class=" -Color -Color-Bold">    24.9 MLBUps      5.63 GB/s [====================]</span>
+[  ] <span class=" -Color -Color-Bold">  133332 it writing hdf5</span>
+^C ]     22.8 MLBUps      5.16 GB/s [==========          ]  3s
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">10</span><span class="p">))</span>
+
+<span class="n">cases</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">T</span><span class="p">,</span><span class="nb">int</span><span class="p">(</span><span class="n">T</span><span class="o">/</span><span class="mf">30.</span><span class="p">))[:</span><span class="mi">5</span><span class="p">]</span>
+
+
+<span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span><span class="n">lim</span> <span class="ow">in</span> <span class="p">[(</span><span class="s1">&#39;W-load field&#39;</span><span class="p">,</span> <span class="s1">&#39;DRE_1&#39;</span><span class="p">,</span><span class="mi">7</span><span class="p">),(</span><span class="s1">&#39;Suspectible field&#39;</span><span class="p">,</span> <span class="s1">&#39;ODE_1&#39;</span><span class="p">,</span><span class="mi">40</span><span class="p">),(</span><span class="s1">&#39;Infected field&#39;</span><span class="p">,</span> <span class="s1">&#39;ODE_2&#39;</span><span class="p">,</span><span class="mi">7</span><span class="p">),(</span><span class="s1">&#39;Recovered/Removed field&#39;</span><span class="p">,</span> <span class="s1">&#39;ODE_3&#39;</span><span class="p">,</span><span class="mi">2</span><span class="p">)]:</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">25</span><span class="p">,</span><span class="mi">5</span><span class="p">))</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">30</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">num</span><span class="p">,</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">cases</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+        <span class="n">f</span> <span class="o">=</span> <span class="n">h5py</span><span class="o">.</span><span class="n">File</span><span class="p">(</span><span class="s1">&#39;./output/run_HDF5_</span><span class="si">%08d</span><span class="s1">.h5&#39;</span><span class="o">%</span><span class="k">i</span>)    
+        <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">cases</span><span class="p">)</span><span class="o">*</span><span class="mi">10</span><span class="o">+</span><span class="mi">100</span><span class="o">+</span><span class="n">num</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">f</span><span class="p">[</span><span class="n">field</span><span class="p">][</span><span class="mi">0</span><span class="p">,:,:])</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">clim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">lim</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">colorbar</span><span class="p">()</span>
+
+<span class="c1">#     plt.subplot(152)</span>
+<span class="c1">#     plt.title(&#39;S&#39;)</span>
+<span class="c1">#     plt.imshow(f[&#39;ODE_1&#39;][0,:,:])</span>
+<span class="c1">#     plt.colorbar()</span>
+
+<span class="c1">#     plt.subplot(153)</span>
+<span class="c1">#     plt.title(&#39;I&#39;)</span>
+<span class="c1">#     plt.imshow(f[&#39;ODE_2&#39;][0,:,:])</span>
+<span class="c1">#     plt.colorbar()</span>
+
+
+<span class="c1">#     plt.subplot(154)</span>
+<span class="c1">#     plt.title(&#39;R&#39;)</span>
+<span class="c1">#     plt.imshow(f[&#39;ODE_3&#39;][0,:,:])</span>
+<span class="c1">#     plt.colorbar()</span>
+
+<span class="c1">#     plt.subplot(155)</span>
+<span class="c1">#     plt.title(&#39;R&#39;)</span>
+<span class="c1">#     plt.imshow(f[&#39;ODE_1&#39;][0,:,:]+f[&#39;ODE_2&#39;][0,:,:]+f[&#39;ODE_3&#39;][0,:,:])</span>
+<span class="c1">#     plt.colorbar()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0
+33333
+66666
+99999
+133332
+0
+33333
+66666
+99999
+133332
+0
+33333
+66666
+99999
+133332
+0
+33333
+66666
+99999
+133332
+</pre></div>
+</div>
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;Figure size 720x720 with 0 Axes&gt;
+</pre></div>
+</div>
+<img alt="../../_images/10_SIR_in_PengModified_Model_35_2.png" src="../../_images/10_SIR_in_PengModified_Model_35_2.png" />
+<img alt="../../_images/10_SIR_in_PengModified_Model_35_3.png" src="../../_images/10_SIR_in_PengModified_Model_35_3.png" />
+<img alt="../../_images/10_SIR_in_PengModified_Model_35_4.png" src="../../_images/10_SIR_in_PengModified_Model_35_4.png" />
+<img alt="../../_images/10_SIR_in_PengModified_Model_35_5.png" src="../../_images/10_SIR_in_PengModified_Model_35_5.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">10</span><span class="p">))</span>
+<span class="n">xx</span> <span class="o">=</span> <span class="mi">30</span>
+<span class="n">yy</span> <span class="o">=</span> <span class="mi">25</span>
+<span class="n">tmp</span> <span class="o">=</span> <span class="n">f</span><span class="p">[</span><span class="s1">&#39;DRE_1&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">,:,:]</span>
+<span class="n">tmp</span><span class="p">[</span><span class="n">xx</span><span class="p">,</span><span class="n">yy</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">tmp</span><span class="p">)</span>
+
+
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">10</span><span class="p">))</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">T</span><span class="p">,</span><span class="nb">int</span><span class="p">(</span><span class="n">T</span><span class="o">/</span><span class="mf">30.</span><span class="p">)):</span>
+    <span class="n">f</span> <span class="o">=</span> <span class="n">h5py</span><span class="o">.</span><span class="n">File</span><span class="p">(</span><span class="s1">&#39;./output/run_HDF5_</span><span class="si">%08d</span><span class="s1">.h5&#39;</span><span class="o">%</span><span class="k">i</span>)    
+    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">i</span><span class="o">*</span><span class="n">dt_LBM</span><span class="p">,</span><span class="n">f</span><span class="p">[</span><span class="s1">&#39;DRE_1&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">,</span><span class="n">xx</span><span class="p">,</span><span class="n">yy</span><span class="p">],</span> <span class="s1">&#39;rx&#39;</span><span class="p">)</span>    
+    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">i</span><span class="o">*</span><span class="n">dt_LBM</span><span class="p">,</span><span class="n">f</span><span class="p">[</span><span class="s1">&#39;ODE_2&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">,</span><span class="n">xx</span><span class="p">,</span><span class="n">yy</span><span class="p">],</span> <span class="s1">&#39;ko&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">i</span><span class="o">*</span><span class="n">dt_LBM</span><span class="p">,</span><span class="n">f</span><span class="p">[</span><span class="s1">&#39;ODE_3&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">,</span><span class="n">xx</span><span class="p">,</span><span class="n">yy</span><span class="p">],</span> <span class="s1">&#39;bo&#39;</span><span class="p">)</span>
+<span class="c1"># plt.ylabel(&#39;# of people&#39;)</span>
+<span class="c1"># plt.twinx()</span>
+<span class="c1"># for i in np.arange(0,T,int(T/30.)):</span>
+<span class="c1">#     f = h5py.File(&#39;./output/run_HDF5_%08d.h5&#39;%i)    </span>
+
+<span class="c1">#     plt.plot(i*dt_LBM,f[&#39;ODE_1&#39;][0,xx,yy], &#39;ro&#39;)</span>
+
+    
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span> <span class="s1">&#39;ro&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;S&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span> <span class="s1">&#39;ko&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;I&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span> <span class="s1">&#39;bo&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;R&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">which</span><span class="o">=</span><span class="s1">&#39;both&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Time&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;# of people&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">FileNotFoundError</span><span class="g g-Whitespace">                         </span>Traceback (most recent call last)
+<span class="o">/</span><span class="n">tmp</span><span class="o">/</span><span class="n">ipykernel_18058</span><span class="o">/</span><span class="mf">724115898.</span><span class="n">py</span> <span class="ow">in</span> <span class="o">&lt;</span><span class="n">module</span><span class="o">&gt;</span>
+<span class="g g-Whitespace">      </span><span class="mi">9</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">10</span><span class="p">))</span>
+<span class="g g-Whitespace">     </span><span class="mi">10</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">T</span><span class="p">,</span><span class="nb">int</span><span class="p">(</span><span class="n">T</span><span class="o">/</span><span class="mf">30.</span><span class="p">)):</span>
+<span class="ne">---&gt; </span><span class="mi">11</span>     <span class="n">f</span> <span class="o">=</span> <span class="n">h5py</span><span class="o">.</span><span class="n">File</span><span class="p">(</span><span class="s1">&#39;./output/run_HDF5_</span><span class="si">%08d</span><span class="s1">.h5&#39;</span><span class="o">%</span><span class="k">i</span>)
+<span class="g g-Whitespace">     </span><span class="mi">12</span>     <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">i</span><span class="o">*</span><span class="n">dt_LBM</span><span class="p">,</span><span class="n">f</span><span class="p">[</span><span class="s1">&#39;DRE_1&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">,</span><span class="n">xx</span><span class="p">,</span><span class="n">yy</span><span class="p">],</span> <span class="s1">&#39;rx&#39;</span><span class="p">)</span>
+<span class="g g-Whitespace">     </span><span class="mi">13</span>     <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">i</span><span class="o">*</span><span class="n">dt_LBM</span><span class="p">,</span><span class="n">f</span><span class="p">[</span><span class="s1">&#39;ODE_2&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">,</span><span class="n">xx</span><span class="p">,</span><span class="n">yy</span><span class="p">],</span> <span class="s1">&#39;ko&#39;</span><span class="p">)</span>
+
+<span class="nn">/usr/local/lib/python3.8/dist-packages/h5py/_hl/files.py</span> in <span class="ni">__init__</span><span class="nt">(self, name, mode, driver, libver, userblock_size, swmr, rdcc_nslots, rdcc_nbytes, rdcc_w0, track_order, fs_strategy, fs_persist, fs_threshold, **kwds)</span>
+<span class="g g-Whitespace">    </span><span class="mi">453</span>             <span class="k">with</span> <span class="n">phil</span><span class="p">:</span>
+<span class="g g-Whitespace">    </span><span class="mi">454</span>                 <span class="n">fapl</span> <span class="o">=</span> <span class="n">make_fapl</span><span class="p">(</span><span class="n">driver</span><span class="p">,</span> <span class="n">libver</span><span class="p">,</span> <span class="n">rdcc_nslots</span><span class="p">,</span> <span class="n">rdcc_nbytes</span><span class="p">,</span> <span class="n">rdcc_w0</span><span class="p">,</span> <span class="o">**</span><span class="n">kwds</span><span class="p">)</span>
+<span class="ne">--&gt; </span><span class="mi">455</span>                 <span class="n">fid</span> <span class="o">=</span> <span class="n">make_fid</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">mode</span><span class="p">,</span> <span class="n">userblock_size</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">456</span>                                <span class="n">fapl</span><span class="p">,</span> <span class="n">fcpl</span><span class="o">=</span><span class="n">make_fcpl</span><span class="p">(</span><span class="n">track_order</span><span class="o">=</span><span class="n">track_order</span><span class="p">,</span> <span class="n">fs_strategy</span><span class="o">=</span><span class="n">fs_strategy</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">457</span>                                <span class="n">fs_persist</span><span class="o">=</span><span class="n">fs_persist</span><span class="p">,</span> <span class="n">fs_threshold</span><span class="o">=</span><span class="n">fs_threshold</span><span class="p">),</span>
+
+<span class="nn">/usr/local/lib/python3.8/dist-packages/h5py/_hl/files.py</span> in <span class="ni">make_fid</span><span class="nt">(name, mode, userblock_size, fapl, fcpl, swmr)</span>
+<span class="g g-Whitespace">    </span><span class="mi">197</span>         <span class="k">if</span> <span class="n">swmr</span> <span class="ow">and</span> <span class="n">swmr_support</span><span class="p">:</span>
+<span class="g g-Whitespace">    </span><span class="mi">198</span>             <span class="n">flags</span> <span class="o">|=</span> <span class="n">h5f</span><span class="o">.</span><span class="n">ACC_SWMR_READ</span>
+<span class="ne">--&gt; </span><span class="mi">199</span>         <span class="n">fid</span> <span class="o">=</span> <span class="n">h5f</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">flags</span><span class="p">,</span> <span class="n">fapl</span><span class="o">=</span><span class="n">fapl</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">200</span>     <span class="k">elif</span> <span class="n">mode</span> <span class="o">==</span> <span class="s1">&#39;r+&#39;</span><span class="p">:</span>
+<span class="g g-Whitespace">    </span><span class="mi">201</span>         <span class="n">fid</span> <span class="o">=</span> <span class="n">h5f</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">h5f</span><span class="o">.</span><span class="n">ACC_RDWR</span><span class="p">,</span> <span class="n">fapl</span><span class="o">=</span><span class="n">fapl</span><span class="p">)</span>
+
+<span class="nn">h5py/_objects.pyx</span> in <span class="ni">h5py._objects.with_phil.wrapper</span><span class="nt">()</span>
+
+<span class="nn">h5py/_objects.pyx</span> in <span class="ni">h5py._objects.with_phil.wrapper</span><span class="nt">()</span>
+
+<span class="nn">h5py/h5f.pyx</span> in <span class="ni">h5py.h5f.open</span><span class="nt">()</span>
+
+<span class="ne">FileNotFoundError</span>: [Errno 2] Unable to open file (unable to open file: name = &#39;./output/run_HDF5_00166665.h5&#39;, errno = 2, error message = &#39;No such file or directory&#39;, flags = 0, o_flags = 0)
+</pre></div>
+</div>
+<img alt="../../_images/10_SIR_in_PengModified_Model_36_1.png" src="../../_images/10_SIR_in_PengModified_Model_36_1.png" />
+<img alt="../../_images/10_SIR_in_PengModified_Model_36_2.png" src="../../_images/10_SIR_in_PengModified_Model_36_2.png" />
+</div>
+</div>
+</div>
+<div class="tex2jax_ignore mathjax_ignore section" id="modified-sir-model-by-peng">
+<h1>Modified SIR model by Peng<a class="headerlink" href="#modified-sir-model-by-peng" title="Permalink to this headline">¶</a></h1>
+<p>or the WSIR model, aleready referenced in this workshop</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\frac{\partial}{\partial t} W = \beta_W \left[\frac{r^2}{8}W + (I-W) \right] \\
+\frac{\partial}{\partial t} S = - \beta \frac{S}{N}W\\
+\frac{\partial}{\partial t} I = \beta \frac{S}{N}W - \gamma I \\
+\frac{\partial}{\partial t} R = \gamma I
+\end{split}\]</div>
+<div class="section" id="id1">
+<h2>d2q9_reaction_diffusion_system_SIR_ModifiedPeng<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+S = ODE_1 \\
+I = ODE_2 \\
+R = ODE_3 \\
+C_1 = R_0 \\
+C_2 = \beta
+C_3 = dt
+\end{split}\]</div>
+</div>
+<div class="section" id="simple-xml-example">
+<h2>Simple XML example<a class="headerlink" href="#simple-xml-example" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="cp">&lt;?xml version=&quot;1.0&quot;?&gt;</span>
+<span class="nt">&lt;CLBConfig</span> <span class="na">version=</span><span class="s">&quot;2.0&quot;</span> <span class="na">output=</span><span class="s">&#39;output/&#39;</span><span class="nt">&gt;</span>
+	<span class="nt">&lt;Geometry</span> <span class="na">nx=</span><span class="s">&quot;100&quot;</span> <span class="na">ny=</span><span class="s">&quot;100&quot;</span><span class="nt">&gt;</span>
+
+		<span class="nt">&lt;None</span> <span class="na">name=</span><span class="s">&quot;city&quot;</span><span class="nt">&gt;</span>
+			<span class="nt">&lt;Box</span> <span class="na">dx=</span><span class="s">&quot;45&quot;</span> <span class="na">dy=</span><span class="s">&quot;45&quot;</span> <span class="na">nx=</span><span class="s">&quot;10&quot;</span> <span class="na">ny=</span><span class="s">&quot;10&quot;</span><span class="nt">/&gt;</span>
+		<span class="nt">&lt;/None&gt;</span> 
+
+	<span class="nt">&lt;/Geometry&gt;</span>
+	<span class="nt">&lt;Model&gt;</span>
+		<span class="nt">&lt;Param</span> <span class="na">name=</span><span class="s">&quot;Diffusivity_DRE_1&quot;</span> <span class="na">value=</span><span class="s">&quot;0.1666&quot;</span><span class="nt">/&gt;</span>
+
+
+		<span class="nt">&lt;Param</span> <span class="na">name=</span><span class="s">&quot;C_1&quot;</span> <span class="na">value=</span><span class="s">&quot;5&quot;</span><span class="nt">/&gt;</span>  <span class="c">&lt;!-- R0 --&gt;</span>
+		<span class="nt">&lt;Param</span> <span class="na">name=</span><span class="s">&quot;C_2&quot;</span> <span class="na">value=</span><span class="s">&quot;2&quot;</span><span class="nt">/&gt;</span>  <span class="c">&lt;!-- Beta --&gt;</span>
+		<span class="nt">&lt;Param</span> <span class="na">name=</span><span class="s">&quot;C_3&quot;</span> <span class="na">value=</span><span class="s">&quot;0.001&quot;</span><span class="nt">/&gt;</span>  <span class="c">&lt;!-- dt --&gt;</span>
+		
+
+		
+
+        
+		<span class="c">&lt;!-- Init_DRE_1 and Init_ODE_2 should start the same --&gt;</span>
+		<span class="nt">&lt;Param</span> <span class="na">name=</span><span class="s">&quot;Init_DRE_1&quot;</span> <span class="na">value=</span><span class="s">&quot;0.&quot;</span> <span class="nt">/&gt;</span>	 <span class="c">&lt;!-- W --&gt;</span>
+
+		<span class="nt">&lt;Param</span> <span class="na">name=</span><span class="s">&quot;Init_ODE_1&quot;</span> <span class="na">value=</span><span class="s">&quot;0.9&quot;</span> <span class="nt">/&gt;</span>	<span class="c">&lt;!-- S --&gt;</span>		
+		<span class="nt">&lt;Param</span> <span class="na">name=</span><span class="s">&quot;Init_ODE_2&quot;</span> <span class="na">value=</span><span class="s">&quot;0.&quot;</span> <span class="nt">/&gt;</span>	 <span class="c">&lt;!-- I --&gt;</span>
+		<span class="nt">&lt;Param</span> <span class="na">name=</span><span class="s">&quot;Init_ODE_3&quot;</span> <span class="na">value=</span><span class="s">&quot;0.1&quot;</span><span class="nt">/&gt;</span>	<span class="c">&lt;!-- R --&gt;</span>
+
+
+
+		
+        <span class="c">&lt;!-- Those should start the same --&gt;</span>
+		<span class="nt">&lt;Param</span> <span class="na">name=</span><span class="s">&quot;Init_DRE_1&quot;</span> <span class="na">value=</span><span class="s">&quot;0.1&quot;</span> <span class="na">zone=</span><span class="s">&quot;city&quot;</span><span class="nt">/&gt;</span>	 <span class="c">&lt;!-- W --&gt;</span>
+		<span class="nt">&lt;Param</span> <span class="na">name=</span><span class="s">&quot;Init_ODE_2&quot;</span> <span class="na">value=</span><span class="s">&quot;0.1&quot;</span> <span class="na">zone=</span><span class="s">&quot;city&quot;</span><span class="nt">/&gt;</span>	 <span class="c">&lt;!-- I --&gt;</span>
+
+		<span class="nt">&lt;Param</span> <span class="na">name=</span><span class="s">&quot;Init_ODE_1&quot;</span> <span class="na">value=</span><span class="s">&quot;0.9&quot;</span> <span class="na">zone=</span><span class="s">&quot;city&quot;</span><span class="nt">/&gt;</span>	<span class="c">&lt;!-- S --&gt;</span>
+
+    <span class="nt">&lt;/Model&gt;</span>
+
+	<span class="nt">&lt;HDF5/&gt;</span>
+    <span class="nt">&lt;Solve</span> <span class="na">Iterations=</span><span class="s">&quot;10000&quot;</span><span class="nt">&gt;</span>
+	<span class="nt">&lt;HDF5</span> <span class="na">Iterations=</span><span class="s">&quot;100&quot;</span><span class="nt">/&gt;</span>
+	<span class="nt">&lt;/Solve&gt;</span> 
+    
+<span class="nt">&lt;/CLBConfig&gt;</span>
+</pre></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">!</span> tclb d2q9_reaction_diffusion_system_SIR_ModifiedPeng ./d2q9_diffusion_SIR_PengModified.xml &gt; /dev/null <span class="o">&amp;&amp;</span> <span class="nb">echo</span> <span class="s2">&quot;DONE&quot;</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Hello allocator!
+DONE
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">S</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+<span class="n">I</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+<span class="n">R</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+<span class="n">W</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+<span class="n">n0</span> <span class="o">=</span> <span class="mi">30</span>
+<span class="n">n</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span><span class="mi">10000</span><span class="p">,</span><span class="mi">100</span><span class="p">):</span>
+    <span class="n">f</span> <span class="o">=</span> <span class="n">h5py</span><span class="o">.</span><span class="n">File</span><span class="p">(</span><span class="s1">&#39;./output/d2q9_diffusion_SIR_PengModified_HDF5_</span><span class="si">%08d</span><span class="s1">.h5&#39;</span><span class="o">%</span><span class="k">i</span>)    
+    <span class="c1">#print(f[&#39;ODE_1&#39;][:,:,:])</span>
+    <span class="n">S</span><span class="o">.</span><span class="n">append</span><span class="p">(</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">f</span><span class="p">[</span><span class="s1">&#39;ODE_1&#39;</span><span class="p">][:,:,:])</span> <span class="p">)</span>
+    <span class="n">I</span><span class="o">.</span><span class="n">append</span><span class="p">(</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">f</span><span class="p">[</span><span class="s1">&#39;ODE_2&#39;</span><span class="p">][:,:,:])</span> <span class="p">)</span>
+    <span class="n">R</span><span class="o">.</span><span class="n">append</span><span class="p">(</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">f</span><span class="p">[</span><span class="s1">&#39;ODE_3&#39;</span><span class="p">][:,:,:])</span> <span class="p">)</span>
+    
+    <span class="n">W</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>  <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">f</span><span class="p">[</span><span class="s1">&#39;DRE_1&#39;</span><span class="p">][:,:,:])</span> <span class="p">)</span>
+    <span class="n">n</span> <span class="o">-=</span> <span class="mi">1</span>
+    <span class="k">if</span> <span class="n">n</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">n</span> <span class="o">=</span> <span class="n">n0</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+        <span class="n">pop</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">f</span><span class="p">[</span><span class="s1">&#39;ODE_1&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">,:,:])</span>
+        <span class="k">for</span> <span class="n">figi</span><span class="p">,</span> <span class="n">fnam</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">([</span><span class="sa">f</span><span class="s1">&#39;ODE_</span><span class="si">{</span><span class="n">k</span><span class="si">}</span><span class="s1">&#39;</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">4</span><span class="p">)]):</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="n">figi</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">([</span><span class="s1">&#39;S&#39;</span><span class="p">,</span> <span class="s1">&#39;I&#39;</span><span class="p">,</span> <span class="s1">&#39;R&#39;</span><span class="p">][</span><span class="n">figi</span><span class="p">])</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">f</span><span class="p">[</span><span class="n">fnam</span><span class="p">][</span><span class="mi">0</span><span class="p">,:,:])</span>
+            <span class="n">pop</span> <span class="o">=</span> <span class="n">pop</span> <span class="o">+</span> <span class="n">f</span><span class="p">[</span><span class="n">fnam</span><span class="p">][</span><span class="mi">0</span><span class="p">,:,:]</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">clim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">xticks</span><span class="p">([])</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">yticks</span><span class="p">([])</span>
+            <span class="c1">#plt.plot(f[fnam][0,50,:])</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">4</span><span class="p">)</span>
+            
+        <span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">pop</span><span class="p">)</span>
+        
+        <span class="n">plt</span><span class="o">.</span><span class="n">xticks</span><span class="p">([])</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">yticks</span><span class="p">([])</span>        
+
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+     
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">W</span><span class="p">,</span> <span class="s1">&#39;-&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;W&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">S</span><span class="p">,</span> <span class="s1">&#39;-&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;S&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">I</span><span class="p">,</span> <span class="s1">&#39;-&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;I&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">R</span><span class="p">,</span> <span class="s1">&#39;-&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;R&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend at 0x7fdb0c5f2160&gt;
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/usr/local/lib/python3.8/dist-packages/matplotlib/image.py:443: UserWarning: Warning: converting a masked element to nan.
+  dv = np.float64(self.norm.vmax) - np.float64(self.norm.vmin)
+/usr/local/lib/python3.8/dist-packages/matplotlib/image.py:444: UserWarning: Warning: converting a masked element to nan.
+  vmid = np.float64(self.norm.vmin) + dv / 2
+</pre></div>
+</div>
+<img alt="../../_images/10_SIR_in_PengModified_Model_39_2.png" src="../../_images/10_SIR_in_PengModified_Model_39_2.png" />
+<img alt="../../_images/10_SIR_in_PengModified_Model_39_3.png" src="../../_images/10_SIR_in_PengModified_Model_39_3.png" />
+<img alt="../../_images/10_SIR_in_PengModified_Model_39_4.png" src="../../_images/10_SIR_in_PengModified_Model_39_4.png" />
+<img alt="../../_images/10_SIR_in_PengModified_Model_39_5.png" src="../../_images/10_SIR_in_PengModified_Model_39_5.png" />
+<img alt="../../_images/10_SIR_in_PengModified_Model_39_6.png" src="../../_images/10_SIR_in_PengModified_Model_39_6.png" />
+</div>
+</div>
+</div>
+</div>
+<div class="tex2jax_ignore mathjax_ignore section" id="let-s-embed-it-all-in-function-call">
+<h1>Let’s embed it all in function call<a class="headerlink" href="#let-s-embed-it-all-in-function-call" title="Permalink to this headline">¶</a></h1>
+</div>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            kernelName: "python3",
+            path: "./notebooks/50_TCLBforSIRModelInSpace"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+              </div>
+              
+        
+            <!-- Previous / next buttons -->
+<div class='prev-next-area'> 
+    <a class='left-prev' id="prev-link" href="../40_IntroTCLB/15_d2q9_diffusion_SpatialSIR_model.html" title="previous page">
+        <i class="fas fa-angle-left"></i>
+        <div class="prev-next-info">
+            <p class="prev-next-subtitle">previous</p>
+            <p class="prev-next-title">First shot: spatially variable SIR model with uniform IC</p>
+        </div>
+    </a>
+</div>
+        
+        </div>
+    </div>
+    <footer class="footer">
+    <div class="container">
+      <p>
+        
+          By G. Gruszczynski and M. Dzikowski<br/>
+        
+            &copy; Copyright 2021.<br/>
+      </p>
+    </div>
+  </footer>
+</main>
+
+
+      </div>
+    </div>
+  
+  <script src="../../_static/js/index.be7d3bbb2ef33a8344ce.js"></script>
+
+  </body>
+</html>

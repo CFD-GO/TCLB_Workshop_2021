@@ -1,0 +1,537 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Prepare FD and LBM solution &#8212; Modelling of epidemic spreading with Lattice Boltzmann Method</title>
+    
+  <link href="../../_static/css/theme.css" rel="stylesheet">
+  <link href="../../_static/css/index.ff1ffe594081f20da1ef19478df9384b.css" rel="stylesheet">
+
+    
+  <link rel="stylesheet"
+    href="../../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    
+      
+
+    
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-book-theme.css?digest=c3fdc42140077d1ad13ad2f1588a4309" />
+    <link rel="stylesheet" type="text/css" href="../../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/panels-main.c949a650a448cc0ae9fd3441c0e17fb0.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/panels-variables.06eb56fa6e07937060861dad626602ad.css" />
+    
+  <link rel="preload" as="script" href="../../_static/js/index.be7d3bbb2ef33a8344ce.js">
+
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/togglebutton.js"></script>
+    <script src="../../_static/clipboard.min.js"></script>
+    <script src="../../_static/copybutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <script src="../../_static/sphinx-book-theme.12a9622fbb08dcb3a2a40b2c02b83a57.js"></script>
+    <script async="async" src="https://unpkg.com/thebe@0.5.1/lib/index.js"></script>
+    <script>
+        const thebe_selector = ".thebe"
+        const thebe_selector_input = "pre"
+        const thebe_selector_output = ".output"
+    </script>
+    <script async="async" src="../../_static/sphinx-thebe.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="First shot: spatially variable SIR model with uniform IC" href="15_d2q9_diffusion_SpatialSIR_model.html" />
+    <link rel="prev" title="Diffusion equation in TCLB solver" href="10_SimpleDiffusion.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="None">
+    
+
+    <!-- Google Analytics -->
+    
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<div class="col-12 col-md-3 bd-sidebar site-navigation show" id="site-navigation">
+    
+        <div class="navbar-brand-box">
+    <a class="navbar-brand text-wrap" href="../../index.html">
+      
+        <!-- `logo` is deprecated in Sphinx 4.0, so remove this when we stop supporting 3 -->
+        
+      
+      
+      <img src="../../_static/cfd-go.png" class="logo" alt="logo">
+      
+      
+      <h1 class="site-logo" id="site-title">Modelling of epidemic spreading with Lattice Boltzmann Method</h1>
+      
+    </a>
+</div><form class="bd-search d-flex align-items-center" action="../../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item active">
+        <p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  SIR 0D
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../20_SIR_0D/part1_SIR_0D_SOLUTION.html">
+   The simplest, SIR model
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../20_SIR_0D/part2_SIR_0D_stability_SOLUTION.html">
+   Under which conditions one may be lucky enough to not get infected?
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../20_SIR_0D/part3_SIR_0D_streamlines_SOLUTION.html">
+   Plotting a vector field
+  </a>
+ </li>
+</ul>
+<p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Diffusion FD
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../25_diffusion_FD/part1_diffusion_and_convolution_SOLUTION.html">
+   Diffusion part 1: the fundamental solution
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../25_diffusion_FD/part2_diffusion_matrix_approach_SOLUTION.html">
+   Diffusion part 2: matrix approach; implicit and explicit scheme
+  </a>
+ </li>
+</ul>
+<p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  SIR 1D
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../30_SIRModelInSpace/part1_SIR_1D_SOLUTION.html">
+   The simple spatial SIR model
+  </a>
+ </li>
+</ul>
+<p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Introduction to TCLB solver
+ </span>
+</p>
+<ul class="current nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="10_SimpleDiffusion.html">
+   Diffusion equation in TCLB solver
+  </a>
+ </li>
+ <li class="toctree-l1 current active">
+  <a class="current reference internal" href="#">
+   Prepare FD and LBM solution
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="15_d2q9_diffusion_SpatialSIR_model.html">
+   First shot: spatially variable SIR model with uniform IC
+  </a>
+ </li>
+</ul>
+<p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Solving spatial SIR system in TCLB
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../50_TCLBforSIRModelInSpace/10_SIR_in_PengModified_Model.html">
+   Notes on LBM dt in nonlinear reactions
+  </a>
+ </li>
+</ul>
+
+    </div>
+</nav> <!-- To handle the deprecated key -->
+
+<div class="navbar_extra_footer">
+  Powered by <a href="https://jupyterbook.org">Jupyter Book</a>
+</div>
+
+</div>
+
+
+          
+
+
+          
+<main class="col py-md-3 pl-md-4 bd-content overflow-auto" role="main">
+    
+    <div class="topbar container-xl fixed-top">
+    <div class="topbar-contents row">
+        <div class="col-12 col-md-3 bd-topbar-whitespace site-navigation show"></div>
+        <div class="col pl-md-4 topbar-main">
+            
+            <button id="navbar-toggler" class="navbar-toggler ml-0" type="button" data-toggle="collapse"
+                data-toggle="tooltip" data-placement="bottom" data-target=".site-navigation" aria-controls="navbar-menu"
+                aria-expanded="true" aria-label="Toggle navigation" aria-controls="site-navigation"
+                title="Toggle navigation" data-toggle="tooltip" data-placement="left">
+                <i class="fas fa-bars"></i>
+                <i class="fas fa-arrow-left"></i>
+                <i class="fas fa-arrow-up"></i>
+            </button>
+            
+            
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn" aria-label="Download this page"><i
+            class="fas fa-download"></i></button>
+
+    <div class="dropdown-buttons">
+        <!-- ipynb file if we had a myst markdown file -->
+        
+        <!-- Download raw file -->
+        <a class="dropdown-buttons" href="../../_sources/notebooks/40_IntroTCLB/11_Dispersion.ipynb"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Download source file" data-toggle="tooltip"
+                data-placement="left">.ipynb</button></a>
+        <!-- Download PDF via print -->
+        <button type="button" id="download-print" class="btn btn-secondary topbarbtn" title="Print to PDF"
+            onClick="window.print()" data-toggle="tooltip" data-placement="left">.pdf</button>
+    </div>
+</div>
+
+            <!-- Source interaction buttons -->
+
+            <!-- Full screen (wrap in <a> to have style consistency -->
+
+<a class="full-screen-button"><button type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip"
+        data-placement="bottom" onclick="toggleFullScreen()" aria-label="Fullscreen mode"
+        title="Fullscreen mode"><i
+            class="fas fa-expand"></i></button></a>
+
+            <!-- Launch buttons -->
+
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn"
+        aria-label="Launch interactive content"><i class="fas fa-rocket"></i></button>
+    <div class="dropdown-buttons">
+        
+        <a class="binder-button" href="https://mybinder.org/v2/gh/CFD-GO/TCLB_Workshop_2021/master?urlpath=tree/mini_book/notebooks/40_IntroTCLB/11_Dispersion.ipynb"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Launch Binder" data-toggle="tooltip"
+                data-placement="left"><img class="binder-button-logo"
+                    src="../../_static/images/logo_binder.svg"
+                    alt="Interact on binder">Binder</button></a>
+        
+        
+        
+        
+    </div>
+</div>
+
+        </div>
+
+        <!-- Table of contents -->
+        <div class="d-none d-md-block col-md-2 bd-toc show">
+            
+            <div class="tocsection onthispage pt-5 pb-3">
+                <i class="fas fa-list"></i> Contents
+            </div>
+            <nav id="bd-toc-nav" aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#">
+   Prepare FD and LBM solution
+  </a>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#get-fft-of-both">
+   Get FFT of both
+  </a>
+ </li>
+</ul>
+
+            </nav>
+        </div>
+    </div>
+</div>
+    <div id="main-content" class="row">
+        <div class="col-12 col-md-9 pl-md-3 pr-md-0">
+        
+              <div>
+                
+  <div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">h5py</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">from</span> <span class="nn">display_xml</span> <span class="kn">import</span> <span class="n">XML</span>
+<span class="kn">import</span> <span class="nn">CLB.CLBXMLWriter</span> <span class="k">as</span> <span class="nn">CLBXML</span>   
+</pre></div>
+</div>
+</div>
+</div>
+<div class="tex2jax_ignore mathjax_ignore section" id="prepare-fd-and-lbm-solution">
+<h1>Prepare FD and LBM solution<a class="headerlink" href="#prepare-fd-and-lbm-solution" title="Permalink to this headline">¶</a></h1>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">u_ic</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">200</span><span class="p">)</span>
+<span class="n">u_ic</span><span class="p">[</span><span class="mi">75</span><span class="p">:</span><span class="o">-</span><span class="mi">75</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="n">np</span><span class="o">.</span><span class="n">savetxt</span><span class="p">(</span><span class="s2">&quot;initial.csv&quot;</span><span class="p">,</span> <span class="n">u_ic</span><span class="p">,</span> <span class="n">delimiter</span><span class="o">=</span><span class="s2">&quot;,&quot;</span><span class="p">)</span>
+
+<span class="n">CLBc</span> <span class="o">=</span> <span class="n">CLBXML</span><span class="o">.</span><span class="n">CLBConfigWriter</span><span class="p">(</span> <span class="p">)</span>
+
+<span class="n">CLBc</span><span class="o">.</span><span class="n">addGeomParam</span><span class="p">(</span><span class="s1">&#39;nx&#39;</span><span class="p">,</span> <span class="mi">200</span><span class="p">)</span>
+<span class="n">CLBc</span><span class="o">.</span><span class="n">addGeomParam</span><span class="p">(</span><span class="s1">&#39;ny&#39;</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
+
+
+<span class="n">CLBc</span><span class="o">.</span><span class="n">addRunR</span><span class="p">(</span><span class="nb">eval</span><span class="o">=</span>\
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    init = read.table(&quot;initial.csv&quot;, header = FALSE, sep = &quot;&quot;, dec = &quot;.&quot;);</span>
+<span class="sd">    Solver$Fields$Init_DRE_1_External[] = init[,1];</span>
+<span class="sd">    Solver$Actions$InitFromExternalAction();</span>
+<span class="sd">&quot;&quot;&quot;</span><span class="p">)</span>
+
+    
+<span class="n">params</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;Diffusivity_DRE_1&quot;</span><span class="p">:</span><span class="mf">0.1666</span><span class="p">,</span>
+        <span class="s2">&quot;Init_DRE_1&quot;</span><span class="p">:</span><span class="o">-</span><span class="mf">0.5</span>
+<span class="p">}</span>
+
+<span class="n">CLBc</span><span class="o">.</span><span class="n">addModelParams</span><span class="p">(</span><span class="n">params</span><span class="p">)</span>
+
+
+<span class="n">CLBc</span><span class="o">.</span><span class="n">addHDF5</span><span class="p">()</span>
+<span class="n">solve</span> <span class="o">=</span> <span class="n">CLBc</span><span class="o">.</span><span class="n">addSolve</span><span class="p">(</span><span class="n">iterations</span><span class="o">=</span><span class="mi">200</span><span class="p">)</span>
+<span class="n">CLBc</span><span class="o">.</span><span class="n">addHDF5</span><span class="p">(</span><span class="n">Iterations</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="n">solve</span><span class="p">)</span>
+   
+<span class="n">CLBc</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;run.xml&#39;</span><span class="p">)</span>
+
+<span class="o">!</span> tclb d2q9_reaction_diffusion_system_SimpleDiffusion run.xml &gt; /dev/null <span class="o">&amp;&amp;</span> <span class="nb">echo</span> <span class="s1">&#39;DONE!&#39;</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Hello allocator!
+DONE!
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">btcs</span><span class="p">(</span><span class="n">u_IC</span><span class="p">,</span> <span class="n">nu</span><span class="p">,</span> <span class="n">nx</span><span class="p">,</span> <span class="n">nt</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="n">dx</span><span class="p">):</span>
+    
+    <span class="n">un_icfd</span> <span class="o">=</span> <span class="n">u_IC</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+    <span class="n">A</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">nx</span><span class="p">,</span> <span class="n">nx</span><span class="p">))</span>
+    
+    
+    
+    <span class="n">Beta_FD</span> <span class="o">=</span> <span class="n">dt</span> <span class="o">*</span> <span class="n">nu</span> <span class="o">/</span> <span class="p">(</span><span class="n">dx</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span> 
+    <span class="c1"># nt += 100</span>
+    <span class="n">last_index_in_matrix</span> <span class="o">=</span> <span class="n">nx</span> <span class="o">-</span><span class="mi">1</span> 
+    <span class="c1"># the BC  - use one sided FD            </span>
+    <span class="n">A</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span><span class="o">-</span><span class="n">Beta_FD</span>     <span class="c1"># forward FD</span>
+    <span class="n">A</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mi">2</span><span class="o">*</span><span class="n">Beta_FD</span>     <span class="c1"># forward FD </span>
+    <span class="n">A</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="n">Beta_FD</span>      <span class="c1"># forward FD </span>
+    <span class="n">A</span><span class="p">[</span><span class="n">last_index_in_matrix</span><span class="p">,</span> <span class="n">last_index_in_matrix</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="n">Beta_FD</span>   <span class="c1"># backward FD </span>
+    <span class="n">A</span><span class="p">[</span><span class="n">last_index_in_matrix</span><span class="p">,</span> <span class="n">last_index_in_matrix</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mi">2</span><span class="o">*</span><span class="n">Beta_FD</span>  <span class="c1"># backward FD </span>
+    <span class="n">A</span><span class="p">[</span><span class="n">last_index_in_matrix</span><span class="p">,</span> <span class="n">last_index_in_matrix</span><span class="p">]</span> <span class="o">=</span>  <span class="mi">1</span><span class="o">-</span><span class="n">Beta_FD</span>   <span class="c1"># backward FD </span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">last_index_in_matrix</span><span class="p">):</span> 
+        <span class="n">A</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="n">Beta_FD</span>        <span class="c1"># left of the diagonal</span>
+        <span class="n">A</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">+</span> <span class="mi">2</span><span class="o">*</span><span class="n">Beta_FD</span>     <span class="c1"># the diagonal</span>
+        <span class="n">A</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="n">Beta_FD</span>         <span class="c1"># right of the diagonal   </span>
+
+    <span class="n">A_inv</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">inv</span><span class="p">(</span><span class="n">A</span><span class="p">)</span>
+    <span class="n">solution</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+    <span class="n">solution</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">u_ic</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nt</span><span class="p">):</span>  <span class="c1">#loop for values of n from 0 to nt, so it will run nt times</span>
+        <span class="n">un_icfd</span> <span class="o">=</span> <span class="n">A_inv</span><span class="nd">@un_icfd</span>
+        <span class="n">solution</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">un_icfd</span><span class="p">)</span>
+    
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">solution</span><span class="p">)</span>
+        
+    
+<span class="n">u_ic</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">loadtxt</span><span class="p">(</span><span class="s2">&quot;initial.csv&quot;</span><span class="p">,</span> <span class="n">delimiter</span><span class="o">=</span><span class="s2">&quot;,&quot;</span><span class="p">)</span>    
+    
+<span class="n">SolutionFD</span> <span class="o">=</span> <span class="n">btcs</span><span class="p">(</span><span class="n">u_ic</span><span class="p">,</span> <span class="mf">0.1666</span><span class="p">,</span> <span class="n">u_ic</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">200</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+
+
+<span class="n">SolutioLBM</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">200</span><span class="p">,</span><span class="mi">10</span><span class="p">):</span>
+    <span class="n">f</span> <span class="o">=</span> <span class="n">h5py</span><span class="o">.</span><span class="n">File</span><span class="p">(</span><span class="s1">&#39;./output/run_HDF5_</span><span class="si">%08d</span><span class="s1">.h5&#39;</span><span class="o">%</span><span class="k">i</span>)    
+    <span class="n">SolutioLBM</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">f</span><span class="p">[</span><span class="s1">&#39;DRE_1&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">,:,:])</span>
+    
+<span class="n">SolutioLBM</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">SolutioLBM</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">5</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">SolutioLBM</span><span class="p">[</span><span class="mi">5</span><span class="p">,</span><span class="mi">25</span><span class="p">,:]</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="s1">&#39;k-&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;TCLB&#39;</span><span class="p">);</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">SolutionFD</span><span class="p">[</span><span class="mi">0</span><span class="p">,:],</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Initial Condition&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">SolutionFD</span><span class="p">[</span><span class="mi">50</span><span class="p">,:],</span> <span class="s1">&#39;--&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Implicit Time, Central Space FD&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">which</span><span class="o">=</span><span class="s1">&#39;both&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../../_images/11_Dispersion_3_0.png" src="../../_images/11_Dispersion_3_0.png" />
+</div>
+</div>
+</div>
+<div class="tex2jax_ignore mathjax_ignore section" id="get-fft-of-both">
+<h1>Get FFT of both<a class="headerlink" href="#get-fft-of-both" title="Permalink to this headline">¶</a></h1>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">10</span><span class="p">))</span>
+<span class="n">s</span> <span class="o">=</span> <span class="n">u_ic</span>
+<span class="n">s_ic</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">fft</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+<span class="n">freq</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">fftfreq</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+<span class="c1">#plt.plot(freq, s_ic.real, &#39;--&#39;, freq, s_ic.imag, &#39;--&#39;)</span>
+
+
+<span class="n">s</span> <span class="o">=</span> <span class="n">SolutionFD</span><span class="p">[</span><span class="mi">50</span><span class="p">,:]</span>
+<span class="n">s_fd</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">fft</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+<span class="c1">#freq = np.fft.fftfreq(s.shape[-1])</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">freq</span><span class="p">,</span> <span class="n">s_fd</span><span class="o">.</span><span class="n">real</span><span class="p">,</span> <span class="s1">&#39;o&#39;</span><span class="p">,</span> <span class="n">freq</span><span class="p">,</span> <span class="n">s_fd</span><span class="o">.</span><span class="n">imag</span><span class="p">,</span> <span class="s1">&#39;o&#39;</span><span class="p">)</span>
+
+<span class="n">s</span> <span class="o">=</span> <span class="n">SolutioLBM</span><span class="p">[</span><span class="mi">5</span><span class="p">,</span><span class="mi">25</span><span class="p">,:]</span><span class="o">.</span><span class="n">T</span>
+<span class="n">s_lbm</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">fft</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+<span class="c1">#freq = np.fft.fftfreq(s.shape[-1])</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">freq</span><span class="p">,</span> <span class="n">s_lbm</span><span class="o">.</span><span class="n">real</span><span class="p">,</span> <span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="n">freq</span><span class="p">,</span> <span class="n">s_lbm</span><span class="o">.</span><span class="n">imag</span><span class="p">,</span> <span class="s1">&#39;x&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[&lt;matplotlib.lines.Line2D at 0x7f7cfa493220&gt;,
+ &lt;matplotlib.lines.Line2D at 0x7f7cfa4932e0&gt;]
+</pre></div>
+</div>
+<img alt="../../_images/11_Dispersion_5_1.png" src="../../_images/11_Dispersion_5_1.png" />
+</div>
+</div>
+<p><img alt="image.png" src="notebooks/40_IntroTCLB/attachment:598522f9-d42d-472e-b2c2-487490806b1a.png" /></p>
+<p>#Ref: https://people.maths.ox.ac.uk/trefethen/5all.pdf</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">10</span><span class="p">))</span>
+<span class="n">omega</span> <span class="o">=</span>  <span class="n">s_fd</span> <span class="o">/</span> <span class="n">s_ic</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">freq</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">omega</span><span class="p">),</span> <span class="s1">&#39;o&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;FDM&#39;</span><span class="p">)</span>
+
+
+<span class="n">omega</span> <span class="o">=</span> <span class="n">s_lbm</span> <span class="o">/</span> <span class="n">s_ic</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">freq</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">omega</span><span class="p">),</span> <span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;LBM&#39;</span><span class="p">)</span>
+
+<span class="n">af</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">freq</span><span class="p">))</span>
+<span class="n">scale</span> <span class="o">=</span> <span class="mi">35</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">semilogy</span><span class="p">(</span><span class="n">af</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">tanh</span><span class="p">(</span><span class="n">scale</span><span class="o">*</span><span class="n">af</span><span class="p">)</span><span class="o">/</span><span class="n">af</span><span class="o">/</span><span class="n">scale</span><span class="p">,</span> <span class="s1">&#39;--&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;~Dispersion relation for laplace&#39;</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">which</span><span class="o">=</span><span class="s1">&#39;both&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/tmp/ipykernel_6618/4255232911.py:2: RuntimeWarning: divide by zero encountered in true_divide
+  omega =  s_fd / s_ic
+/tmp/ipykernel_6618/4255232911.py:2: RuntimeWarning: invalid value encountered in true_divide
+  omega =  s_fd / s_ic
+/tmp/ipykernel_6618/4255232911.py:6: RuntimeWarning: divide by zero encountered in true_divide
+  omega = s_lbm / s_ic
+/tmp/ipykernel_6618/4255232911.py:6: RuntimeWarning: invalid value encountered in true_divide
+  omega = s_lbm / s_ic
+/tmp/ipykernel_6618/4255232911.py:11: RuntimeWarning: invalid value encountered in true_divide
+  plt.semilogy(af, np.tanh(scale*af)/af/scale, &#39;--&#39;, label=&#39;~Dispersion relation for laplace&#39;)
+</pre></div>
+</div>
+<img alt="../../_images/11_Dispersion_8_1.png" src="../../_images/11_Dispersion_8_1.png" />
+</div>
+</div>
+</div>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            kernelName: "python3",
+            path: "./notebooks/40_IntroTCLB"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+              </div>
+              
+        
+            <!-- Previous / next buttons -->
+<div class='prev-next-area'> 
+    <a class='left-prev' id="prev-link" href="10_SimpleDiffusion.html" title="previous page">
+        <i class="fas fa-angle-left"></i>
+        <div class="prev-next-info">
+            <p class="prev-next-subtitle">previous</p>
+            <p class="prev-next-title">Diffusion equation in TCLB solver</p>
+        </div>
+    </a>
+    <a class='right-next' id="next-link" href="15_d2q9_diffusion_SpatialSIR_model.html" title="next page">
+    <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">First shot: spatially variable SIR model with uniform IC</p>
+    </div>
+    <i class="fas fa-angle-right"></i>
+    </a>
+</div>
+        
+        </div>
+    </div>
+    <footer class="footer">
+    <div class="container">
+      <p>
+        
+          By G. Gruszczynski and M. Dzikowski<br/>
+        
+            &copy; Copyright 2021.<br/>
+      </p>
+    </div>
+  </footer>
+</main>
+
+
+      </div>
+    </div>
+  
+  <script src="../../_static/js/index.be7d3bbb2ef33a8344ce.js"></script>
+
+  </body>
+</html>

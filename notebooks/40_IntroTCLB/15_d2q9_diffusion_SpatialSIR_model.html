@@ -1,0 +1,929 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>First shot: spatially variable SIR model with uniform IC &#8212; Modelling of epidemic spreading with Lattice Boltzmann Method</title>
+    
+  <link href="../../_static/css/theme.css" rel="stylesheet">
+  <link href="../../_static/css/index.ff1ffe594081f20da1ef19478df9384b.css" rel="stylesheet">
+
+    
+  <link rel="stylesheet"
+    href="../../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    
+      
+
+    
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-book-theme.css?digest=c3fdc42140077d1ad13ad2f1588a4309" />
+    <link rel="stylesheet" type="text/css" href="../../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/panels-main.c949a650a448cc0ae9fd3441c0e17fb0.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/panels-variables.06eb56fa6e07937060861dad626602ad.css" />
+    
+  <link rel="preload" as="script" href="../../_static/js/index.be7d3bbb2ef33a8344ce.js">
+
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/togglebutton.js"></script>
+    <script src="../../_static/clipboard.min.js"></script>
+    <script src="../../_static/copybutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <script src="../../_static/sphinx-book-theme.12a9622fbb08dcb3a2a40b2c02b83a57.js"></script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script async="async" src="https://unpkg.com/thebe@0.5.1/lib/index.js"></script>
+    <script>
+        const thebe_selector = ".thebe"
+        const thebe_selector_input = "pre"
+        const thebe_selector_output = ".output"
+    </script>
+    <script async="async" src="../../_static/sphinx-thebe.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Notes on LBM dt in nonlinear reactions" href="../50_TCLBforSIRModelInSpace/10_SIR_in_PengModified_Model.html" />
+    <link rel="prev" title="Prepare FD and LBM solution" href="11_Dispersion.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="None">
+    
+
+    <!-- Google Analytics -->
+    
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<div class="col-12 col-md-3 bd-sidebar site-navigation show" id="site-navigation">
+    
+        <div class="navbar-brand-box">
+    <a class="navbar-brand text-wrap" href="../../index.html">
+      
+        <!-- `logo` is deprecated in Sphinx 4.0, so remove this when we stop supporting 3 -->
+        
+      
+      
+      <img src="../../_static/cfd-go.png" class="logo" alt="logo">
+      
+      
+      <h1 class="site-logo" id="site-title">Modelling of epidemic spreading with Lattice Boltzmann Method</h1>
+      
+    </a>
+</div><form class="bd-search d-flex align-items-center" action="../../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item active">
+        <p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  SIR 0D
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../20_SIR_0D/part1_SIR_0D_SOLUTION.html">
+   The simplest, SIR model
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../20_SIR_0D/part2_SIR_0D_stability_SOLUTION.html">
+   Under which conditions one may be lucky enough to not get infected?
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../20_SIR_0D/part3_SIR_0D_streamlines_SOLUTION.html">
+   Plotting a vector field
+  </a>
+ </li>
+</ul>
+<p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Diffusion FD
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../25_diffusion_FD/part1_diffusion_and_convolution_SOLUTION.html">
+   Diffusion part 1: the fundamental solution
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../25_diffusion_FD/part2_diffusion_matrix_approach_SOLUTION.html">
+   Diffusion part 2: matrix approach; implicit and explicit scheme
+  </a>
+ </li>
+</ul>
+<p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  SIR 1D
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../30_SIRModelInSpace/part1_SIR_1D_SOLUTION.html">
+   The simple spatial SIR model
+  </a>
+ </li>
+</ul>
+<p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Introduction to TCLB solver
+ </span>
+</p>
+<ul class="current nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="10_SimpleDiffusion.html">
+   Diffusion equation in TCLB solver
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="11_Dispersion.html">
+   Prepare FD and LBM solution
+  </a>
+ </li>
+ <li class="toctree-l1 current active">
+  <a class="current reference internal" href="#">
+   First shot: spatially variable SIR model with uniform IC
+  </a>
+ </li>
+</ul>
+<p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Solving spatial SIR system in TCLB
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../50_TCLBforSIRModelInSpace/10_SIR_in_PengModified_Model.html">
+   Notes on LBM dt in nonlinear reactions
+  </a>
+ </li>
+</ul>
+
+    </div>
+</nav> <!-- To handle the deprecated key -->
+
+<div class="navbar_extra_footer">
+  Powered by <a href="https://jupyterbook.org">Jupyter Book</a>
+</div>
+
+</div>
+
+
+          
+
+
+          
+<main class="col py-md-3 pl-md-4 bd-content overflow-auto" role="main">
+    
+    <div class="topbar container-xl fixed-top">
+    <div class="topbar-contents row">
+        <div class="col-12 col-md-3 bd-topbar-whitespace site-navigation show"></div>
+        <div class="col pl-md-4 topbar-main">
+            
+            <button id="navbar-toggler" class="navbar-toggler ml-0" type="button" data-toggle="collapse"
+                data-toggle="tooltip" data-placement="bottom" data-target=".site-navigation" aria-controls="navbar-menu"
+                aria-expanded="true" aria-label="Toggle navigation" aria-controls="site-navigation"
+                title="Toggle navigation" data-toggle="tooltip" data-placement="left">
+                <i class="fas fa-bars"></i>
+                <i class="fas fa-arrow-left"></i>
+                <i class="fas fa-arrow-up"></i>
+            </button>
+            
+            
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn" aria-label="Download this page"><i
+            class="fas fa-download"></i></button>
+
+    <div class="dropdown-buttons">
+        <!-- ipynb file if we had a myst markdown file -->
+        
+        <!-- Download raw file -->
+        <a class="dropdown-buttons" href="../../_sources/notebooks/40_IntroTCLB/15_d2q9_diffusion_SpatialSIR_model.ipynb"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Download source file" data-toggle="tooltip"
+                data-placement="left">.ipynb</button></a>
+        <!-- Download PDF via print -->
+        <button type="button" id="download-print" class="btn btn-secondary topbarbtn" title="Print to PDF"
+            onClick="window.print()" data-toggle="tooltip" data-placement="left">.pdf</button>
+    </div>
+</div>
+
+            <!-- Source interaction buttons -->
+
+            <!-- Full screen (wrap in <a> to have style consistency -->
+
+<a class="full-screen-button"><button type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip"
+        data-placement="bottom" onclick="toggleFullScreen()" aria-label="Fullscreen mode"
+        title="Fullscreen mode"><i
+            class="fas fa-expand"></i></button></a>
+
+            <!-- Launch buttons -->
+
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn"
+        aria-label="Launch interactive content"><i class="fas fa-rocket"></i></button>
+    <div class="dropdown-buttons">
+        
+        <a class="binder-button" href="https://mybinder.org/v2/gh/CFD-GO/TCLB_Workshop_2021/master?urlpath=tree/mini_book/notebooks/40_IntroTCLB/15_d2q9_diffusion_SpatialSIR_model.ipynb"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Launch Binder" data-toggle="tooltip"
+                data-placement="left"><img class="binder-button-logo"
+                    src="../../_static/images/logo_binder.svg"
+                    alt="Interact on binder">Binder</button></a>
+        
+        
+        
+        
+    </div>
+</div>
+
+        </div>
+
+        <!-- Table of contents -->
+        <div class="d-none d-md-block col-md-2 bd-toc show">
+            
+            <div class="tocsection onthispage pt-5 pb-3">
+                <i class="fas fa-list"></i> Contents
+            </div>
+            <nav id="bd-toc-nav" aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#">
+   First shot: spatially variable SIR model with uniform IC
+  </a>
+  <ul class="visible nav section-nav flex-column">
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#we-could-use-tclb-shortcuts-in-a-loop-to-see-effects-of-beta">
+     We could use TCLB shortcuts in a loop, to see effects of
+     <span class="math notranslate nohighlight">
+      \(\beta\)
+     </span>
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#sir-simple-laplace">
+   SIR - Simple Laplace
+  </a>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#simple-spatially-variable-sir-model-with-non-uniform-ic">
+   Simple spatially variable SIR model with non-uniform IC
+  </a>
+ </li>
+</ul>
+
+            </nav>
+        </div>
+    </div>
+</div>
+    <div id="main-content" class="row">
+        <div class="col-12 col-md-9 pl-md-3 pr-md-0">
+        
+              <div>
+                
+  <div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">h5py</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">CLB.CLBXMLWriter</span> <span class="k">as</span> <span class="nn">CLBXML</span>   
+<span class="kn">import</span> <span class="nn">tempfile</span>
+<span class="kn">import</span> <span class="nn">scipy.optimize</span> <span class="k">as</span> <span class="nn">so</span>
+<span class="kn">from</span> <span class="nn">display_xml</span> <span class="kn">import</span> <span class="n">XML</span>
+
+<span class="kn">from</span> <span class="nn">scipy.integrate</span> <span class="kn">import</span> <span class="n">solve_ivp</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="tex2jax_ignore mathjax_ignore section" id="first-shot-spatially-variable-sir-model-with-uniform-ic">
+<h1>First shot: spatially variable SIR model with uniform IC<a class="headerlink" href="#first-shot-spatially-variable-sir-model-with-uniform-ic" title="Permalink to this headline">¶</a></h1>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Zadanie</span> <span class="n">E</span> <span class="o">-</span> <span class="n">Benchmark</span> <span class="n">I</span><span class="p">:</span> <span class="n">Poprawność</span> <span class="n">symulacji</span> <span class="n">równań</span> <span class="n">typu</span> <span class="n">SIR</span> <span class="n">w</span> <span class="n">domenie</span> <span class="n">jednorodnej</span> <span class="p">(</span><span class="mi">0</span><span class="n">D</span><span class="p">)</span> <span class="n">vs</span> <span class="n">analityczne</span><span class="o">/</span><span class="n">Runge</span><span class="o">-</span><span class="n">Kutta</span>
+ <span class="o">-</span> <span class="n">output</span> <span class="n">jak</span> <span class="n">do</span> <span class="n">raportu</span><span class="o">/</span><span class="n">artykułu</span> <span class="p">(</span><span class="n">nie</span> <span class="n">do</span> <span class="n">szkolenia</span><span class="p">)</span> <span class="o">.</span><span class="n">md</span>
+ <span class="o">-</span> <span class="n">dodać</span> <span class="n">skrypt</span> <span class="n">do</span> <span class="n">examples</span> <span class="ow">and</span> <span class="n">papers</span>
+ <span class="o">-</span> <span class="n">dodać</span> <span class="n">ref</span> <span class="n">do</span> <span class="n">repo</span> <span class="p">:)</span>
+</pre></div>
+</div>
+<p>To evaluate, if model is working, let’s start with basic case: uniform initial distribution of SIR variables, with periodic BC. This should give solution for original SIR ODE, if <span class="math notranslate nohighlight">\(\beta\)</span> is sufficiently large.</p>
+<p>Firstly, we prepare solution of ODE using SymPy’s solve_ivp toolbox. For details see previous workshops.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#Test case settings</span>
+
+<span class="n">I_init</span> <span class="o">=</span> <span class="mf">0.1</span>
+<span class="n">S_init</span> <span class="o">=</span> <span class="mf">1.</span> <span class="o">-</span> <span class="n">I_init</span>
+<span class="n">R_init</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="n">beta</span> <span class="o">=</span> <span class="mf">1e20</span>
+<span class="n">dt</span> <span class="o">=</span> <span class="mf">0.01</span>
+<span class="n">R0</span> <span class="o">=</span> <span class="mi">3</span>
+<span class="n">T</span> <span class="o">=</span> <span class="mi">1000</span>
+
+
+
+<span class="c1">###########################3</span>
+<span class="c1"># FD SOLUTION #</span>
+
+
+<span class="k">def</span> <span class="nf">SIR_0D</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">beta</span><span class="p">,</span> <span class="n">gamma</span><span class="p">,</span> <span class="n">N</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">     # Susceptible → Infected → Removed</span>
+<span class="sd">    :param t: time [days]</span>
+<span class="sd">    :param z: Susceptible, Exposed, Infected, Removed</span>
+<span class="sd">    :param beta: average number of contacts per day for each infected individual</span>
+<span class="sd">    :param gamma: Between I and R, the transition rate is γ</span>
+<span class="sd">    (simply the frequency of recoveries, that is, number of recovered or dead during one day</span>
+<span class="sd">    divided by the total number of infected on that same day, supposing &quot;day&quot; is the time unit).</span>
+<span class="sd">    If the duration of the infection is denoted D, then γ = 1/D.</span>
+<span class="sd">    :return: derivatives [dS, dI, dR]</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">S</span><span class="p">,</span> <span class="n">I</span><span class="p">,</span> <span class="n">R</span> <span class="o">=</span> <span class="n">z</span>
+    <span class="n">dSdt</span> <span class="o">=</span> <span class="o">-</span><span class="n">beta</span><span class="o">*</span><span class="n">I</span><span class="o">*</span><span class="n">S</span><span class="o">/</span><span class="n">N</span>
+    <span class="n">dIdt</span> <span class="o">=</span> <span class="n">beta</span><span class="o">*</span><span class="n">I</span><span class="o">*</span><span class="n">S</span><span class="o">/</span><span class="n">N</span> <span class="o">-</span> <span class="n">I</span><span class="o">*</span><span class="n">gamma</span>
+    <span class="n">dRdt</span> <span class="o">=</span> <span class="n">I</span><span class="o">*</span><span class="n">gamma</span>
+    <span class="k">return</span> <span class="p">[</span><span class="n">dSdt</span><span class="p">,</span> <span class="n">dIdt</span><span class="p">,</span> <span class="n">dRdt</span><span class="p">]</span>
+
+
+
+<span class="c1"># INITIAL CONDItIONS</span>
+<span class="n">initial_susceptible</span> <span class="o">=</span> <span class="n">S_init</span> <span class="c1"># initial number of susceptible individuals in population.</span>
+<span class="n">initial_infections</span> <span class="o">=</span> <span class="n">I_init</span>  <span class="c1"># initial number of infected individuals in population.</span>
+<span class="n">initial_removed</span> <span class="o">=</span> <span class="n">R_init</span>  <span class="c1"># initial number of removed (recovered) individuals in population.</span>
+<span class="n">IC</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">initial_susceptible</span><span class="p">,</span> <span class="n">initial_infections</span><span class="p">,</span> <span class="n">initial_removed</span><span class="p">])</span>
+
+<span class="n">days_to_simulate</span> <span class="o">=</span> <span class="n">T</span><span class="o">*</span><span class="n">dt</span>
+<span class="n">sol</span> <span class="o">=</span> <span class="n">solve_ivp</span><span class="p">(</span><span class="n">SIR_0D</span><span class="p">,</span>
+                <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">days_to_simulate</span><span class="p">],</span>
+                <span class="n">IC</span><span class="p">,</span>
+                <span class="n">method</span><span class="o">=</span><span class="s1">&#39;RK45&#39;</span><span class="p">,</span>
+                <span class="n">args</span><span class="o">=</span><span class="p">[</span><span class="n">R0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>
+                <span class="n">dense_output</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="n">t</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">days_to_simulate</span><span class="p">,</span> <span class="mi">1000</span><span class="p">)</span>
+<span class="n">z</span> <span class="o">=</span> <span class="n">sol</span><span class="o">.</span><span class="n">sol</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
+
+<span class="n">S_rk4</span><span class="p">,</span> <span class="n">I_rk4</span><span class="p">,</span> <span class="n">R_rk4</span> <span class="o">=</span> <span class="n">z</span>
+
+<span class="n">params</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;legend.fontsize&#39;</span><span class="p">:</span> <span class="s1">&#39;xx-large&#39;</span><span class="p">,</span>
+          <span class="s1">&#39;figure.figsize&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mi">14</span><span class="p">,</span> <span class="mi">8</span><span class="p">),</span>
+         <span class="s1">&#39;axes.labelsize&#39;</span><span class="p">:</span> <span class="s1">&#39;xx-large&#39;</span><span class="p">,</span>
+         <span class="s1">&#39;axes.titlesize&#39;</span><span class="p">:</span><span class="s1">&#39;xx-large&#39;</span><span class="p">,</span>
+         <span class="s1">&#39;xtick.labelsize&#39;</span><span class="p">:</span><span class="s1">&#39;xx-large&#39;</span><span class="p">,</span>
+         <span class="s1">&#39;ytick.labelsize&#39;</span><span class="p">:</span><span class="s1">&#39;xx-large&#39;</span><span class="p">}</span>
+<span class="n">axes</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">gca</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">S_rk4</span><span class="p">,</span>
+         <span class="n">color</span><span class="o">=</span><span class="s2">&quot;green&quot;</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">markevery</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">markersize</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s2">&quot;-&quot;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+         <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Susceptible&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">I_rk4</span><span class="p">,</span>
+         <span class="n">color</span><span class="o">=</span><span class="s2">&quot;red&quot;</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">markevery</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">markersize</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s2">&quot;-&quot;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+         <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Infected&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">R_rk4</span><span class="p">,</span>
+         <span class="n">color</span><span class="o">=</span><span class="s2">&quot;black&quot;</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">markevery</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">markersize</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s2">&quot;-&quot;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+         <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Removed&#39;</span><span class="p">)</span>
+
+
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;t&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">% o</span><span class="s1">f people&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;SIR Epidemic Calculator&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../../_images/15_d2q9_diffusion_SpatialSIR_model_3_0.png" src="../../_images/15_d2q9_diffusion_SpatialSIR_model_3_0.png" />
+</div>
+</div>
+<p>We will use <strong>2q9_reaction_diffusion_system_SIR_ModifiedPeng</strong> model (or the WSIR model), aleready referenced in this workshop</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\frac{\partial}{\partial t} W = \beta_W \left[\frac{r^2}{8}W + (I-W) \right] \\
+\frac{\partial}{\partial t} S = - \beta \frac{S}{N}W\\
+\frac{\partial}{\partial t} I = \beta \frac{S}{N}W - \gamma I \\
+\frac{\partial}{\partial t} R = \gamma I
+\end{split}\]</div>
+<p>where</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+S = ODE_1 \\
+I = ODE_2 \\
+R = ODE_3 \\
+C_1 = R_0 \\
+C_2 = \beta\\
+C_3 = dt
+\end{split}\]</div>
+<div class="amsmath math notranslate nohighlight" id="equation-a3ec8727-6411-46fc-b337-d818e982d465">
+<span class="eqno">(5)<a class="headerlink" href="#equation-a3ec8727-6411-46fc-b337-d818e982d465" title="Permalink to this equation">¶</a></span>\[\begin{align}
+S = ODE_1 \\
+I = ODE_2 \\
+R = ODE_3 \\
+C_1 = R_0 \\
+C_2 = \beta\\
+C_3 = dt
+\end{align}\]</div>
+<div class="math notranslate nohighlight">
+\[
+S = ODE_1
+\]</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">CLBc</span> <span class="o">=</span> <span class="n">CLBXML</span><span class="o">.</span><span class="n">CLBConfigWriter</span><span class="p">(</span> <span class="p">)</span>
+
+<span class="n">CLBc</span><span class="o">.</span><span class="n">addGeomParam</span><span class="p">(</span><span class="s1">&#39;nx&#39;</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
+<span class="n">CLBc</span><span class="o">.</span><span class="n">addGeomParam</span><span class="p">(</span><span class="s1">&#39;ny&#39;</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+
+
+<span class="n">params</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;Diffusivity_DRE_1&quot;</span> <span class="p">:</span> <span class="mf">1.</span><span class="o">/</span><span class="mf">6.</span><span class="p">,</span>
+        <span class="s2">&quot;C_1&quot;</span><span class="p">:</span><span class="n">R0</span><span class="p">,</span>
+        <span class="s2">&quot;C_2&quot;</span><span class="p">:</span><span class="n">beta</span><span class="p">,</span>
+        <span class="s2">&quot;C_3&quot;</span><span class="p">:</span><span class="n">dt</span><span class="p">,</span>            
+        <span class="s2">&quot;Init_DRE_1&quot;</span><span class="p">:</span><span class="n">I_init</span><span class="p">,</span> <span class="c1">#This is W equation, initlally equall to I. large Beta reduces Relaxation-To-SIR Time</span>
+        <span class="s2">&quot;Init_ODE_1&quot;</span><span class="p">:</span><span class="n">S_init</span><span class="p">,</span>
+        <span class="s2">&quot;Init_ODE_2&quot;</span><span class="p">:</span><span class="n">I_init</span><span class="p">,</span>
+        <span class="s2">&quot;Init_ODE_3&quot;</span><span class="p">:</span><span class="n">R_init</span>
+<span class="p">}</span>
+
+<span class="n">CLBc</span><span class="o">.</span><span class="n">addModelParams</span><span class="p">(</span><span class="n">params</span><span class="p">)</span>
+
+
+<span class="n">CLBc</span><span class="o">.</span><span class="n">addHDF5</span><span class="p">()</span>
+<span class="n">solve</span> <span class="o">=</span> <span class="n">CLBc</span><span class="o">.</span><span class="n">addSolve</span><span class="p">(</span><span class="n">iterations</span><span class="o">=</span><span class="n">T</span><span class="p">)</span>
+<span class="n">CLBc</span><span class="o">.</span><span class="n">addHDF5</span><span class="p">(</span><span class="n">Iterations</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">T</span> <span class="o">/</span> <span class="mi">50</span><span class="p">),</span> <span class="n">parent</span><span class="o">=</span><span class="n">solve</span><span class="p">)</span>
+   
+<span class="n">CLBc</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;run.xml&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">!</span> rm -rf output/* <span class="o">&amp;&amp;</span> tclb d2q9_reaction_diffusion_system_SIR_ModifiedPeng run.xml
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>MPMD: TCLB: local:0/1 work:0/1 ---  connected to:
+[  ] <span class=" -Color -Color-Bold -Color-Bold-Green">-------------------------------------------------------------------------</span>
+[  ] <span class=" -Color -Color-Bold -Color-Bold-Green">-  CLB version:   v6.0-beta-1713-g0861a50                               -</span>
+[  ] <span class=" -Color -Color-Bold -Color-Bold-Green">-        Model: d2q9_reaction_diffusion_system_SIR_ModifiedPeng                 </span>
+[  ] <span class=" -Color -Color-Bold -Color-Bold-Green">              -</span>
+[  ] <span class=" -Color -Color-Bold -Color-Bold-Green">-------------------------------------------------------------------------</span>
+[  ] <span class=" -Color -Color-Bold -Color-Bold-Green">Setting output path to: run</span>
+[  ] <span class=" -Color -Color-Bold">Discarding 1 comments</span>
+[ 0] <span class=" -Color -Color-Bold">Running on CPU</span>
+[ 0] <span class=" -Color -Color-Yellow">WARNING: </span><span class=" -Color -Color-Bold -Color-Bold-Yellow">No &quot;Units&quot; element in config file</span>
+[  ] <span class=" -Color -Color-Green">Mesh size in config file: 100x2x1</span>
+[  ] <span class=" -Color -Color-Bold">Global lattice size: 100x2x1</span>
+[  ] <span class=" -Color -Color-Green">Max region size: 200. Mesh size 200. Overhead:  0%</span>
+[  ] <span class=" -Color -Color-Bold">Local lattice size: 100x2x1</span>
+Hello allocator!
+[  ] <span class=" -Color -Color-Bold">  Threads  |      Action</span>
+[  ] <span class=" -Color -Color-Bold">    1x1    | Primal , NoGlobals , BaseIteration</span>
+[  ] <span class=" -Color -Color-Bold">    1x1    | Tangent , NoGlobals , BaseIteration</span>
+[  ] <span class=" -Color -Color-Bold">    1x1    | Optimize , NoGlobals , BaseIteration</span>
+[  ] <span class=" -Color -Color-Bold">    1x1    | SteadyAdjoint , NoGlobals , BaseIteration</span>
+[  ] <span class=" -Color -Color-Bold">    1x1    | Primal , IntegrateGlobals , BaseIteration</span>
+[  ] <span class=" -Color -Color-Bold">    1x1    | Tangent , IntegrateGlobals , BaseIteration</span>
+[  ] <span class=" -Color -Color-Bold">    1x1    | Optimize , IntegrateGlobals , BaseIteration</span>
+[  ] <span class=" -Color -Color-Bold">    1x1    | SteadyAdjoint , IntegrateGlobals , BaseIteration</span>
+[  ] <span class=" -Color -Color-Bold">    1x1    | Primal , OnlyObjective , BaseIteration</span>
+[  ] <span class=" -Color -Color-Bold">    1x1    | Tangent , OnlyObjective , BaseIteration</span>
+[  ] <span class=" -Color -Color-Bold">    1x1    | Optimize , OnlyObjective , BaseIteration</span>
+[  ] <span class=" -Color -Color-Bold">    1x1    | SteadyAdjoint , OnlyObjective , BaseIteration</span>
+[  ] <span class=" -Color -Color-Bold">    1x1    | Primal , NoGlobals , BaseInit</span>
+[  ] <span class=" -Color -Color-Bold">    1x1    | Tangent , NoGlobals , BaseInit</span>
+[  ] <span class=" -Color -Color-Bold">    1x1    | Optimize , NoGlobals , BaseInit</span>
+[  ] <span class=" -Color -Color-Bold">    1x1    | SteadyAdjoint , NoGlobals , BaseInit</span>
+[  ] <span class=" -Color -Color-Bold">    1x1    | Primal , IntegrateGlobals , BaseInit</span>
+[  ] <span class=" -Color -Color-Bold">    1x1    | Tangent , IntegrateGlobals , BaseInit</span>
+[  ] <span class=" -Color -Color-Bold">    1x1    | Optimize , IntegrateGlobals , BaseInit</span>
+[  ] <span class=" -Color -Color-Bold">    1x1    | SteadyAdjoint , IntegrateGlobals , BaseInit</span>
+[  ] <span class=" -Color -Color-Bold">    1x1    | Primal , OnlyObjective , BaseInit</span>
+[  ] <span class=" -Color -Color-Bold">    1x1    | Tangent , OnlyObjective , BaseInit</span>
+[  ] <span class=" -Color -Color-Bold">    1x1    | Optimize , OnlyObjective , BaseInit</span>
+[  ] <span class=" -Color -Color-Bold">    1x1    | SteadyAdjoint , OnlyObjective , BaseInit</span>
+[  ] <span class=" -Color -Color-Bold -Color-Bold-Green">[0] Cumulative allocation of 71424 b (71.4 kB)</span>
+[  ] <span class=" -Color -Color-Bold">Creating geom size:200</span>
+[  ] <span class=" -Color -Color-Bold -Color-Bold-Green">Setting output path to: run</span>
+[  ] <span class=" -Color -Color-Bold -Color-Bold-Green">Setting output path to: output/run</span>
+[  ] <span class=" -Color -Color-Bold">loading geometry ...</span>
+[  ] <span class=" -Color -Color-Bold">Setting number of zones to 1</span>
+[  ] <span class=" -Color -Color-Bold">Setting Diffusivity_DRE_1 to 0.1666666666666667 (0.166667)</span>
+[  ] <span class=" -Color -Color-Bold">[0] Settings [Diffusivity for  DRE_1] to 0.166667</span>
+[  ] <span class=" -Color -Color-Bold">Setting C_1 to 3.0000000000000000 (3.000000)</span>
+[  ] <span class=" -Color -Color-Bold">[0] Settings [Model parameter C_1] to 3.000000</span>
+[  ] <span class=" -Color -Color-Bold">Setting C_2 to 100000000000000000000.0000000000000000 (100000000000000000000.000</span>
+[  ] <span class=" -Color -Color-Bold">000)</span>
+[  ] <span class=" -Color -Color-Bold">[0] Settings [Model parameter C_2] to 100000000000000000000.000000</span>
+[  ] <span class=" -Color -Color-Bold">Setting C_3 to 0.0100000000000000 (0.010000)</span>
+[  ] <span class=" -Color -Color-Bold">[0] Settings [Model parameter C_3] to 0.010000</span>
+[  ] <span class=" -Color -Color-Bold">Setting Init_DRE_1 in zone  (-1) to 0.1000000000000000 (0.100000)</span>
+[  ] <span class=" -Color -Color-Bold">Setting Init_ODE_1 in zone  (-1) to 0.9000000000000000 (0.900000)</span>
+[  ] <span class=" -Color -Color-Bold">Setting Init_ODE_2 in zone  (-1) to 0.1000000000000000 (0.100000)</span>
+[  ] <span class=" -Color -Color-Bold">Setting Init_ODE_3 in zone  (-1) to 0.0000000000000000 (0.000000)</span>
+[  ] <span class=" -Color -Color-Bold">Initializing Lattice ...</span>
+[  ] <span class=" -Color -Color-Bold">Callback HDF5 with no Iterations attribute</span>==]  0s
+[  ] <span class=" -Color -Color-Bold">Negotiated HDF5 chunks: 1x2x100[x3]</span>
+[  ] <span class=" -Color -Color-Bold">       0 it writing hdf5</span>
+[  ] <span class=" -Color -Color-Bold">Setting action Solve at 1000.000000 iterations</span>
+[  ] <span class=" -Color -Color-Bold">Setting callback HDF5 at 20.000000 iterations</span>
+[  ] <span class=" -Color -Color-Bold">Negotiated HDF5 chunks: 1x2x100[x3]</span>
+[  ] <span class=" -Color -Color-Bold">Adding HDF5 to the solver hands</span>
+[  ] <span class=" -Color -Color-Bold">     1.3 MLBUps      0.28 GB/s [====================]</span>
+[  ] <span class=" -Color -Color-Bold">      20 it writing hdf5</span>
+[  ] <span class=" -Color -Color-Bold">     0.5 MLBUps      0.10 GB/s [====================]</span>
+[  ] <span class=" -Color -Color-Bold">      40 it writing hdf5</span>
+[  ] <span class=" -Color -Color-Bold">     0.6 MLBUps      0.13 GB/s [====================]</span>
+[  ] <span class=" -Color -Color-Bold">      60 it writing hdf5</span>
+[  ] <span class=" -Color -Color-Bold">     0.6 MLBUps      0.13 GB/s [====================]</span>
+[  ] <span class=" -Color -Color-Bold">      80 it writing hdf5</span>
+[  ] <span class=" -Color -Color-Bold">     0.6 MLBUps      0.13 GB/s [====================]</span>
+[  ] <span class=" -Color -Color-Bold">     100 it writing hdf5</span>
+[  ] <span class=" -Color -Color-Bold">     0.6 MLBUps      0.13 GB/s [====================]</span>
+[  ] <span class=" -Color -Color-Bold">     120 it writing hdf5</span>
+[  ] <span class=" -Color -Color-Bold">     0.6 MLBUps      0.13 GB/s [====================]</span>
+[  ] <span class=" -Color -Color-Bold">     140 it writing hdf5</span>
+[  ] <span class=" -Color -Color-Bold">     0.6 MLBUps      0.13 GB/s [====================]</span>
+[  ] <span class=" -Color -Color-Bold">     160 it writing hdf5</span>
+[  ] <span class=" -Color -Color-Bold">     0.6 MLBUps      0.13 GB/s [====================]</span>
+[  ] <span class=" -Color -Color-Bold">     180 it writing hdf5</span>
+[  ] <span class=" -Color -Color-Bold">     0.6 MLBUps      0.13 GB/s [====================]</span>
+[  ] <span class=" -Color -Color-Bold">     200 it writing hdf5</span>
+[  ] <span class=" -Color -Color-Bold">     0.6 MLBUps      0.13 GB/s [====================]</span>
+[  ] <span class=" -Color -Color-Bold">     220 it writing hdf5</span>
+[  ] <span class=" -Color -Color-Bold">     0.6 MLBUps      0.13 GB/s [====================]</span>
+[  ] <span class=" -Color -Color-Bold">     240 it writing hdf5</span>
+[  ] <span class=" -Color -Color-Bold">     0.6 MLBUps      0.13 GB/s [====================]</span>
+[  ] <span class=" -Color -Color-Bold">     260 it writing hdf5</span>
+[  ] <span class=" -Color -Color-Bold">     0.6 MLBUps      0.13 GB/s [====================]</span>
+[  ] <span class=" -Color -Color-Bold">     280 it writing hdf5</span>
+[  ] <span class=" -Color -Color-Bold">     0.6 MLBUps      0.13 GB/s [====================]</span>
+[  ] <span class=" -Color -Color-Bold">     300 it writing hdf5</span>
+[  ] <span class=" -Color -Color-Bold">     0.6 MLBUps      0.13 GB/s [====================]</span>
+[  ] <span class=" -Color -Color-Bold">     320 it writing hdf5</span>
+[  ] <span class=" -Color -Color-Bold">     0.6 MLBUps      0.12 GB/s [====================]</span>
+[  ] <span class=" -Color -Color-Bold">     340 it writing hdf5</span>
+[  ] <span class=" -Color -Color-Bold">     0.6 MLBUps      0.13 GB/s [====================]</span>
+[  ] <span class=" -Color -Color-Bold">     360 it writing hdf5</span>
+[  ] <span class=" -Color -Color-Bold">     0.6 MLBUps      0.13 GB/s [====================]</span>
+[  ] <span class=" -Color -Color-Bold">     380 it writing hdf5</span>
+[  ] <span class=" -Color -Color-Bold">     0.6 MLBUps      0.13 GB/s [====================]</span>
+[  ] <span class=" -Color -Color-Bold">     400 it writing hdf5</span>
+[  ] <span class=" -Color -Color-Bold">     0.6 MLBUps      0.13 GB/s [====================]</span>
+[  ] <span class=" -Color -Color-Bold">     420 it writing hdf5</span>
+[  ] <span class=" -Color -Color-Bold">     0.7 MLBUps      0.14 GB/s [====================]</span>
+[  ] <span class=" -Color -Color-Bold">     440 it writing hdf5</span>
+[  ] <span class=" -Color -Color-Bold">     0.8 MLBUps      0.16 GB/s [====================]</span>
+[  ] <span class=" -Color -Color-Bold">     460 it writing hdf5</span>
+[  ] <span class=" -Color -Color-Bold">     0.8 MLBUps      0.16 GB/s [====================]</span>
+[  ] <span class=" -Color -Color-Bold">     480 it writing hdf5</span>
+[  ] <span class=" -Color -Color-Bold">     0.8 MLBUps      0.16 GB/s [====================]</span>
+[  ] <span class=" -Color -Color-Bold">     500 it writing hdf5</span>
+[  ] <span class=" -Color -Color-Bold">     0.8 MLBUps      0.16 GB/s [====================]</span>
+[  ] <span class=" -Color -Color-Bold">     520 it writing hdf5</span>
+[  ] <span class=" -Color -Color-Bold">     0.8 MLBUps      0.16 GB/s [====================]</span>
+[  ] <span class=" -Color -Color-Bold">     540 it writing hdf5</span>
+[  ] <span class=" -Color -Color-Bold">     0.8 MLBUps      0.16 GB/s [====================]</span>
+[  ] <span class=" -Color -Color-Bold">     560 it writing hdf5</span>
+[  ] <span class=" -Color -Color-Bold">     0.8 MLBUps      0.16 GB/s [====================]</span>
+[  ] <span class=" -Color -Color-Bold">     580 it writing hdf5</span>
+[  ] <span class=" -Color -Color-Bold">     0.8 MLBUps      0.16 GB/s [====================]</span>
+[  ] <span class=" -Color -Color-Bold">     600 it writing hdf5</span>
+[  ] <span class=" -Color -Color-Bold">     0.8 MLBUps      0.16 GB/s [====================]</span>
+[  ] <span class=" -Color -Color-Bold">     620 it writing hdf5</span>
+[  ] <span class=" -Color -Color-Bold">     0.8 MLBUps      0.16 GB/s [====================]</span>
+[  ] <span class=" -Color -Color-Bold">     640 it writing hdf5</span>
+[  ] <span class=" -Color -Color-Bold">     0.8 MLBUps      0.16 GB/s [====================]</span>
+[  ] <span class=" -Color -Color-Bold">     660 it writing hdf5</span>
+[  ] <span class=" -Color -Color-Bold">     0.8 MLBUps      0.16 GB/s [====================]</span>
+[  ] <span class=" -Color -Color-Bold">     680 it writing hdf5</span>
+[  ] <span class=" -Color -Color-Bold">     0.8 MLBUps      0.16 GB/s [====================]</span>
+[  ] <span class=" -Color -Color-Bold">     700 it writing hdf5</span>
+[  ] <span class=" -Color -Color-Bold">     0.8 MLBUps      0.16 GB/s [====================]</span>
+[  ] <span class=" -Color -Color-Bold">     720 it writing hdf5</span>
+[  ] <span class=" -Color -Color-Bold">     0.8 MLBUps      0.16 GB/s [====================]</span>
+[  ] <span class=" -Color -Color-Bold">     740 it writing hdf5</span>
+[  ] <span class=" -Color -Color-Bold">     0.8 MLBUps      0.16 GB/s [====================]</span>
+[  ] <span class=" -Color -Color-Bold">     760 it writing hdf5</span>
+[  ] <span class=" -Color -Color-Bold">     0.8 MLBUps      0.16 GB/s [====================]</span>
+[  ] <span class=" -Color -Color-Bold">     780 it writing hdf5</span>
+[  ] <span class=" -Color -Color-Bold">     0.8 MLBUps      0.16 GB/s [====================]</span>
+[  ] <span class=" -Color -Color-Bold">     800 it writing hdf5</span>
+[  ] <span class=" -Color -Color-Bold">     0.8 MLBUps      0.16 GB/s [====================]</span>
+[  ] <span class=" -Color -Color-Bold">     820 it writing hdf5</span>
+[  ] <span class=" -Color -Color-Bold">     0.8 MLBUps      0.16 GB/s [====================]</span>
+[  ] <span class=" -Color -Color-Bold">     840 it writing hdf5</span>
+[  ] <span class=" -Color -Color-Bold">     0.8 MLBUps      0.16 GB/s [====================]</span>
+[  ] <span class=" -Color -Color-Bold">     860 it writing hdf5</span>
+[  ] <span class=" -Color -Color-Bold">     0.8 MLBUps      0.16 GB/s [====================]</span>
+[  ] <span class=" -Color -Color-Bold">     880 it writing hdf5</span>
+[  ] <span class=" -Color -Color-Bold">     0.8 MLBUps      0.16 GB/s [====================]</span>
+[  ] <span class=" -Color -Color-Bold">     900 it writing hdf5</span>
+[  ] <span class=" -Color -Color-Bold">     0.8 MLBUps      0.16 GB/s [====================]</span>
+[  ] <span class=" -Color -Color-Bold">     920 it writing hdf5</span>
+[  ] <span class=" -Color -Color-Bold">     0.8 MLBUps      0.16 GB/s [====================]</span>
+[  ] <span class=" -Color -Color-Bold">     940 it writing hdf5</span>
+[  ] <span class=" -Color -Color-Bold">     0.8 MLBUps      0.16 GB/s [====================]</span>
+[  ] <span class=" -Color -Color-Bold">     960 it writing hdf5</span>
+[  ] <span class=" -Color -Color-Bold">     0.8 MLBUps      0.16 GB/s [====================]</span>
+[  ] <span class=" -Color -Color-Bold">     980 it writing hdf5</span>
+[  ] <span class=" -Color -Color-Bold">     0.8 MLBUps      0.16 GB/s [====================]</span>
+[  ] <span class=" -Color -Color-Bold">    1000 it writing hdf5</span>
+[  ] <span class=" -Color -Color-Bold">Total duration: 0.338237 s = 0.005637 min = 0.000094 h</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">S</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+<span class="n">I</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+<span class="n">R</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">T</span><span class="p">,</span><span class="nb">int</span><span class="p">(</span><span class="n">T</span> <span class="o">/</span> <span class="mi">50</span><span class="p">)):</span>
+    <span class="n">f</span> <span class="o">=</span> <span class="n">h5py</span><span class="o">.</span><span class="n">File</span><span class="p">(</span><span class="s1">&#39;output/run_HDF5_</span><span class="si">%08d</span><span class="s1">.h5&#39;</span><span class="o">%</span><span class="k">i</span>)    
+    <span class="c1">#plt.plot(f[&#39;DRE_1&#39;][0,25,:])</span>
+    <span class="n">S</span><span class="o">.</span><span class="n">append</span><span class="p">(</span> <span class="n">f</span><span class="p">[</span><span class="s1">&#39;ODE_1&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span> <span class="p">)</span>
+    <span class="n">I</span><span class="o">.</span><span class="n">append</span><span class="p">(</span> <span class="n">f</span><span class="p">[</span><span class="s1">&#39;ODE_2&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span> <span class="p">)</span>
+    <span class="n">R</span><span class="o">.</span><span class="n">append</span><span class="p">(</span> <span class="n">f</span><span class="p">[</span><span class="s1">&#39;ODE_3&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span> <span class="p">)</span>
+
+<span class="n">t_lb</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">T</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">S</span><span class="p">))</span><span class="o">*</span><span class="n">dt</span>
+    
+    
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span><span class="mi">8</span><span class="p">))</span>
+    
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">t_lb</span><span class="p">,</span><span class="n">S</span><span class="p">,</span> <span class="s1">&#39;gx&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;S - TCLB&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">t_lb</span><span class="p">,</span><span class="n">I</span><span class="p">,</span> <span class="s1">&#39;rx&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;I - TCLB&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">t_lb</span><span class="p">,</span><span class="n">R</span><span class="p">,</span> <span class="s1">&#39;kx&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;R - TCLB&#39;</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">S_rk4</span><span class="p">,</span>
+         <span class="n">color</span><span class="o">=</span><span class="s2">&quot;green&quot;</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">markevery</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">markersize</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s2">&quot;-&quot;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+         <span class="n">label</span><span class="o">=</span><span class="s1">&#39;S - RK45&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">I_rk4</span><span class="p">,</span>
+         <span class="n">color</span><span class="o">=</span><span class="s2">&quot;red&quot;</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">markevery</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">markersize</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s2">&quot;-&quot;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+         <span class="n">label</span><span class="o">=</span><span class="s1">&#39;I - RK45&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">R_rk4</span><span class="p">,</span>
+         <span class="n">color</span><span class="o">=</span><span class="s2">&quot;black&quot;</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">markevery</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">markersize</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s2">&quot;-&quot;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+         <span class="n">label</span><span class="o">=</span><span class="s1">&#39;R - RK45&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">which</span><span class="o">=</span><span class="s1">&#39;both&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../../_images/15_d2q9_diffusion_SpatialSIR_model_7_0.png" src="../../_images/15_d2q9_diffusion_SpatialSIR_model_7_0.png" />
+</div>
+</div>
+<div class="section" id="we-could-use-tclb-shortcuts-in-a-loop-to-see-effects-of-beta">
+<h2>We could use TCLB shortcuts in a loop, to see effects of <span class="math notranslate nohighlight">\(\beta\)</span><a class="headerlink" href="#we-could-use-tclb-shortcuts-in-a-loop-to-see-effects-of-beta" title="Permalink to this headline">¶</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span><span class="mi">8</span><span class="p">))</span>
+    
+<span class="k">for</span> <span class="n">_beta</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">logspace</span><span class="p">(</span><span class="o">-</span><span class="mi">5</span><span class="p">,</span><span class="mi">6</span><span class="p">,</span><span class="mi">3</span><span class="p">):</span>
+    
+    <span class="n">CLBc</span> <span class="o">=</span> <span class="n">CLBXML</span><span class="o">.</span><span class="n">CLBConfigWriter</span><span class="p">(</span> <span class="p">)</span>
+
+    <span class="n">CLBc</span><span class="o">.</span><span class="n">addGeomParam</span><span class="p">(</span><span class="s1">&#39;nx&#39;</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
+    <span class="n">CLBc</span><span class="o">.</span><span class="n">addGeomParam</span><span class="p">(</span><span class="s1">&#39;ny&#39;</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
+
+
+    <span class="n">params</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;Diffusivity_DRE_1&quot;</span> <span class="p">:</span> <span class="mf">1.</span><span class="o">/</span><span class="mf">6.</span><span class="p">,</span>
+            <span class="s2">&quot;C_1&quot;</span><span class="p">:</span><span class="n">R0</span><span class="p">,</span>
+            <span class="s2">&quot;C_2&quot;</span><span class="p">:</span><span class="n">_beta</span><span class="p">,</span>
+            <span class="s2">&quot;C_3&quot;</span><span class="p">:</span><span class="n">dt</span><span class="p">,</span>            
+            <span class="s2">&quot;Init_DRE_1&quot;</span><span class="p">:</span><span class="n">I_init</span><span class="p">,</span> <span class="c1">#This is W equation, initlally equall to I. large Beta reduces Relaxation-To-SIR Time</span>
+            <span class="s2">&quot;Init_ODE_1&quot;</span><span class="p">:</span><span class="n">S_init</span><span class="p">,</span>
+            <span class="s2">&quot;Init_ODE_2&quot;</span><span class="p">:</span><span class="n">I_init</span><span class="p">,</span>
+            <span class="s2">&quot;Init_ODE_3&quot;</span><span class="p">:</span><span class="n">R_init</span>
+    <span class="p">}</span>
+
+    <span class="n">CLBc</span><span class="o">.</span><span class="n">addModelParams</span><span class="p">(</span><span class="n">params</span><span class="p">)</span>
+
+
+    <span class="n">CLBc</span><span class="o">.</span><span class="n">addHDF5</span><span class="p">()</span>
+    <span class="n">solve</span> <span class="o">=</span> <span class="n">CLBc</span><span class="o">.</span><span class="n">addSolve</span><span class="p">(</span><span class="n">iterations</span><span class="o">=</span><span class="n">T</span><span class="p">)</span>
+    <span class="n">CLBc</span><span class="o">.</span><span class="n">addHDF5</span><span class="p">(</span><span class="n">Iterations</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">T</span> <span class="o">/</span> <span class="mi">50</span><span class="p">),</span> <span class="n">parent</span><span class="o">=</span><span class="n">solve</span><span class="p">)</span>
+
+    <span class="n">CLBc</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;run.xml&#39;</span><span class="p">)</span>
+
+    <span class="o">!</span> rm -rf output/* <span class="o">&amp;&amp;</span>  tclb d2q9_reaction_diffusion_system_SIR_ModifiedPeng run.xml &gt; /dev/null <span class="o">&amp;&amp;</span> <span class="nb">echo</span> <span class="s2">&quot;DONE!&quot;</span>
+
+
+    <span class="n">S</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+    <span class="n">I</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+    <span class="n">R</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">T</span><span class="p">,</span><span class="nb">int</span><span class="p">(</span><span class="n">T</span> <span class="o">/</span> <span class="mi">50</span><span class="p">)):</span>
+        <span class="n">f</span> <span class="o">=</span> <span class="n">h5py</span><span class="o">.</span><span class="n">File</span><span class="p">(</span><span class="s1">&#39;output/run_HDF5_</span><span class="si">%08d</span><span class="s1">.h5&#39;</span><span class="o">%</span><span class="k">i</span>)    
+        <span class="c1">#plt.plot(f[&#39;DRE_1&#39;][0,25,:])</span>
+        <span class="n">S</span><span class="o">.</span><span class="n">append</span><span class="p">(</span> <span class="n">f</span><span class="p">[</span><span class="s1">&#39;ODE_1&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span> <span class="p">)</span>
+        <span class="n">I</span><span class="o">.</span><span class="n">append</span><span class="p">(</span> <span class="n">f</span><span class="p">[</span><span class="s1">&#39;ODE_2&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span> <span class="p">)</span>
+        <span class="n">R</span><span class="o">.</span><span class="n">append</span><span class="p">(</span> <span class="n">f</span><span class="p">[</span><span class="s1">&#39;ODE_3&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span> <span class="p">)</span>
+
+    <span class="n">t_lb</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">T</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">S</span><span class="p">))</span><span class="o">*</span><span class="n">dt</span>
+
+<span class="c1">#    plt.plot(t_lb,S, &#39;g-&#39;, label=r&#39;S - TCLB ($\beta=$)&#39;)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">t_lb</span><span class="p">,</span><span class="n">I</span><span class="p">,</span> <span class="s1">&#39;--&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="sa">r</span><span class="s1">&#39;Infected - TCLB  ($\beta=</span><span class="si">%e</span><span class="s1">$)&#39;</span><span class="o">%</span><span class="k">_beta</span> )
+    
+<span class="c1">#    plt.plot(t_lb,R, &#39;k-&#39;, label=&#39;R - TCLB&#39;)</span>
+
+<span class="c1">#plt.plot(t, S_rk4,</span>
+<span class="c1">#         color=&quot;green&quot;, marker=&quot;&quot;, markevery=1, markersize=15, linestyle=&quot;-&quot;, linewidth=2,</span>
+<span class="c1">#         label=&#39;S - RK45&#39;)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">I_rk4</span><span class="p">,</span>
+         <span class="n">color</span><span class="o">=</span><span class="s2">&quot;red&quot;</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">markevery</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">markersize</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s2">&quot;-&quot;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+         <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Infected - RK45&#39;</span><span class="p">)</span>
+<span class="c1">#plt.plot(t, R_rk4,</span>
+<span class="c1">#         color=&quot;black&quot;, marker=&quot;&quot;, markevery=1, markersize=15, linestyle=&quot;-&quot;, linewidth=2,</span>
+<span class="c1">#         label=&#39;R - RK45&#39;)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">which</span><span class="o">=</span><span class="s1">&#39;both&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Time&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">% o</span><span class="s1">f population&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Hello allocator!
+DONE!
+Hello allocator!
+DONE!
+Hello allocator!
+DONE!
+</pre></div>
+</div>
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Text(0, 0.5, &#39;% of population&#39;)
+</pre></div>
+</div>
+<img alt="../../_images/15_d2q9_diffusion_SpatialSIR_model_9_2.png" src="../../_images/15_d2q9_diffusion_SpatialSIR_model_9_2.png" />
+</div>
+</div>
+</div>
+</div>
+<div class="tex2jax_ignore mathjax_ignore section" id="sir-simple-laplace">
+<h1>SIR - Simple Laplace<a class="headerlink" href="#sir-simple-laplace" title="Permalink to this headline">¶</a></h1>
+<p>The same could be done with SIR_SimpleLaplace model - for large <span class="math notranslate nohighlight">\(\beta\)</span> results are identical</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">CLBc</span> <span class="o">=</span> <span class="n">CLBXML</span><span class="o">.</span><span class="n">CLBConfigWriter</span><span class="p">(</span> <span class="p">)</span>
+
+<span class="n">CLBc</span><span class="o">.</span><span class="n">addGeomParam</span><span class="p">(</span><span class="s1">&#39;nx&#39;</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
+<span class="n">CLBc</span><span class="o">.</span><span class="n">addGeomParam</span><span class="p">(</span><span class="s1">&#39;ny&#39;</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
+
+
+<span class="n">params</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;Diffusivity_DRE_1&quot;</span> <span class="p">:</span> <span class="mf">1.</span><span class="o">/</span><span class="mf">6.</span><span class="p">,</span>
+        <span class="s2">&quot;Diffusivity_DRE_2&quot;</span> <span class="p">:</span> <span class="mf">1.</span><span class="o">/</span><span class="mf">6.</span><span class="p">,</span>
+        <span class="s2">&quot;Diffusivity_DRE_3&quot;</span> <span class="p">:</span> <span class="mf">1.</span><span class="o">/</span><span class="mf">6.</span><span class="p">,</span>    
+        <span class="s2">&quot;C_1&quot;</span><span class="p">:</span><span class="n">R0</span><span class="p">,</span>
+        <span class="s2">&quot;C_2&quot;</span><span class="p">:</span><span class="n">dt</span><span class="p">,</span> 
+        <span class="s2">&quot;Init_DRE_1&quot;</span><span class="p">:</span><span class="n">S_init</span><span class="p">,</span>
+        <span class="s2">&quot;Init_DRE_2&quot;</span><span class="p">:</span><span class="n">I_init</span><span class="p">,</span>
+        <span class="s2">&quot;Init_DRE_3&quot;</span><span class="p">:</span><span class="n">R_init</span>
+<span class="p">}</span>
+
+<span class="n">CLBc</span><span class="o">.</span><span class="n">addModelParams</span><span class="p">(</span><span class="n">params</span><span class="p">)</span>
+
+
+<span class="n">CLBc</span><span class="o">.</span><span class="n">addHDF5</span><span class="p">()</span>
+<span class="n">solve</span> <span class="o">=</span> <span class="n">CLBc</span><span class="o">.</span><span class="n">addSolve</span><span class="p">(</span><span class="n">iterations</span><span class="o">=</span><span class="n">T</span><span class="p">)</span>
+<span class="n">CLBc</span><span class="o">.</span><span class="n">addHDF5</span><span class="p">(</span><span class="n">Iterations</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">T</span> <span class="o">/</span> <span class="mi">50</span><span class="p">),</span> <span class="n">parent</span><span class="o">=</span><span class="n">solve</span><span class="p">)</span>
+   
+<span class="n">CLBc</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;run.xml&#39;</span><span class="p">)</span>
+
+<span class="o">!</span> rm -rf output/* <span class="o">&amp;&amp;</span>  tclb d2q9_reaction_diffusion_system_SIR_SimpleLaplace run.xml &gt; /dev/null
+
+
+<span class="n">S</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+<span class="n">I</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+<span class="n">R</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">T</span><span class="p">,</span><span class="nb">int</span><span class="p">(</span><span class="n">T</span> <span class="o">/</span> <span class="mi">50</span><span class="p">)):</span>
+    <span class="n">f</span> <span class="o">=</span> <span class="n">h5py</span><span class="o">.</span><span class="n">File</span><span class="p">(</span><span class="s1">&#39;output/run_HDF5_</span><span class="si">%08d</span><span class="s1">.h5&#39;</span><span class="o">%</span><span class="k">i</span>)    
+    <span class="c1">#plt.plot(f[&#39;DRE_1&#39;][0,25,:])</span>
+    <span class="n">S</span><span class="o">.</span><span class="n">append</span><span class="p">(</span> <span class="n">f</span><span class="p">[</span><span class="s1">&#39;DRE_1&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span> <span class="p">)</span>
+    <span class="n">I</span><span class="o">.</span><span class="n">append</span><span class="p">(</span> <span class="n">f</span><span class="p">[</span><span class="s1">&#39;DRE_2&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span> <span class="p">)</span>
+    <span class="n">R</span><span class="o">.</span><span class="n">append</span><span class="p">(</span> <span class="n">f</span><span class="p">[</span><span class="s1">&#39;DRE_3&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span> <span class="p">)</span>
+
+<span class="n">t_lb</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">T</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">S</span><span class="p">))</span><span class="o">*</span><span class="n">dt</span>
+    
+    
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span><span class="mi">8</span><span class="p">))</span>
+    
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">t_lb</span><span class="p">,</span><span class="n">S</span><span class="p">,</span> <span class="s1">&#39;gx&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;S - TCLB&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">t_lb</span><span class="p">,</span><span class="n">I</span><span class="p">,</span> <span class="s1">&#39;rx&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;I - TCLB&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">t_lb</span><span class="p">,</span><span class="n">R</span><span class="p">,</span> <span class="s1">&#39;kx&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;R - TCLB&#39;</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">S_rk4</span><span class="p">,</span>
+         <span class="n">color</span><span class="o">=</span><span class="s2">&quot;green&quot;</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">markevery</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">markersize</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s2">&quot;-&quot;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+         <span class="n">label</span><span class="o">=</span><span class="s1">&#39;S - RK45&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">I_rk4</span><span class="p">,</span>
+         <span class="n">color</span><span class="o">=</span><span class="s2">&quot;red&quot;</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">markevery</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">markersize</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s2">&quot;-&quot;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+         <span class="n">label</span><span class="o">=</span><span class="s1">&#39;I - RK45&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">R_rk4</span><span class="p">,</span>
+         <span class="n">color</span><span class="o">=</span><span class="s2">&quot;black&quot;</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">markevery</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">markersize</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s2">&quot;-&quot;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+         <span class="n">label</span><span class="o">=</span><span class="s1">&#39;R - RK45&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">which</span><span class="o">=</span><span class="s1">&#39;both&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Hello allocator!
+</pre></div>
+</div>
+<img alt="../../_images/15_d2q9_diffusion_SpatialSIR_model_11_1.png" src="../../_images/15_d2q9_diffusion_SpatialSIR_model_11_1.png" />
+</div>
+</div>
+</div>
+<div class="tex2jax_ignore mathjax_ignore section" id="simple-spatially-variable-sir-model-with-non-uniform-ic">
+<h1>Simple spatially variable SIR model with non-uniform IC<a class="headerlink" href="#simple-spatially-variable-sir-model-with-non-uniform-ic" title="Permalink to this headline">¶</a></h1>
+</div>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            kernelName: "python3",
+            path: "./notebooks/40_IntroTCLB"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+              </div>
+              
+        
+            <!-- Previous / next buttons -->
+<div class='prev-next-area'> 
+    <a class='left-prev' id="prev-link" href="11_Dispersion.html" title="previous page">
+        <i class="fas fa-angle-left"></i>
+        <div class="prev-next-info">
+            <p class="prev-next-subtitle">previous</p>
+            <p class="prev-next-title">Prepare FD and LBM solution</p>
+        </div>
+    </a>
+    <a class='right-next' id="next-link" href="../50_TCLBforSIRModelInSpace/10_SIR_in_PengModified_Model.html" title="next page">
+    <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Notes on LBM dt in nonlinear reactions</p>
+    </div>
+    <i class="fas fa-angle-right"></i>
+    </a>
+</div>
+        
+        </div>
+    </div>
+    <footer class="footer">
+    <div class="container">
+      <p>
+        
+          By G. Gruszczynski and M. Dzikowski<br/>
+        
+            &copy; Copyright 2021.<br/>
+      </p>
+    </div>
+  </footer>
+</main>
+
+
+      </div>
+    </div>
+  
+  <script src="../../_static/js/index.be7d3bbb2ef33a8344ce.js"></script>
+
+  </body>
+</html>

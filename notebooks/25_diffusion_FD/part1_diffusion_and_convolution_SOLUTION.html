@@ -1,0 +1,807 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Diffusion part 1: the fundamental solution &#8212; Modelling of epidemic spreading with Lattice Boltzmann Method</title>
+    
+  <link href="../../_static/css/theme.css" rel="stylesheet">
+  <link href="../../_static/css/index.ff1ffe594081f20da1ef19478df9384b.css" rel="stylesheet">
+
+    
+  <link rel="stylesheet"
+    href="../../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    
+      
+
+    
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-book-theme.css?digest=c3fdc42140077d1ad13ad2f1588a4309" />
+    <link rel="stylesheet" type="text/css" href="../../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/panels-main.c949a650a448cc0ae9fd3441c0e17fb0.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/panels-variables.06eb56fa6e07937060861dad626602ad.css" />
+    
+  <link rel="preload" as="script" href="../../_static/js/index.be7d3bbb2ef33a8344ce.js">
+
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/togglebutton.js"></script>
+    <script src="../../_static/clipboard.min.js"></script>
+    <script src="../../_static/copybutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <script src="../../_static/sphinx-book-theme.12a9622fbb08dcb3a2a40b2c02b83a57.js"></script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script async="async" src="https://unpkg.com/thebe@0.5.1/lib/index.js"></script>
+    <script>
+        const thebe_selector = ".thebe"
+        const thebe_selector_input = "pre"
+        const thebe_selector_output = ".output"
+    </script>
+    <script async="async" src="../../_static/sphinx-thebe.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Diffusion part 2: matrix approach; implicit and explicit scheme" href="part2_diffusion_matrix_approach_SOLUTION.html" />
+    <link rel="prev" title="Plotting a vector field" href="../20_SIR_0D/part3_SIR_0D_streamlines_SOLUTION.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="None">
+    
+
+    <!-- Google Analytics -->
+    
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<div class="col-12 col-md-3 bd-sidebar site-navigation show" id="site-navigation">
+    
+        <div class="navbar-brand-box">
+    <a class="navbar-brand text-wrap" href="../../index.html">
+      
+        <!-- `logo` is deprecated in Sphinx 4.0, so remove this when we stop supporting 3 -->
+        
+      
+      
+      <img src="../../_static/cfd-go.png" class="logo" alt="logo">
+      
+      
+      <h1 class="site-logo" id="site-title">Modelling of epidemic spreading with Lattice Boltzmann Method</h1>
+      
+    </a>
+</div><form class="bd-search d-flex align-items-center" action="../../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item active">
+        <p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  SIR 0D
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../20_SIR_0D/part1_SIR_0D_SOLUTION.html">
+   The simplest, SIR model
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../20_SIR_0D/part2_SIR_0D_stability_SOLUTION.html">
+   Under which conditions one may be lucky enough to not get infected?
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../20_SIR_0D/part3_SIR_0D_streamlines_SOLUTION.html">
+   Plotting a vector field
+  </a>
+ </li>
+</ul>
+<p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Diffusion FD
+ </span>
+</p>
+<ul class="current nav bd-sidenav">
+ <li class="toctree-l1 current active">
+  <a class="current reference internal" href="#">
+   Diffusion part 1: the fundamental solution
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="part2_diffusion_matrix_approach_SOLUTION.html">
+   Diffusion part 2: matrix approach; implicit and explicit scheme
+  </a>
+ </li>
+</ul>
+<p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  SIR 1D
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../30_SIRModelInSpace/part1_SIR_1D_SOLUTION.html">
+   The simple spatial SIR model
+  </a>
+ </li>
+</ul>
+<p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Introduction to TCLB solver
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../40_IntroTCLB/10_SimpleDiffusion.html">
+   Diffusion equation in TCLB solver
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../40_IntroTCLB/11_Dispersion.html">
+   Prepare FD and LBM solution
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../40_IntroTCLB/15_d2q9_diffusion_SpatialSIR_model.html">
+   First shot: spatially variable SIR model with uniform IC
+  </a>
+ </li>
+</ul>
+<p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Solving spatial SIR system in TCLB
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../50_TCLBforSIRModelInSpace/10_SIR_in_PengModified_Model.html">
+   Notes on LBM dt in nonlinear reactions
+  </a>
+ </li>
+</ul>
+
+    </div>
+</nav> <!-- To handle the deprecated key -->
+
+<div class="navbar_extra_footer">
+  Powered by <a href="https://jupyterbook.org">Jupyter Book</a>
+</div>
+
+</div>
+
+
+          
+
+
+          
+<main class="col py-md-3 pl-md-4 bd-content overflow-auto" role="main">
+    
+    <div class="topbar container-xl fixed-top">
+    <div class="topbar-contents row">
+        <div class="col-12 col-md-3 bd-topbar-whitespace site-navigation show"></div>
+        <div class="col pl-md-4 topbar-main">
+            
+            <button id="navbar-toggler" class="navbar-toggler ml-0" type="button" data-toggle="collapse"
+                data-toggle="tooltip" data-placement="bottom" data-target=".site-navigation" aria-controls="navbar-menu"
+                aria-expanded="true" aria-label="Toggle navigation" aria-controls="site-navigation"
+                title="Toggle navigation" data-toggle="tooltip" data-placement="left">
+                <i class="fas fa-bars"></i>
+                <i class="fas fa-arrow-left"></i>
+                <i class="fas fa-arrow-up"></i>
+            </button>
+            
+            
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn" aria-label="Download this page"><i
+            class="fas fa-download"></i></button>
+
+    <div class="dropdown-buttons">
+        <!-- ipynb file if we had a myst markdown file -->
+        
+        <!-- Download raw file -->
+        <a class="dropdown-buttons" href="../../_sources/notebooks/25_diffusion_FD/part1_diffusion_and_convolution_SOLUTION.ipynb"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Download source file" data-toggle="tooltip"
+                data-placement="left">.ipynb</button></a>
+        <!-- Download PDF via print -->
+        <button type="button" id="download-print" class="btn btn-secondary topbarbtn" title="Print to PDF"
+            onClick="window.print()" data-toggle="tooltip" data-placement="left">.pdf</button>
+    </div>
+</div>
+
+            <!-- Source interaction buttons -->
+
+            <!-- Full screen (wrap in <a> to have style consistency -->
+
+<a class="full-screen-button"><button type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip"
+        data-placement="bottom" onclick="toggleFullScreen()" aria-label="Fullscreen mode"
+        title="Fullscreen mode"><i
+            class="fas fa-expand"></i></button></a>
+
+            <!-- Launch buttons -->
+
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn"
+        aria-label="Launch interactive content"><i class="fas fa-rocket"></i></button>
+    <div class="dropdown-buttons">
+        
+        <a class="binder-button" href="https://mybinder.org/v2/gh/CFD-GO/TCLB_Workshop_2021/master?urlpath=tree/mini_book/notebooks/25_diffusion_FD/part1_diffusion_and_convolution_SOLUTION.ipynb"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Launch Binder" data-toggle="tooltip"
+                data-placement="left"><img class="binder-button-logo"
+                    src="../../_static/images/logo_binder.svg"
+                    alt="Interact on binder">Binder</button></a>
+        
+        
+        
+        
+    </div>
+</div>
+
+        </div>
+
+        <!-- Table of contents -->
+        <div class="d-none d-md-block col-md-2 bd-toc show">
+            
+            <div class="tocsection onthispage pt-5 pb-3">
+                <i class="fas fa-list"></i> Contents
+            </div>
+            <nav id="bd-toc-nav" aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#">
+   Diffusion part 1: the fundamental solution
+  </a>
+  <ul class="visible nav section-nav flex-column">
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#discretizing-frac-partial-2-u-partial-x-2">
+     Discretizing
+     <span class="math notranslate nohighlight">
+      \(\frac{\partial ^2 u}{\partial x^2}\)
+     </span>
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#discretizing-both-frac-partial-u-partial-t-and-frac-partial-2-u-partial-x-2">
+     Discretizing both
+     <span class="math notranslate nohighlight">
+      \(\frac{\partial u}{\partial t}\)
+     </span>
+     and
+     <span class="math notranslate nohighlight">
+      \(\frac{\partial ^2 u}{\partial x^2}\)
+     </span>
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#the-convolution-part-i">
+     The convolution - part I
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#task">
+       Task
+      </a>
+     </li>
+    </ul>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#the-convolution-part-ii">
+     The convolution - part II
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#id1">
+       Task
+      </a>
+     </li>
+    </ul>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#analytical-solution-advection-diffusion-of-a-gaussian-hill">
+     Analytical solution: Advection - Diffusion of a Gaussian Hill
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id2">
+     Task
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#questions">
+     Questions:
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#answers">
+     Answers
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#learn-more">
+   Learn More
+  </a>
+  <ul class="visible nav section-nav flex-column">
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#inspiration">
+     Inspiration
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+
+            </nav>
+        </div>
+    </div>
+</div>
+    <div id="main-content" class="row">
+        <div class="col-12 col-md-9 pl-md-3 pr-md-0">
+        
+              <div>
+                
+  <div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">timeit</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>   <span class="c1">#and the useful plotting library</span>
+<span class="kn">from</span> <span class="nn">numba</span> <span class="kn">import</span> <span class="n">jit</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="tex2jax_ignore mathjax_ignore section" id="diffusion-part-1-the-fundamental-solution">
+<h1>Diffusion part 1: the fundamental solution<a class="headerlink" href="#diffusion-part-1-the-fundamental-solution" title="Permalink to this headline">¶</a></h1>
+<p>The one-dimensional diffusion equation is:</p>
+<div class="math notranslate nohighlight">
+\[\frac{\partial u}{\partial t}= \nu \frac{\partial^2 u}{\partial x^2}\]</div>
+<p>The first thing you should notice is that —unlike the previous two simple equations we have studied— this equation has a second-order derivative. We first need to learn what to do with it!</p>
+<div class="section" id="discretizing-frac-partial-2-u-partial-x-2">
+<h2>Discretizing <span class="math notranslate nohighlight">\(\frac{\partial ^2 u}{\partial x^2}\)</span><a class="headerlink" href="#discretizing-frac-partial-2-u-partial-x-2" title="Permalink to this headline">¶</a></h2>
+<p>The second-order derivative can be represented geometrically as the line tangent to the curve given by the first derivative.  We will discretize the second-order derivative with a Central Difference scheme: a combination of Forward Difference and Backward Difference of the first derivative.  Consider the Taylor expansion of <span class="math notranslate nohighlight">\(u_{i+1}\)</span> and <span class="math notranslate nohighlight">\(u_{i-1}\)</span> around <span class="math notranslate nohighlight">\(u_i\)</span>:</p>
+<p><span class="math notranslate nohighlight">\(u_{i+1} = u_i + \Delta x \frac{\partial u}{\partial x}\bigg|_i + \frac{\Delta x^2}{2} \frac{\partial ^2 u}{\partial x^2}\bigg|_i + \frac{\Delta x^3}{3!} \frac{\partial ^3 u}{\partial x^3}\bigg|_i + O(\Delta x^4)\)</span></p>
+<p><span class="math notranslate nohighlight">\(u_{i-1} = u_i - \Delta x \frac{\partial u}{\partial x}\bigg|_i + \frac{\Delta x^2}{2} \frac{\partial ^2 u}{\partial x^2}\bigg|_i - \frac{\Delta x^3}{3!} \frac{\partial ^3 u}{\partial x^3}\bigg|_i + O(\Delta x^4)\)</span></p>
+<p>If we add these two expansions, you can see that the odd-numbered derivative terms will cancel each other out.  If we neglect any terms of <span class="math notranslate nohighlight">\(O(\Delta x^4)\)</span> or higher (and really, those are very small), then we can rearrange the sum of these two expansions to solve for our second-derivative.</p>
+<p><span class="math notranslate nohighlight">\(u_{i+1} + u_{i-1} = 2u_i+\Delta x^2 \frac{\partial ^2 u}{\partial x^2}\bigg|_i + O(\Delta x^4)\)</span></p>
+<p>Then rearrange to solve for <span class="math notranslate nohighlight">\(\frac{\partial ^2 u}{\partial x^2}\bigg|_i\)</span> and the result is:</p>
+<div class="math notranslate nohighlight">
+\[\frac{\partial ^2 u}{\partial x^2}=\frac{u_{i+1}-2u_{i}+u_{i-1}}{\Delta x^2} + O(\Delta x^4)\]</div>
+</div>
+<div class="section" id="discretizing-both-frac-partial-u-partial-t-and-frac-partial-2-u-partial-x-2">
+<h2>Discretizing both <span class="math notranslate nohighlight">\(\frac{\partial u}{\partial t}\)</span> and <span class="math notranslate nohighlight">\(\frac{\partial ^2 u}{\partial x^2}\)</span><a class="headerlink" href="#discretizing-both-frac-partial-u-partial-t-and-frac-partial-2-u-partial-x-2" title="Permalink to this headline">¶</a></h2>
+<p>We can now write the discretized version of the diffusion equation in 1D:</p>
+<div class="math notranslate nohighlight">
+\[\frac{u_{i}^{n+1}-u_{i}^{n}}{\Delta t}=\nu\frac{u_{i+1}^{n}-2u_{i}^{n}+u_{i-1}^{n}}{\Delta x^2}\]</div>
+<p>As before, we notice that once we have an initial condition, the only unknown is <span class="math notranslate nohighlight">\(u_{i}^{n+1}\)</span>, so we re-arrange the equation solving for our unknown:</p>
+<div class="math notranslate nohighlight">
+\[u_{i}^{n+1}=u_{i}^{n}+\underbrace{\frac{\nu\Delta t}{\Delta x^2}}_{\beta}(u_{i+1}^{n}-2u_{i}^{n}+u_{i-1}^{n})\]</div>
+<div class="math notranslate nohighlight">
+\[u_{i}^{n+1}=\beta u_{i-1}^{n} + u_{i}^{n}(1- 2 \beta) +\beta u_{i+1}^{n}\]</div>
+<p>The above discrete equation allows us to write a program to advance a solution in time.
+But we need an initial condition.
+Let’s continue using our favorite: the hat function.
+So, at <span class="math notranslate nohighlight">\(t=0\)</span>, <span class="math notranslate nohighlight">\(u=1\)</span> in the interval <span class="math notranslate nohighlight">\(0.25\le x\le 0.5\)</span> and <span class="math notranslate nohighlight">\(u=0\)</span> everywhere else.
+We are ready to number-crunch!</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">nx</span> <span class="o">=</span> <span class="mi">128</span>
+<span class="n">domain_length</span> <span class="o">=</span> <span class="mi">64</span>
+<span class="n">dx</span> <span class="o">=</span> <span class="n">domain_length</span> <span class="o">/</span> <span class="p">(</span><span class="n">nx</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">xspace</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">domain_length</span><span class="p">,</span> <span class="n">nx</span><span class="p">)</span>
+
+<span class="n">nt</span> <span class="o">=</span> <span class="mi">200</span>                <span class="c1"># the number of timesteps we want to calculate</span>
+<span class="n">nu</span> <span class="o">=</span> <span class="mi">5</span>                  <span class="c1"># the value of viscosity</span>
+<span class="n">sigma</span> <span class="o">=</span> <span class="mf">.2</span>              <span class="c1"># sigma is a parameter, we&#39;ll learn more about it later</span>
+<span class="n">dt</span> <span class="o">=</span> <span class="n">sigma</span> <span class="o">*</span> <span class="n">dx</span><span class="o">**</span><span class="mi">2</span> <span class="o">/</span> <span class="n">nu</span> <span class="c1"># dt is defined using sigma ... more later!</span>
+
+<span class="n">u_IC</span> <span class="o">=</span> <span class="mi">0</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">nx</span><span class="p">)</span>            <span class="c1"># numpy function ones()</span>
+<span class="n">u_IC</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">nx</span><span class="o">/</span><span class="mi">4</span><span class="p">):</span><span class="nb">int</span><span class="p">(</span><span class="n">nx</span><span class="o">/</span><span class="mi">2</span><span class="p">)]</span> <span class="o">=</span> <span class="mi">1</span>   <span class="c1"># setting u = 1 between 0.25 and 0.5 as per our I.C.s</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">xspace</span><span class="p">,</span> <span class="n">u_IC</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[&lt;matplotlib.lines.Line2D at 0x7fab40ad9970&gt;]
+</pre></div>
+</div>
+<img alt="../../_images/part1_diffusion_and_convolution_SOLUTION_8_1.png" src="../../_images/part1_diffusion_and_convolution_SOLUTION_8_1.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">calc_diffusion_FD_btcs_naive</span><span class="p">(</span><span class="n">IC</span><span class="p">,</span><span class="n">nx</span><span class="p">,</span><span class="n">nt</span><span class="p">,</span><span class="n">nu</span><span class="p">,</span><span class="n">dt</span><span class="p">):</span>
+    <span class="c1"># backward time, central space</span>
+    <span class="n">u</span> <span class="o">=</span> <span class="n">IC</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+    <span class="n">un</span> <span class="o">=</span> <span class="n">IC</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span> <span class="c1">#our placeholder array, un, to advance the solution in time</span>
+    <span class="n">beta</span> <span class="o">=</span> <span class="n">nu</span> <span class="o">*</span> <span class="n">dt</span> <span class="o">/</span> <span class="n">dx</span><span class="o">**</span><span class="mi">2</span>
+    
+    <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nt</span><span class="p">):</span>  <span class="c1">#iterate through time</span>
+        <span class="n">un</span> <span class="o">=</span> <span class="n">u</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span> <span class="c1">#copy the existing values of u into un</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">nx</span><span class="p">):</span>
+            <span class="c1"># this is slow (index operations &amp; branching)</span>
+            <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="n">nx</span><span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+                <span class="n">u</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">beta</span><span class="o">*</span><span class="n">un</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">+</span> <span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="mi">2</span><span class="o">*</span><span class="n">beta</span><span class="p">)</span><span class="o">*</span><span class="n">un</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="n">beta</span><span class="o">*</span><span class="n">un</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="c1"># periodic BC</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">u</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">beta</span><span class="o">*</span><span class="n">un</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">+</span> <span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="mi">2</span><span class="o">*</span><span class="n">beta</span><span class="p">)</span><span class="o">*</span><span class="n">un</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="n">beta</span><span class="o">*</span><span class="n">un</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">u</span>
+
+
+<span class="c1"># @jit(nopython=True)</span>
+<span class="c1"># @jit(nopython=True, parallel=True)</span>
+<span class="k">def</span> <span class="nf">calc_diffusion_FD_btcs</span><span class="p">(</span><span class="n">IC</span><span class="p">,</span><span class="n">nx</span><span class="p">,</span><span class="n">nt</span><span class="p">,</span><span class="n">nu</span><span class="p">,</span><span class="n">dt</span><span class="p">):</span>
+    <span class="c1"># backward time, central space</span>
+    <span class="n">u</span> <span class="o">=</span> <span class="n">IC</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+    <span class="n">un</span> <span class="o">=</span> <span class="n">IC</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span> <span class="c1">#our placeholder array, un, to advance the solution in time</span>
+    <span class="n">beta</span> <span class="o">=</span> <span class="n">nu</span> <span class="o">*</span> <span class="n">dt</span> <span class="o">/</span> <span class="n">dx</span><span class="o">**</span><span class="mi">2</span>
+
+    <span class="n">c_ind</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">nx</span><span class="p">)</span>
+    <span class="n">l_ind</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">roll</span><span class="p">(</span><span class="n">c_ind</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">r_ind</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">roll</span><span class="p">(</span><span class="n">c_ind</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+    
+    <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nt</span><span class="p">):</span>  <span class="c1">#iterate through time</span>
+        <span class="n">un</span> <span class="o">=</span> <span class="n">u</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span> <span class="c1"># copy the existing values of u into un</span>
+        
+        <span class="n">lap_u</span> <span class="o">=</span> <span class="n">un</span><span class="p">[</span><span class="n">l_ind</span><span class="p">]</span> <span class="o">-</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">un</span><span class="p">[</span><span class="n">c_ind</span><span class="p">]</span> <span class="o">+</span> <span class="n">un</span><span class="p">[</span><span class="n">r_ind</span><span class="p">]</span>  <span class="c1"># periodic BC</span>
+        <span class="n">u</span> <span class="o">=</span> <span class="n">un</span> <span class="o">+</span> <span class="n">beta</span><span class="o">*</span> <span class="n">lap_u</span>
+    <span class="k">return</span> <span class="n">u</span>
+
+
+<span class="n">starttime</span> <span class="o">=</span> <span class="n">timeit</span><span class="o">.</span><span class="n">default_timer</span><span class="p">()</span>
+<span class="n">u_FD</span> <span class="o">=</span> <span class="n">calc_diffusion_FD_btcs</span><span class="p">(</span><span class="n">u_IC</span><span class="p">,</span><span class="n">nx</span><span class="p">,</span><span class="n">nt</span><span class="p">,</span><span class="n">nu</span><span class="p">,</span><span class="n">dt</span><span class="p">)</span>
+<span class="c1"># u_FD = calc_diffusion_FD_btcs_naive(u_IC,nx,nt,nu,dt)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;The time difference is :&quot;</span><span class="p">,</span> <span class="n">timeit</span><span class="o">.</span><span class="n">default_timer</span><span class="p">()</span> <span class="o">-</span> <span class="n">starttime</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">xspace</span><span class="p">,</span> <span class="n">u_FD</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>The time difference is : 0.0013509820000763284
+</pre></div>
+</div>
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[&lt;matplotlib.lines.Line2D at 0x7fab3e973910&gt;]
+</pre></div>
+</div>
+<img alt="../../_images/part1_diffusion_and_convolution_SOLUTION_9_2.png" src="../../_images/part1_diffusion_and_convolution_SOLUTION_9_2.png" />
+</div>
+</div>
+</div>
+<div class="section" id="the-convolution-part-i">
+<h2>The convolution - part I<a class="headerlink" href="#the-convolution-part-i" title="Permalink to this headline">¶</a></h2>
+<p><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.convolve.html">https://numpy.org/doc/stable/reference/generated/numpy.convolve.html</a></p>
+<p><a class="reference external" href="https://en.wikipedia.org/wiki/Convolution">https://en.wikipedia.org/wiki/Convolution</a></p>
+<p>The discrete convolution operation is known as:</p>
+<div class="math notranslate nohighlight">
+\[ 
+(a \star v)[n]= \sum^{\infty}_{m=-\infty} a[m]v[n-m]
+\]</div>
+<p>Notice, that single step of the explicit algorithm implemented before can be expressed as convolution with a <span class="math notranslate nohighlight">\([\beta,1-2 \beta,\beta]\)</span> filter.
+To compute more time steps, one have to convolve many times.</p>
+<div class="section" id="task">
+<h3>Task<a class="headerlink" href="#task" title="Permalink to this headline">¶</a></h3>
+<p>Solve the diffusion equation by convolving the initial condition with the filter in each iteration.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">calc_diffusion_iterate_convolutions</span><span class="p">(</span><span class="n">IC</span><span class="p">,</span><span class="n">nx</span><span class="p">,</span><span class="n">nt</span><span class="p">,</span><span class="n">nu</span><span class="p">,</span><span class="n">dt</span><span class="p">):</span>
+    <span class="n">u</span> <span class="o">=</span> <span class="n">IC</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+    <span class="n">un</span> <span class="o">=</span> <span class="n">IC</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span> <span class="c1"># our placeholder array, un, to advance the solution in time</span>
+    <span class="n">beta</span> <span class="o">=</span> <span class="n">nu</span> <span class="o">*</span> <span class="n">dt</span> <span class="o">/</span> <span class="n">dx</span><span class="o">**</span><span class="mi">2</span>
+    <span class="n">filtr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">beta</span><span class="p">,</span><span class="mi">1</span><span class="o">-</span><span class="mi">2</span><span class="o">*</span><span class="n">beta</span><span class="p">,</span><span class="n">beta</span><span class="p">])</span>
+    <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nt</span><span class="p">):</span>  <span class="c1"># iterate through time</span>
+        <span class="n">un</span> <span class="o">=</span> <span class="n">u</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>    <span class="c1"># copy the existing values of u into un</span>
+        <span class="n">u</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">convolve</span><span class="p">(</span><span class="n">filtr</span><span class="p">,</span><span class="n">un</span><span class="p">,</span> <span class="s1">&#39;same&#39;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">u</span>
+
+<span class="n">u_iter_conv</span> <span class="o">=</span> <span class="n">calc_diffusion_iterate_convolutions</span><span class="p">(</span><span class="n">u_IC</span><span class="p">,</span><span class="n">nx</span><span class="p">,</span><span class="n">nt</span><span class="p">,</span><span class="n">nu</span><span class="p">,</span><span class="n">dt</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">xspace</span><span class="p">,</span> <span class="n">u_iter_conv</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[&lt;matplotlib.lines.Line2D at 0x7fab3e957cd0&gt;]
+</pre></div>
+</div>
+<img alt="../../_images/part1_diffusion_and_convolution_SOLUTION_11_1.png" src="../../_images/part1_diffusion_and_convolution_SOLUTION_11_1.png" />
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="the-convolution-part-ii">
+<h2>The convolution - part II<a class="headerlink" href="#the-convolution-part-ii" title="Permalink to this headline">¶</a></h2>
+<p>The fundamental solution of the heat equation is the Gaussian function (impulse responce).</p>
+<p>Consider “diffusion” of a single particle.
+The probability of finding a particle after T time steps follows the normal (a.k.a Gaussian) distribution.
+To compute it, one can convolve the initial position with a Gaussian.
+The result will be equivalent with repeated convolutions with small filter.</p>
+<p>This means that convolving with a Gaussian tells us the solution to the diffusion equation after
+a fixed amount of time. This is the same as low pass filtering an image. So smoothing, low pass
+filtering, diffusion, all mean the same thing.</p>
+<div class="section" id="id1">
+<h3>Task<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
+<p>Solve the diffusion equation by convolving the initial condition with the Gaussian.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">calc_diffusion_single_convolution</span><span class="p">(</span><span class="n">IC</span><span class="p">,</span><span class="n">x</span><span class="p">,</span><span class="n">nt</span><span class="p">,</span><span class="n">nu</span><span class="p">,</span><span class="n">dt</span><span class="p">):</span>
+    <span class="n">u</span> <span class="o">=</span> <span class="n">IC</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+    <span class="k">def</span> <span class="nf">get_gaussian</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">alfa</span><span class="p">,</span> <span class="n">t</span><span class="p">):</span>
+        <span class="n">g</span> <span class="o">=</span> <span class="o">-</span><span class="p">(</span><span class="n">x</span><span class="o">-</span><span class="n">domain_length</span><span class="o">/</span><span class="mf">2.</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span>
+        <span class="n">g</span> <span class="o">/=</span><span class="p">(</span><span class="mi">4</span><span class="o">*</span><span class="n">alfa</span><span class="o">*</span><span class="n">t</span><span class="p">)</span>
+        <span class="n">g</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">g</span><span class="p">)</span>
+        <span class="n">g</span> <span class="o">/=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">4</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span><span class="n">alfa</span><span class="o">*</span><span class="n">t</span><span class="p">)</span>
+        <span class="n">g</span> <span class="o">*=</span> <span class="n">domain_length</span><span class="o">/</span><span class="p">(</span><span class="n">nx</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="c1"># normalize --&gt; sum(g)=1</span>
+        <span class="k">return</span> <span class="n">g</span>
+    
+    
+    <span class="n">time_spot</span> <span class="o">=</span> <span class="n">dt</span><span class="o">*</span><span class="n">nt</span>
+    <span class="n">fundamental_solution</span> <span class="o">=</span> <span class="n">get_gaussian</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">nu</span><span class="p">,</span> <span class="n">time_spot</span><span class="p">)</span>
+    
+    <span class="n">u</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">convolve</span><span class="p">(</span><span class="n">fundamental_solution</span><span class="p">,</span> <span class="n">u</span><span class="p">,</span> <span class="s1">&#39;same&#39;</span><span class="p">)</span>
+    <span class="c1"># plt.plot(x, fundamental_solution, marker=&#39;v&#39;, linestyle=&quot;&quot;, markevery=5)</span>
+    <span class="k">return</span> <span class="n">u</span><span class="p">,</span> <span class="n">fundamental_solution</span>
+
+<span class="n">u_single_conv</span><span class="p">,</span> <span class="n">fs</span> <span class="o">=</span> <span class="n">calc_diffusion_single_convolution</span><span class="p">(</span><span class="n">u_IC</span><span class="p">,</span><span class="n">xspace</span><span class="p">,</span><span class="n">nt</span><span class="p">,</span><span class="n">nu</span><span class="p">,</span><span class="n">dt</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">xspace</span><span class="p">,</span> <span class="n">u_single_conv</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[&lt;matplotlib.lines.Line2D at 0x7fab3e8c5220&gt;]
+</pre></div>
+</div>
+<img alt="../../_images/part1_diffusion_and_convolution_SOLUTION_13_1.png" src="../../_images/part1_diffusion_and_convolution_SOLUTION_13_1.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Now plot the solutions obtained using 3 different approaches on the same plot</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s1">&#39;font.size&#39;</span><span class="p">:</span> <span class="mi">16</span><span class="p">})</span>
+<span class="n">figure</span><span class="p">,</span> <span class="n">axis</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">8</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">subplots_adjust</span><span class="p">(</span><span class="n">hspace</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">axis</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Diffusion&#39;</span><span class="p">)</span>
+<span class="n">axis</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">xspace</span><span class="p">,</span> <span class="n">u_FD</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="sa">r</span><span class="s1">&#39;$u_</span><span class="si">{FD}</span><span class="s1">$&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="s2">&quot;3&quot;</span><span class="p">)</span>
+<span class="n">axis</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">xspace</span><span class="p">,</span> <span class="n">u_iter_conv</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="sa">r</span><span class="s1">&#39;$u_{multiple \; convolutions}$&#39;</span><span class="p">,</span>  <span class="n">marker</span><span class="o">=</span><span class="s1">&#39;o&#39;</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">markevery</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">axis</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">xspace</span><span class="p">,</span> <span class="n">u_single_conv</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="sa">r</span><span class="s1">&#39;$u_</span><span class="si">{convolution}</span><span class="s1">$&#39;</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">markevery</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">axis</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;x&#39;</span><span class="p">)</span>
+<span class="n">axis</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;Concentration&#39;</span><span class="p">)</span>
+<span class="n">axis</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s2">&quot;upper right&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend at 0x7fab3e821ac0&gt;
+</pre></div>
+</div>
+<img alt="../../_images/part1_diffusion_and_convolution_SOLUTION_14_1.png" src="../../_images/part1_diffusion_and_convolution_SOLUTION_14_1.png" />
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="analytical-solution-advection-diffusion-of-a-gaussian-hill">
+<h2>Analytical solution: Advection - Diffusion of a Gaussian Hill<a class="headerlink" href="#analytical-solution-advection-diffusion-of-a-gaussian-hill" title="Permalink to this headline">¶</a></h2>
+<p>In case of an isotropic diffusion, the analytical solution describing evolution of a Gaussian Hill can be expressed as</p>
+<div class="math notranslate nohighlight">
+\[
+C(\boldsymbol{x}, t)=\frac{\left(2\pi\sigma_{0}^{2}\right)^{D/2} }{\left(2\pi(\sigma_{0}^{2} + 2 k t)\right)^{D/2}} 
+C_0 \exp \left(-\frac{\left(\boldsymbol{x}-\boldsymbol{x}_{0}-\boldsymbol{u} t\right)^{2}}{2\left(\sigma_{0}^{2}+ 2 k t\right)}\right)
+\]</div>
+<p>where:</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(C_0\)</span> - initial concentration,</p></li>
+<li><p><span class="math notranslate nohighlight">\(D\)</span> - number of dimensions,</p></li>
+<li><p><span class="math notranslate nohighlight">\(t\)</span> - time,</p></li>
+<li><p><span class="math notranslate nohighlight">\(k\)</span> - conductivity,</p></li>
+<li><p><span class="math notranslate nohighlight">\(\boldsymbol{u}\)</span> - velocity of advection</p></li>
+<li><p><span class="math notranslate nohighlight">\(\sigma_{0}\)</span> the initial variance of the distribution.</p></li>
+</ul>
+</div>
+<div class="section" id="id2">
+<h2>Task<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic simple">
+<li><p>Implement the <code class="docutils literal notranslate"><span class="pre">GaussianHillAnal</span></code> class.
+It shall have a method <code class="docutils literal notranslate"><span class="pre">get_concentration_ND(self,</span> <span class="pre">X,</span> <span class="pre">t)</span></code>, which will return the concentration at given time and space.</p></li>
+<li><p>Benchmark the FD code against analytical solution.</p></li>
+</ol>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sympy.matrices</span> <span class="kn">import</span> <span class="n">Matrix</span>
+<span class="kn">import</span> <span class="nn">sympy</span> <span class="k">as</span> <span class="nn">sp</span>
+
+<span class="k">class</span> <span class="nc">GaussianHillAnal</span><span class="p">:</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">C0</span><span class="p">,</span> <span class="n">X0</span><span class="p">,</span> <span class="n">Sigma2_0</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">U</span><span class="p">,</span> <span class="n">D</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        :param C0: initial concentration</span>
+<span class="sd">        :param X0: initial position of the hill&#39;s centre = Matrix([x0, y0])</span>
+<span class="sd">        :param U:  velocity = Matrix([ux, uy])</span>
+<span class="sd">        :param Sigma2_0: initial width of the Gaussian Hill</span>
+<span class="sd">        :param k: conductivity</span>
+<span class="sd">        :param dimenions: number of dimensions</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">C0</span> <span class="o">=</span> <span class="n">C0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">X0</span> <span class="o">=</span> <span class="n">X0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">U</span> <span class="o">=</span> <span class="n">U</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Sigma2_0</span> <span class="o">=</span> <span class="n">Sigma2_0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">k</span> <span class="o">=</span> <span class="n">k</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dim</span> <span class="o">=</span> <span class="n">D</span>
+
+    <span class="k">def</span> <span class="nf">get_concentration_ND</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">t</span><span class="p">):</span>
+        <span class="n">decay</span> <span class="o">=</span> <span class="mf">2.</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">k</span><span class="o">*</span><span class="n">t</span>
+        <span class="n">L</span> <span class="o">=</span> <span class="n">X</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">X0</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">U</span><span class="o">*</span><span class="n">t</span>
+        <span class="n">C</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">C0</span>
+        <span class="n">C</span> <span class="o">*=</span> <span class="nb">pow</span><span class="p">(</span><span class="mf">2.</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">Sigma2_0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dim</span> <span class="o">/</span> <span class="mf">2.</span><span class="p">)</span>
+        <span class="n">C</span> <span class="o">/=</span> <span class="nb">pow</span><span class="p">(</span><span class="mf">2.</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Sigma2_0</span> <span class="o">+</span> <span class="n">decay</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">dim</span> <span class="o">/</span> <span class="mf">2.</span><span class="p">)</span>
+        <span class="n">C</span> <span class="o">*=</span> <span class="n">sp</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="p">(</span><span class="n">L</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">L</span><span class="p">))</span> <span class="o">/</span> <span class="p">(</span><span class="mf">2.</span><span class="o">*</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Sigma2_0</span> <span class="o">+</span> <span class="n">decay</span><span class="p">)))</span>
+        <span class="k">return</span> <span class="n">C</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">time_0</span>    <span class="o">=</span> <span class="n">dt</span><span class="o">*</span><span class="n">nt</span><span class="o">/</span><span class="mi">2</span>     <span class="c1"># initial contidion for FD</span>
+<span class="n">time_spot</span> <span class="o">=</span> <span class="n">dt</span><span class="o">*</span><span class="n">nt</span>       <span class="c1"># time to be simulated (by FD and analytically)</span>
+
+<span class="n">X0</span> <span class="o">=</span> <span class="n">Matrix</span><span class="p">([</span><span class="n">domain_length</span><span class="o">/</span><span class="mf">2.</span><span class="p">])</span> <span class="c1"># center of the hill</span>
+<span class="n">C0</span> <span class="o">=</span> <span class="mf">1.</span>                 <span class="c1"># concentration</span>
+<span class="n">variance</span> <span class="o">=</span> <span class="mi">30</span>           <span class="c1"># initial variance</span>
+<span class="n">reference_level</span> <span class="o">=</span> <span class="mi">0</span>     
+
+<span class="n">T_0</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">nx</span><span class="p">)</span>
+<span class="n">T_anal</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">nx</span><span class="p">)</span>
+
+<span class="n">gha</span> <span class="o">=</span> <span class="n">GaussianHillAnal</span><span class="p">(</span><span class="n">C0</span><span class="p">,</span> <span class="n">X0</span><span class="p">,</span> <span class="n">variance</span><span class="p">,</span> <span class="n">nu</span><span class="p">,</span> <span class="n">Matrix</span><span class="p">([</span><span class="mi">0</span><span class="p">]),</span> <span class="n">D</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nx</span><span class="p">):</span>
+    <span class="n">T_0</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">reference_level</span> <span class="o">+</span> <span class="n">gha</span><span class="o">.</span><span class="n">get_concentration_ND</span><span class="p">(</span><span class="n">Matrix</span><span class="p">([</span><span class="n">xspace</span><span class="p">[</span><span class="n">i</span><span class="p">]]),</span> <span class="n">time_0</span><span class="p">)</span>  
+    <span class="n">T_anal</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">reference_level</span> <span class="o">+</span> <span class="n">gha</span><span class="o">.</span><span class="n">get_concentration_ND</span><span class="p">(</span><span class="n">Matrix</span><span class="p">([</span><span class="n">xspace</span><span class="p">[</span><span class="n">i</span><span class="p">]]),</span> <span class="n">time_spot</span><span class="p">)</span>  
+
+<span class="n">T_FD</span> <span class="o">=</span> <span class="n">calc_diffusion_FD_btcs</span><span class="p">(</span><span class="n">T_0</span><span class="p">,</span><span class="n">nx</span><span class="p">,</span><span class="n">nt</span><span class="p">,</span><span class="n">nu</span><span class="p">,</span><span class="n">dt</span><span class="p">)</span>
+<span class="n">T_single_conv</span><span class="p">,</span> <span class="n">fs</span> <span class="o">=</span> <span class="n">calc_diffusion_single_convolution</span><span class="p">(</span><span class="n">T_0</span><span class="p">,</span><span class="n">xspace</span><span class="p">,</span><span class="n">nt</span><span class="p">,</span><span class="n">nu</span><span class="p">,</span><span class="n">dt</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s1">&#39;font.size&#39;</span><span class="p">:</span> <span class="mi">16</span><span class="p">})</span>
+<span class="n">figure</span><span class="p">,</span> <span class="n">axis</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">subplots_adjust</span><span class="p">(</span><span class="n">hspace</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">axis</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Diffusion of a Gaussian Hill&#39;</span><span class="p">)</span>
+<span class="n">axis</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">xspace</span><span class="p">,</span> <span class="n">T_0</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="sa">r</span><span class="s1">&#39;$T_</span><span class="si">{0}</span><span class="s1">$&#39;</span><span class="p">)</span>
+<span class="n">axis</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">xspace</span><span class="p">,</span> <span class="n">T_anal</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="sa">r</span><span class="s1">&#39;$T_</span><span class="si">{anal}</span><span class="s1">$&#39;</span><span class="p">)</span>
+<span class="n">axis</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">xspace</span><span class="p">,</span> <span class="n">T_FD</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="sa">r</span><span class="s1">&#39;$T_</span><span class="si">{FD}</span><span class="s1">$&#39;</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">markevery</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">axis</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">xspace</span><span class="p">,</span> <span class="n">T_single_conv</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="sa">r</span><span class="s1">&#39;$T_</span><span class="si">{conv}</span><span class="s1">$&#39;</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s1">&#39;v&#39;</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">markevery</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">axis</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;x&#39;</span><span class="p">)</span>
+<span class="n">axis</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;Concentration&#39;</span><span class="p">)</span>
+<span class="n">axis</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s2">&quot;upper right&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend at 0x7fab3d5124c0&gt;
+</pre></div>
+</div>
+<img alt="../../_images/part1_diffusion_and_convolution_SOLUTION_17_1.png" src="../../_images/part1_diffusion_and_convolution_SOLUTION_17_1.png" />
+</div>
+</div>
+</div>
+<div class="section" id="questions">
+<h2>Questions:<a class="headerlink" href="#questions" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>How do you find the FD solution compared to analytical one? Experiment with different dx, dt.</p></li>
+<li><p>How would you asses that your mesh is fine enought in a real CFD simulation (without analytical solution)?</p></li>
+</ul>
+</div>
+<div class="section" id="answers">
+<h2>Answers<a class="headerlink" href="#answers" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>Mesh convergence study</p></li>
+</ul>
+</div>
+</div>
+<div class="tex2jax_ignore mathjax_ignore section" id="learn-more">
+<h1>Learn More<a class="headerlink" href="#learn-more" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="inspiration">
+<h2>Inspiration<a class="headerlink" href="#inspiration" title="Permalink to this headline">¶</a></h2>
+<p><a class="reference external" href="http://www.cs.umd.edu/~djacobs/CMSC828seg/Diffusion.pdf">http://www.cs.umd.edu/~djacobs/CMSC828seg/Diffusion.pdf</a></p>
+<p><a class="reference external" href="https://web.math.ucsb.edu/~helena/teaching/math124b/heat.pdf">https://web.math.ucsb.edu/~helena/teaching/math124b/heat.pdf</a></p>
+<p>Some of the text has been inspired by the <strong>12 steps to Navier–Stokes</strong>, the practical module taught in the interactive CFD class of <a class="reference external" href="http://lorenabarba.com">Prof. Lorena Barba</a>. (provided under a Creative Commons Attribution license, CC-BY.  All code is made available under the FSF-approved BSD-3 license.  (c) Lorena A. Barba, Gilbert F. Forsyth 2017. Thanks to NSF for support via CAREER award #1149784.
+<a class="reference external" href="https://twitter.com/LorenaABarba">&#64;LorenaABarba</a>)</p>
+<p>For a careful walk-through of the discretization of the diffusion equation with finite differences (and all steps from 1 to 4), watch <strong>Video Lesson 4</strong> by Prof. Barba on YouTube.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">IPython.display</span> <span class="kn">import</span> <span class="n">YouTubeVideo</span>
+<span class="n">YouTubeVideo</span><span class="p">(</span><span class="s1">&#39;y2WaK7_iMRI&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html">
+<iframe
+    width="400"
+    height="300"
+    src="https://www.youtube.com/embed/y2WaK7_iMRI"
+    frameborder="0"
+    allowfullscreen
+
+></iframe>
+</div></div>
+</div>
+</div>
+</div>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            kernelName: "python3",
+            path: "./notebooks/25_diffusion_FD"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+              </div>
+              
+        
+            <!-- Previous / next buttons -->
+<div class='prev-next-area'> 
+    <a class='left-prev' id="prev-link" href="../20_SIR_0D/part3_SIR_0D_streamlines_SOLUTION.html" title="previous page">
+        <i class="fas fa-angle-left"></i>
+        <div class="prev-next-info">
+            <p class="prev-next-subtitle">previous</p>
+            <p class="prev-next-title">Plotting a vector field</p>
+        </div>
+    </a>
+    <a class='right-next' id="next-link" href="part2_diffusion_matrix_approach_SOLUTION.html" title="next page">
+    <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Diffusion part 2: matrix approach; implicit and explicit scheme</p>
+    </div>
+    <i class="fas fa-angle-right"></i>
+    </a>
+</div>
+        
+        </div>
+    </div>
+    <footer class="footer">
+    <div class="container">
+      <p>
+        
+          By G. Gruszczynski and M. Dzikowski<br/>
+        
+            &copy; Copyright 2021.<br/>
+      </p>
+    </div>
+  </footer>
+</main>
+
+
+      </div>
+    </div>
+  
+  <script src="../../_static/js/index.be7d3bbb2ef33a8344ce.js"></script>
+
+  </body>
+</html>

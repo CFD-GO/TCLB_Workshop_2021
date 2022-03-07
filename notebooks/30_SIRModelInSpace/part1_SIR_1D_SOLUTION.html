@@ -1,0 +1,1017 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>The simple spatial SIR model &#8212; Modelling of epidemic spreading with Lattice Boltzmann Method</title>
+    
+  <link href="../../_static/css/theme.css" rel="stylesheet">
+  <link href="../../_static/css/index.ff1ffe594081f20da1ef19478df9384b.css" rel="stylesheet">
+
+    
+  <link rel="stylesheet"
+    href="../../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    
+      
+
+    
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-book-theme.css?digest=c3fdc42140077d1ad13ad2f1588a4309" />
+    <link rel="stylesheet" type="text/css" href="../../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/panels-main.c949a650a448cc0ae9fd3441c0e17fb0.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/panels-variables.06eb56fa6e07937060861dad626602ad.css" />
+    
+  <link rel="preload" as="script" href="../../_static/js/index.be7d3bbb2ef33a8344ce.js">
+
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/togglebutton.js"></script>
+    <script src="../../_static/clipboard.min.js"></script>
+    <script src="../../_static/copybutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <script src="../../_static/sphinx-book-theme.12a9622fbb08dcb3a2a40b2c02b83a57.js"></script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script async="async" src="https://unpkg.com/thebe@0.5.1/lib/index.js"></script>
+    <script>
+        const thebe_selector = ".thebe"
+        const thebe_selector_input = "pre"
+        const thebe_selector_output = ".output"
+    </script>
+    <script async="async" src="../../_static/sphinx-thebe.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Diffusion equation in TCLB solver" href="../40_IntroTCLB/10_SimpleDiffusion.html" />
+    <link rel="prev" title="Diffusion part 2: matrix approach; implicit and explicit scheme" href="../25_diffusion_FD/part2_diffusion_matrix_approach_SOLUTION.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="None">
+    
+
+    <!-- Google Analytics -->
+    
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<div class="col-12 col-md-3 bd-sidebar site-navigation show" id="site-navigation">
+    
+        <div class="navbar-brand-box">
+    <a class="navbar-brand text-wrap" href="../../index.html">
+      
+        <!-- `logo` is deprecated in Sphinx 4.0, so remove this when we stop supporting 3 -->
+        
+      
+      
+      <img src="../../_static/cfd-go.png" class="logo" alt="logo">
+      
+      
+      <h1 class="site-logo" id="site-title">Modelling of epidemic spreading with Lattice Boltzmann Method</h1>
+      
+    </a>
+</div><form class="bd-search d-flex align-items-center" action="../../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item active">
+        <p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  SIR 0D
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../20_SIR_0D/part1_SIR_0D_SOLUTION.html">
+   The simplest, SIR model
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../20_SIR_0D/part2_SIR_0D_stability_SOLUTION.html">
+   Under which conditions one may be lucky enough to not get infected?
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../20_SIR_0D/part3_SIR_0D_streamlines_SOLUTION.html">
+   Plotting a vector field
+  </a>
+ </li>
+</ul>
+<p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Diffusion FD
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../25_diffusion_FD/part1_diffusion_and_convolution_SOLUTION.html">
+   Diffusion part 1: the fundamental solution
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../25_diffusion_FD/part2_diffusion_matrix_approach_SOLUTION.html">
+   Diffusion part 2: matrix approach; implicit and explicit scheme
+  </a>
+ </li>
+</ul>
+<p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  SIR 1D
+ </span>
+</p>
+<ul class="current nav bd-sidenav">
+ <li class="toctree-l1 current active">
+  <a class="current reference internal" href="#">
+   The simple spatial SIR model
+  </a>
+ </li>
+</ul>
+<p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Introduction to TCLB solver
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../40_IntroTCLB/10_SimpleDiffusion.html">
+   Diffusion equation in TCLB solver
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../40_IntroTCLB/11_Dispersion.html">
+   Prepare FD and LBM solution
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../40_IntroTCLB/15_d2q9_diffusion_SpatialSIR_model.html">
+   First shot: spatially variable SIR model with uniform IC
+  </a>
+ </li>
+</ul>
+<p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Solving spatial SIR system in TCLB
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../50_TCLBforSIRModelInSpace/10_SIR_in_PengModified_Model.html">
+   Notes on LBM dt in nonlinear reactions
+  </a>
+ </li>
+</ul>
+
+    </div>
+</nav> <!-- To handle the deprecated key -->
+
+<div class="navbar_extra_footer">
+  Powered by <a href="https://jupyterbook.org">Jupyter Book</a>
+</div>
+
+</div>
+
+
+          
+
+
+          
+<main class="col py-md-3 pl-md-4 bd-content overflow-auto" role="main">
+    
+    <div class="topbar container-xl fixed-top">
+    <div class="topbar-contents row">
+        <div class="col-12 col-md-3 bd-topbar-whitespace site-navigation show"></div>
+        <div class="col pl-md-4 topbar-main">
+            
+            <button id="navbar-toggler" class="navbar-toggler ml-0" type="button" data-toggle="collapse"
+                data-toggle="tooltip" data-placement="bottom" data-target=".site-navigation" aria-controls="navbar-menu"
+                aria-expanded="true" aria-label="Toggle navigation" aria-controls="site-navigation"
+                title="Toggle navigation" data-toggle="tooltip" data-placement="left">
+                <i class="fas fa-bars"></i>
+                <i class="fas fa-arrow-left"></i>
+                <i class="fas fa-arrow-up"></i>
+            </button>
+            
+            
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn" aria-label="Download this page"><i
+            class="fas fa-download"></i></button>
+
+    <div class="dropdown-buttons">
+        <!-- ipynb file if we had a myst markdown file -->
+        
+        <!-- Download raw file -->
+        <a class="dropdown-buttons" href="../../_sources/notebooks/30_SIRModelInSpace/part1_SIR_1D_SOLUTION.ipynb"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Download source file" data-toggle="tooltip"
+                data-placement="left">.ipynb</button></a>
+        <!-- Download PDF via print -->
+        <button type="button" id="download-print" class="btn btn-secondary topbarbtn" title="Print to PDF"
+            onClick="window.print()" data-toggle="tooltip" data-placement="left">.pdf</button>
+    </div>
+</div>
+
+            <!-- Source interaction buttons -->
+
+            <!-- Full screen (wrap in <a> to have style consistency -->
+
+<a class="full-screen-button"><button type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip"
+        data-placement="bottom" onclick="toggleFullScreen()" aria-label="Fullscreen mode"
+        title="Fullscreen mode"><i
+            class="fas fa-expand"></i></button></a>
+
+            <!-- Launch buttons -->
+
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn"
+        aria-label="Launch interactive content"><i class="fas fa-rocket"></i></button>
+    <div class="dropdown-buttons">
+        
+        <a class="binder-button" href="https://mybinder.org/v2/gh/CFD-GO/TCLB_Workshop_2021/master?urlpath=tree/mini_book/notebooks/30_SIRModelInSpace/part1_SIR_1D_SOLUTION.ipynb"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Launch Binder" data-toggle="tooltip"
+                data-placement="left"><img class="binder-button-logo"
+                    src="../../_static/images/logo_binder.svg"
+                    alt="Interact on binder">Binder</button></a>
+        
+        
+        
+        
+    </div>
+</div>
+
+        </div>
+
+        <!-- Table of contents -->
+        <div class="d-none d-md-block col-md-2 bd-toc show">
+            
+            <div class="tocsection onthispage pt-5 pb-3">
+                <i class="fas fa-list"></i> Contents
+            </div>
+            <nav id="bd-toc-nav" aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#">
+   The simple spatial SIR model
+  </a>
+  <ul class="visible nav section-nav flex-column">
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#the-case-1d-queue">
+     The case - 1D queue
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#the-spatial-effect">
+     The spatial effect
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#choice-of-the-infectious-operator">
+     Choice of the “infectious” operator
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#comparison-of-infectious-operators-in-the-frequency-domain">
+     Comparison of “infectious” operators in the frequency domain
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#notice">
+       Notice:
+      </a>
+     </li>
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#remarks">
+       Remarks
+      </a>
+     </li>
+    </ul>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#the-spatial-sir-system">
+     The spatial SIR system
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#the-low-diffusivity-issue-and-the-spatial-wsir-remedy">
+     The low diffusivity issue and the spatial WSIR remedy
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#the-nondimensional-form-equations-revisited">
+     The nondimensional form equations - revisited
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#remarks-on-other-sir-diffusion-models">
+     Remarks on other SIR-diffusion models
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#similarity-numbers-in-sir-like-models">
+   Similarity numbers in SIR-like models
+  </a>
+  <ul class="visible nav section-nav flex-column">
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#the-fourier-number">
+     The Fourier number
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#the-second-damkohler-number">
+     The (second) Damköhler number
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#sir-with-independent-naive-diffusion">
+       SIR with
+       <em>
+        independent
+       </em>
+       (naive) diffusion
+      </a>
+     </li>
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#sir-peng">
+       SIR-Peng
+      </a>
+     </li>
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#wsir">
+       WSIR
+      </a>
+     </li>
+    </ul>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#exercise">
+     Exercise
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#effect-of-varing-spatial-density">
+   Effect of varing spatial density
+  </a>
+  <ul class="visible nav section-nav flex-column">
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#influence-of-the-beta-w-relaxation-coefficient">
+     Influence of the
+     <span class="math notranslate nohighlight">
+      \( \beta_W \)
+     </span>
+     relaxation coefficient
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#id1">
+       Exercise
+      </a>
+     </li>
+    </ul>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#numbers-or-fractions-revisited-for-curious-readers-only">
+     Numbers or fractions - revisited (for curious readers only)
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+
+            </nav>
+        </div>
+    </div>
+</div>
+    <div id="main-content" class="row">
+        <div class="col-12 col-md-9 pl-md-3 pr-md-0">
+        
+              <div>
+                
+  <div class="tex2jax_ignore mathjax_ignore section" id="the-simple-spatial-sir-model">
+<h1>The simple spatial SIR model<a class="headerlink" href="#the-simple-spatial-sir-model" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="the-case-1d-queue">
+<h2>The case - 1D queue<a class="headerlink" href="#the-case-1d-queue" title="Permalink to this headline">¶</a></h2>
+<p>Consider a queue of people waiting in front of a drugstore. Some of them are ill, some have just come to buy medicine for their beloved ones. Some are standing alone, some are couples or whole families…
+What is the probabilty that the susceptible people would get infected?</p>
+<p>A <em><strong>1D queue</strong></em> example shall allows us to observe the spatial effects and make some general conclusions before setting up a more real, 2D model.</p>
+<p>How does the people behave? Do they swap their places in the queue? What is the distance at which an individual may get infected?</p>
+<p>Let us start with the already presented SIR system:</p>
+<div class="amsmath math notranslate nohighlight">
+\[\begin{align*}
+\frac{\partial}{\partial t} S &amp;= - \beta \frac{S}{N}I  \\
+\frac{\partial}{\partial t} I &amp;= \beta \frac{S}{N}I - \gamma I \\
+\frac{\partial}{\partial t} R &amp;= \gamma I
+\end{align*}\]</div>
+</div>
+<div class="section" id="the-spatial-effect">
+<h2>The spatial effect<a class="headerlink" href="#the-spatial-effect" title="Permalink to this headline">¶</a></h2>
+<p>The disease may spread to neighbours with some probability <span class="math notranslate nohighlight">\(P(r)\)</span>, where <span class="math notranslate nohighlight">\(r\)</span> is the “infectious” distance.
+Various functions can be choosen to model <span class="math notranslate nohighlight">\(P(r)\)</span>.</p>
+<p>Comparing to 0D SIR, we have to take into account interaction between two functions.
+First accounts for the spatial distribution of infected individuals <span class="math notranslate nohighlight">\(I(x)\)</span>,
+while the second describes the distance at which infection may occour <span class="math notranslate nohighlight">\(P(r)\)</span>, where <span class="math notranslate nohighlight">\(r = x-x_0\)</span></p>
+<p>From a mathematical perspective, the resulting interaction can be writen as a convolution of these two functions.
+Now, the <em><strong>viral load</strong></em>, <span class="math notranslate nohighlight">\(W\)</span>,  can be defined as:</p>
+<div class="math notranslate nohighlight">
+\[
+W = I \star P(r)
+\]</div>
+<p>Next, the rate of change of infected people can be generalized as:</p>
+<div class="math notranslate nohighlight">
+\[
+\frac{\partial}{\partial t} I =  \beta \frac{S}{N}W  - \gamma I
+\]</div>
+<p>Notice, that the <span class="math notranslate nohighlight">\(0D\)</span> case corresponds to <span class="math notranslate nohighlight">\(P(r) = \delta \)</span>, where <span class="math notranslate nohighlight">\( \delta \)</span> is the Dirac distribution.</p>
+</div>
+<div class="section" id="choice-of-the-infectious-operator">
+<h2>Choice of the “infectious” operator<a class="headerlink" href="#choice-of-the-infectious-operator" title="Permalink to this headline">¶</a></h2>
+<p>Let us investigate four basic distributions.</p>
+<ol class="arabic simple">
+<li><p>The simplest choice is to assume, that an individual can get become infected (with constant probability) if he/she is located within a <em><strong>circe</strong></em> of radius <span class="math notranslate nohighlight">\(r\)</span>.</p></li>
+</ol>
+<div class="math notranslate nohighlight">
+\[
+W = I \star [\text{disc of radius r}],
+\]</div>
+<ol class="arabic simple">
+<li><p>which can be (explicitly) approximated as [1],</p></li>
+</ol>
+<div class="math notranslate nohighlight">
+\[
+W \approx I + \frac{r^2}{8} \Delta I.
+\]</div>
+<ol class="arabic simple">
+<li><p>An alternative (implicit) approximation is,</p></li>
+</ol>
+<div class="math notranslate nohighlight">
+\[
+W - \frac{r^2}{8} \Delta W \approx I 
+\]</div>
+<ol class="arabic simple">
+<li><p>Finally, assuming, that the probability of getting infected at some distance has a normal distribution,</p></li>
+</ol>
+<div class="math notranslate nohighlight">
+\[
+W  = I \star Gaussian(\sigma)
+\]</div>
+<hr class="docutils" />
+<p>[1] “Continuous and discrete SIR-models with spatial distributions” Seong-Hun Paeng and Jonggul Lee, Journal of Mathematical Biology, 2016</p>
+</div>
+<div class="section" id="comparison-of-infectious-operators-in-the-frequency-domain">
+<h2>Comparison of “infectious” operators in the frequency domain<a class="headerlink" href="#comparison-of-infectious-operators-in-the-frequency-domain" title="Permalink to this headline">¶</a></h2>
+<p>Let us remind basic properties of the Fourier transform:</p>
+<div class="amsmath math notranslate nohighlight">
+\[\begin{align*}
+\mathcal F (\delta) &amp;= 1 \\
+\mathcal F (\nabla u) &amp;= - k^2 \mathcal F(u)\\
+\mathcal F (u \star v) &amp;= \mathcal F (u) \mathcal F (v) \\
+\mathcal F (C_1 u + C_2 v) &amp;= C_1 \mathcal F(u)+ C_2 \mathcal F(v)  
+\end{align*}\]</div>
+<p>The <a class="reference external" href="https://en.wikipedia.org/wiki/Transfer_function">frequency responce</a>, <span class="math notranslate nohighlight">\(G\)</span>, (<a class="reference external" href="https://pl.wikipedia.org/wiki/Transmitancja_widmowa">Transmitancja widmowa</a>) describes the
+ratio of the output amplitude,Y, to the input amplitude, X, for each frequency <span class="math notranslate nohighlight">\(\omega\)</span>.
+The <em><strong>gain</strong></em> is defined as absolute value of the system frequency responce.
+(Moduł transmitancji widmowej opisuje wzmocnienie układu.)</p>
+<div class="math notranslate nohighlight">
+\[
+G(j \omega) = \frac{Y}{X} 
+\]</div>
+<p>where <span class="math notranslate nohighlight">\(X\)</span> and <span class="math notranslate nohighlight">\(Y\)</span> denote the Fourier transform of the <em>input</em> and <em>output</em> signal respectively.</p>
+<p>The frequency responce for each of the “infectious” operators can be calculated as follows:</p>
+<div class="amsmath math notranslate nohighlight">
+\[\begin{align*}
+G_1 &amp;= \frac{\mathcal F (I + \frac{r^2}{8} \Delta I)}{F (I)} =  \frac{\mathcal F (I ) - k^2 \frac{r^2}{8} \mathcal F ( I))}{\mathcal F ( I)} = 1 - k^2 \frac{r^2}{8} \\
+G_2 &amp;= \frac{\mathcal F (I )}{ \mathcal F (I - \frac{r^2}{8} \Delta I)} = \frac{1}{1 + k^2 \frac{r^2}{8}} \\
+G_3 &amp;= \frac{\mathcal F (I \star \text{[disc of radius r]})}{ \mathcal F (I)} = \frac{2 * besselJ(k r,1)}{kr} \\
+G_4 &amp;= \frac{\mathcal F (I \star Gaussian(\sigma=r/2)}{\mathcal F (I)} = exp\left((-kr)^{2/8} \right)
+\end{align*}\]</div>
+<div class="section" id="notice">
+<h3>Notice:<a class="headerlink" href="#notice" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p>the input, <span class="math notranslate nohighlight">\(X\)</span>, in <span class="math notranslate nohighlight">\(G_2\)</span> is implicit.</p></li>
+<li><p>the frequency responce is related to the continous (not discrete) operator.</p></li>
+</ul>
+<p><img alt="Operators" src="../../_images/operators.png" /></p>
+</div>
+<div class="section" id="remarks">
+<h3>Remarks<a class="headerlink" href="#remarks" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p>Q1 What is the interpretation of the negative values?</p></li>
+<li><p>A1 For frequencies where negative values occurs, the spread of the disease may become unphysical. The high frequency for <span class="math notranslate nohighlight">\(W = I + \frac{r^2}{8} \Delta I\)</span> <em><strong>continous</strong></em> operator tends to infinity, thus such IC is expected to diverge.</p></li>
+<li><p>Q2 Does the frequency responce for the discrete operators follows the same plot?</p></li>
+<li><p>A2 No. The responce for higher frequencies becomes flattened by a discrete operator. The lower the order of a FD stencil, the more flattened the responce.</p></li>
+<li><p>Q3 What are the pros / cons of convolution with some reasonable function (like Gaussian) vs its approximation?</p></li>
+<li><p>A3 Approximation (laplacian term) is more local than convolution. As a result, the algorithm is computationally faster. Moreover, imposing BC for an equation which includes a laplacian term is far easier than with convolution.</p></li>
+<li><p>Q4 Are there any other differences between <span class="math notranslate nohighlight">\(W = I + \frac{r^2}{8} \Delta I\)</span> and <span class="math notranslate nohighlight">\(W - \frac{r^2}{8} \Delta W= I\)</span> approximations apart from frequency responce?</p></li>
+</ul>
+</div>
+</div>
+<div class="section" id="the-spatial-sir-system">
+<h2>The spatial SIR system<a class="headerlink" href="#the-spatial-sir-system" title="Permalink to this headline">¶</a></h2>
+<p>Let us use the simplest approximation [1],</p>
+<div class="amsmath math notranslate nohighlight">
+\[\begin{align*}
+\frac{\partial}{\partial t} S &amp;= - \beta \frac{S}{N}(I + \frac{r^2}{8} \Delta I)  \\
+\frac{\partial}{\partial t} I &amp;= \beta \frac{S}{N}(I + \frac{r^2}{8} \Delta I) - \gamma I \\
+\frac{\partial}{\partial t} R &amp;= \gamma I
+\end{align*}\]</div>
+<p>Substituting <span class="math notranslate nohighlight">\(W  = I + \frac{r^2}{8} \Delta I\)</span>,</p>
+<div class="amsmath math notranslate nohighlight">
+\[\begin{align*}
+\frac{\partial}{\partial t} S &amp;=  - \beta \frac{S}{N}W \\
+\frac{\partial}{\partial t} I &amp;= \beta \frac{S}{N}W - \gamma I \\
+\frac{\partial}{\partial t} R &amp;= \gamma I
+\end{align*}\]</div>
+<p>Notice that the diffusivity depends on <span class="math notranslate nohighlight">\(S\)</span>, which is decreasing in time.</p>
+</div>
+<div class="section" id="the-low-diffusivity-issue-and-the-spatial-wsir-remedy">
+<h2>The low diffusivity issue and the spatial WSIR remedy<a class="headerlink" href="#the-low-diffusivity-issue-and-the-spatial-wsir-remedy" title="Permalink to this headline">¶</a></h2>
+<p>Low values of the diffusivity coefficient can lead to stability problems in the numerical algorithms.</p>
+<p>To avoid numerical issues, the <span class="math notranslate nohighlight">\(W\)</span>, is simulated as an additional field.</p>
+<p><span class="math notranslate nohighlight">\(W\)</span> is relaxed (with <span class="math notranslate nohighlight">\(\beta_W\)</span> coefficient) to <span class="math notranslate nohighlight">\( W - \Delta W\frac{r^2}{8} = I \)</span>.</p>
+<p>The WSIR system reads:</p>
+<div class="amsmath math notranslate nohighlight">
+\[\begin{align*}
+\frac{\partial}{\partial t} W &amp;= \beta_W \left[ \frac{r^2}{8} \Delta W + (I-W) \right] \\
+\frac{\partial}{\partial t} S &amp;= - \beta \frac{S}{N}W\\
+\frac{\partial}{\partial t} I &amp;= \beta \frac{S}{N}W - \gamma I \\
+\frac{\partial}{\partial t} R &amp;= \gamma I
+\end{align*}\]</div>
+</div>
+<div class="section" id="the-nondimensional-form-equations-revisited">
+<h2>The nondimensional form equations - revisited<a class="headerlink" href="#the-nondimensional-form-equations-revisited" title="Permalink to this headline">¶</a></h2>
+<p>Again, we can rescale the time as <span class="math notranslate nohighlight">\(\tau = \gamma t\)</span>, then the set of equations can be described by single similarity number <span class="math notranslate nohighlight">\(R_{0}=\frac {\beta }{\gamma }\)</span></p>
+<div class="amsmath math notranslate nohighlight">
+\[\begin{align*}
+\frac{\partial}{\partial \tau} S &amp;= - R_0 \frac{S}{N}(I + \frac{r^2}{8} \Delta I)  \\
+\frac{\partial}{\partial \tau} I &amp;= R_0 \frac{S}{N}(I + \frac{r^2}{8} \Delta I) - I \\
+\frac{\partial}{\partial \tau} R &amp;= I
+\end{align*}\]</div>
+<p>The WSIR system reads:</p>
+<div class="amsmath math notranslate nohighlight">
+\[\begin{align*}
+\frac{\partial}{\partial \tau} W &amp;= \frac{\beta_W}{\gamma} \left[ \frac{r^2}{8} \Delta W + (I-W) \right] \\
+\frac{\partial}{\partial \tau} S &amp;= -  R_0  \frac{S}{N}W\\
+\frac{\partial}{\partial \tau} I &amp;= R_0  \frac{S}{N}W - \ I \\
+\frac{\partial}{\partial \tau} R &amp;= I
+\end{align*}\]</div>
+</div>
+<div class="section" id="remarks-on-other-sir-diffusion-models">
+<h2>Remarks on other SIR-diffusion models<a class="headerlink" href="#remarks-on-other-sir-diffusion-models" title="Permalink to this headline">¶</a></h2>
+<p>There are models [2], in which the diffusion acts as an <em>independent</em> operator for each of the compartments,</p>
+<div class="amsmath math notranslate nohighlight">
+\[\begin{align*}
+\frac{\partial}{\partial t} S &amp;= - \beta \frac{S}{N}I + k_S \Delta S  \\
+\frac{\partial}{\partial t} I &amp;= \beta \frac{S}{N}I - \gamma I + k_I \Delta I\\
+\frac{\partial}{\partial t} R &amp;= \gamma I + k_R \Delta R
+\end{align*}\]</div>
+<p>where <span class="math notranslate nohighlight">\(k_{S,I,R}\)</span> denotes the diffusion coefficient for particular compartment.</p>
+<p>According to [1], such models does not capture physics of the epidemy because:</p>
+<ul class="simple">
+<li><p>a) almost all humans moves within a small fixed radius and does not disperse in a manner such as Brownian motion.</p></li>
+<li><p>b) equation cannot explain the spatial transmission by infection if individuals are at rest.</p></li>
+<li><p>c) humans would move away from an increasing gradient of the infected.</p></li>
+<li><p>d) humans would move away from over-crowded locations.</p></li>
+</ul>
+<p>Consequently, the spatial transmission described by [2] is caused not by infection but by the dispersion of patients.</p>
+<p>Inspired by the heat transfer equation:</p>
+<div class="amsmath math notranslate nohighlight">
+\[\begin{align*}
+\frac{\partial}{\partial t} \rho T = \nabla \cdot  k \nabla T + \dot{q}
+\end{align*}\]</div>
+<p>One can mitigate the escape of humans from <em>over-crowded</em> locations by using fractions in the laplacian term.</p>
+<p>Notice, that this will be  <strong>a different model</strong>: <span class="math notranslate nohighlight">\( \frac{1}{N} \nabla \cdot k_s \nabla S \neq  \nabla \cdot k_s \nabla s\)</span> because <span class="math notranslate nohighlight">\(N\)</span> is a spatial variable:</p>
+<div class="amsmath math notranslate nohighlight">
+\[\begin{align*}
+\frac{\partial}{\partial t} S = \frac{\partial}{\partial t} N s &amp;= \nabla \cdot k_s \nabla s - \beta \frac{S}{N}I \\
+\frac{\partial}{\partial t} I = \frac{\partial}{\partial t} N i &amp;= \nabla \cdot k_i \nabla i + \beta \frac{S}{N}I  - \gamma I \\
+\frac{\partial}{\partial t} R =\frac{\partial}{\partial t} N r &amp;=  \nabla \cdot k_r \nabla r + \gamma I 
+\end{align*}\]</div>
+<p>Anyway, the drawbacks mentioned in <span class="math notranslate nohighlight">\(a)-c)\)</span> still apply.</p>
+<hr class="docutils" />
+<p>[2]  Modeling epidemics by the lattice Boltzmann method, De Rosis, Alessandro, Phys. Rev. E, 2020</p>
+</div>
+</div>
+<div class="tex2jax_ignore mathjax_ignore section" id="similarity-numbers-in-sir-like-models">
+<h1>Similarity numbers in SIR-like models<a class="headerlink" href="#similarity-numbers-in-sir-like-models" title="Permalink to this headline">¶</a></h1>
+<p>Let us define dimensionless variables,</p>
+<div class="amsmath math notranslate nohighlight">
+\[\begin{align*}
+\overline{x} = \frac{x}{x_c}, \hspace{2em} 
+\overline{t} = \frac{t}{t_c}, \hspace{2em}
+\overline{N} = \frac{N}{N_c}, \hspace{2em}
+\overline{S} = \frac{S}{N_c}, \hspace{2em}
+\overline{I} = \frac{I}{N_c}, \hspace{2em}
+\end{align*}\]</div>
+<p>where the <span class="math notranslate nohighlight">\(\textit{c}\)</span>-subscript denotes a characteristics scale.</p>
+<div class="section" id="the-fourier-number">
+<h2>The Fourier number<a class="headerlink" href="#the-fourier-number" title="Permalink to this headline">¶</a></h2>
+<p>The Fourier number, <span class="math notranslate nohighlight">\(Fo\)</span>, is the ratio of the diffusive term to the temporal term. It can can be viewed as a non-dimensional-time.</p>
+</div>
+<div class="section" id="the-second-damkohler-number">
+<h2>The (second) Damköhler number<a class="headerlink" href="#the-second-damkohler-number" title="Permalink to this headline">¶</a></h2>
+<p>The (second) Damköhler number is defined as the ratio of the reaction rate to the diffusive transfer rate.</p>
+<div class="amsmath math notranslate nohighlight">
+\[\begin{align*}
+Da = \frac{\dot{R} x_c^2}{k}
+\end{align*}\]</div>
+<p>where:</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(\dot{R} [1/s]\)</span> denotes the reaction rate</p></li>
+<li><p><span class="math notranslate nohighlight">\(x_c [m]\)</span> is the characteristics lenght</p></li>
+<li><p><span class="math notranslate nohighlight">\(k [m^2 / s]\)</span> is the diffusion coefficient</p></li>
+</ul>
+<div class="section" id="sir-with-independent-naive-diffusion">
+<h3>SIR with <em>independent</em> (naive) diffusion<a class="headerlink" href="#sir-with-independent-naive-diffusion" title="Permalink to this headline">¶</a></h3>
+<p>First, we will analyze a SIR model with <em>independent</em> (naive) diffusion.
+Its dimensions are</p>
+<div class="amsmath math notranslate nohighlight">
+\[\begin{align*}
+\overbrace{\frac{\partial}{\partial t}}^{[1/s]} \overbrace{S}^{[individual]} &amp;= - \overbrace{\beta}^{[1/s]} \overbrace{\frac{S}{N}}^{[-]}\overbrace{I}^{[individual]}+ \overbrace{k_S}^{[m^2/s]} \overbrace{\Delta}^{[1/m^2]} \overbrace{S}^{[individual]}  \\
+\end{align*}\]</div>
+<p>In terms of the characteristic scales</p>
+<div class="amsmath math notranslate nohighlight">
+\[\begin{align*}
+\frac{1}{t_c} \frac{\partial}{\partial \overline{t}} \overline{S}N_c &amp;= - \beta \frac{\overline{S}N_c }{\overline{N}N_c }\overline{I}N_c  + k_S \frac{N_c}{x_c^2}  \frac{\partial^2}{\partial \overline{x}^2}\overline{S} \hspace{2em} \text{//} \cdot t_c, :N_c \\
+\frac{\partial}{\partial \overline{t}} \overline{S} &amp;= - \beta t_c \frac{\overline{S}}{\overline{N}}\overline{I}  + k_S \frac{t_c}{x_c^2}  \frac{\partial^2}{\partial \overline{x}^2}\overline{S} \\ 
+&amp;= - \underbrace{\beta \frac{x_c^2 \frac{\overline{I}}{\overline{N}}}{k_S}}_{Da_S}   \underbrace{\frac{k_S  t_c}{x_c^2}}_{Fo} \overline{S}  + \underbrace{\frac{k_S t_c}{x_c^2}}_{Fo}  \frac{\partial^2}{\partial \overline{x}^2}\overline{S}
+\end{align*}\]</div>
+<p>In this model, the diffusion coefficient are independent for each fo the S,I,R compartments. As a consequnce, this model will be described by three Damkohnler numbers, <span class="math notranslate nohighlight">\(Da_S, Da_I, Da_R\)</span>.</p>
+</div>
+<div class="section" id="sir-peng">
+<h3>SIR-Peng<a class="headerlink" href="#sir-peng" title="Permalink to this headline">¶</a></h3>
+<p>Notice, that in the SIR-Peng model, the only field with diffusive term is the <span class="math notranslate nohighlight">\(I\)</span> compartment.</p>
+<div class="amsmath math notranslate nohighlight">
+\[\begin{align*}
+\frac{\partial}{\partial t} I &amp;= \beta \frac{S}{N}(I + \frac{r^2}{8} \Delta I) - \gamma I
+\end{align*}\]</div>
+<p>Repeating the analysis,</p>
+<div class="amsmath math notranslate nohighlight">
+\[\begin{align*}
+\frac{1}{t_c} \frac{\partial}{\partial \overline{t}} \overline{I}N_c &amp;=  \beta \frac{\overline{S}N_c }{\overline{N}N_c } \left[ \overline{I}N_c  + N_c   \frac{r^2}{8} \frac{1}{x_c^2} \frac{\partial^2}{\partial \overline{x}^2} \overline{I} \right] - \gamma \overline{I}N_c \hspace{2em} \text{//} \cdot t_c, :N_c \\
+\end{align*}\]</div>
+<p>and denoting <span class="math notranslate nohighlight">\(k=\beta \frac{r^2}{8}\frac{\overline{S}}{\overline{N}} \)</span></p>
+<div class="amsmath math notranslate nohighlight">
+\[\begin{align*}
+ \frac{\partial}{\partial \overline{t}} \overline{I}&amp;=   \left(\beta \frac{\overline{S} }{\overline{N} } - \gamma \right) t_c \overline{I} +  \overbrace{\frac{r^2}{8}\beta \frac{\overline{S} }{\overline{N} }}^{k} \frac{t_c}{x_c^2} \frac{\partial^2}{\partial \overline{x}^2} \overline{I} 
+\end{align*}\]</div>
+<p>leads to the final form</p>
+<div class="amsmath math notranslate nohighlight">
+\[\begin{align*}
+\frac{\partial}{\partial \overline{t}} \overline{I} &amp;= \underbrace{ \frac{x_c^2\left(\beta  \frac{\overline{S}}{\overline{N}} - \gamma \right)}{k}}_{Da_I}   \underbrace{\frac{k  t_c}{x_c^2}}_{Fo} \overline{I}  + \underbrace{\frac{k t_c}{x_c^2}}_{Fo}  \frac{\partial^2}{\partial \overline{x}^2}\overline{I}
+\end{align*}\]</div>
+</div>
+<div class="section" id="wsir">
+<h3>WSIR<a class="headerlink" href="#wsir" title="Permalink to this headline">¶</a></h3>
+<p>Notice, that in the WSIR model, the only field with diffusive term is the <span class="math notranslate nohighlight">\(W\)</span> field.</p>
+<div class="amsmath math notranslate nohighlight">
+\[\begin{align*}
+\frac{\partial}{\partial t} W &amp;= \beta_W \left[ \frac{r^2}{8} \Delta W + (I-W) \right] 
+\end{align*}\]</div>
+<p>Repeating the analysis,</p>
+<div class="amsmath math notranslate nohighlight">
+\[\begin{align*}
+\frac{1}{t_c} \frac{\partial}{\partial \overline{t}} \overline{W}N_c &amp;=  \beta_W N_c \left[ \frac{r^2}{8} \frac{1}{x_c^2} \frac{\partial^2}{\partial \overline{x}^2} \overline{W} + (\overline{I}-\overline{W}) \right] \hspace{2em} \text{//} \cdot t_c, :N_c \\
+\frac{\partial}{\partial \overline{t}} \overline{W} &amp;=  \beta_W t_c \overline{I} -  \beta_W t_c \overline{W} + \overbrace{\frac{r^2}{8} \beta_W}^{k} \frac{t_c}{x_c^2} \frac{\partial^2}{\partial \overline{x}^2} \overline{W} 
+\end{align*}\]</div>
+<p>and denoting <span class="math notranslate nohighlight">\(k=\beta_W \frac{r^2}{8} \)</span></p>
+<div class="amsmath math notranslate nohighlight">
+\[\begin{align*}
+\frac{\partial}{\partial \overline{t}} \overline{W} 
+&amp;= 
+\beta_W t_c \overline{I} -  \frac{\beta_W x_c^2}{k} \frac{k t_c}{x_c^2} \overline{W} +  \frac{k t_c}{x_c^2} \frac{\partial^2}{\partial \overline{x}^2} \overline{W} \\
+&amp;= 
+\beta_W t_c \overline{I} -   \underbrace{\frac{8 x_c^2}{r^2}}_{Da}  \underbrace{\frac{k t_c}{x_c^2}}_{Fo} \overline{W} +   \underbrace{\frac{k t_c}{x_c^2}}_{Fo} \frac{\partial^2}{\partial \overline{x}^2} \overline{W}
+\end{align*}\]</div>
+<p>Finally, the Damkohler number for WSIR model is <span class="math notranslate nohighlight">\(Da_W = \frac{8 x_c^2}{r^2}\)</span></p>
+</div>
+</div>
+<div class="section" id="exercise">
+<h2>Exercise<a class="headerlink" href="#exercise" title="Permalink to this headline">¶</a></h2>
+<p>Implement a FD solver for both SIR-Peng and WSIR model.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>              
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">from</span> <span class="nn">numba</span> <span class="kn">import</span> <span class="n">jit</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;..&quot;</span><span class="p">)</span>
+<span class="kn">from</span> <span class="nn">utils.sir_plot_utils</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="o">%</span><span class="k">matplotlib</span> inline
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">nx</span> <span class="o">=</span> <span class="mi">128</span>
+<span class="n">domain_length</span> <span class="o">=</span> <span class="mi">64</span>
+<span class="n">dx</span> <span class="o">=</span> <span class="n">domain_length</span> <span class="o">/</span> <span class="p">(</span><span class="n">nx</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">xspace</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">domain_length</span><span class="p">,</span> <span class="n">nx</span><span class="p">)</span>
+
+<span class="n">r0</span> <span class="o">=</span> <span class="mf">5.5</span>  <span class="c1"># infectious radius</span>
+<span class="n">beta_sir</span> <span class="o">=</span> <span class="mf">3.01</span>  <span class="c1"># the average number of contacts per person per time</span>
+<span class="n">gamma_sir</span> <span class="o">=</span> <span class="mi">1</span><span class="o">/</span><span class="mf">2.8</span>  <span class="c1"># 1 over days to recovery</span>
+
+<span class="n">beta_W</span> <span class="o">=</span> <span class="mf">1e3</span>
+
+<span class="n">total_time</span> <span class="o">=</span> <span class="mf">1e-0</span>
+<span class="n">dt</span> <span class="o">=</span> <span class="mf">1e-5</span>
+<span class="n">ntimesteps</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">total_time</span> <span class="o">/</span> <span class="n">dt</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Spatially uniform population density</span>
+
+<span class="n">I_IC</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">nx</span><span class="p">)</span><span class="o">*</span><span class="mf">0.01</span>                <span class="c1"># numpy function ones()</span>
+<span class="n">I_IC</span><span class="p">[</span><span class="nb">int</span><span class="p">((</span><span class="n">nx</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">/</span><span class="mi">4</span><span class="p">):</span><span class="nb">int</span><span class="p">(</span><span class="n">nx</span><span class="o">/</span><span class="mi">2</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)]</span> <span class="o">=</span> <span class="mf">0.05</span>  <span class="c1"># setting u = 2 between 0.5 and 1 as per our I.C.s</span>
+<span class="n">S_IC</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">nx</span><span class="p">)</span> <span class="o">-</span> <span class="n">I_IC</span>
+<span class="n">R_IC</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">nx</span><span class="p">)</span>
+
+<span class="n">N</span> <span class="o">=</span> <span class="n">S_IC</span> <span class="o">+</span> <span class="n">I_IC</span> <span class="o">+</span> <span class="n">R_IC</span>
+
+
+<span class="n">make_wsir_plot_1D</span><span class="p">(</span><span class="n">S_IC</span><span class="p">,</span> <span class="n">I_IC</span><span class="p">,</span> <span class="n">R_IC</span><span class="p">,</span> <span class="n">xspace</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;SIR IC&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../../_images/part1_SIR_1D_SOLUTION_13_0.png" src="../../_images/part1_SIR_1D_SOLUTION_13_0.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>    
+<span class="c1"># @jit(cache=True, nopython=True)</span>
+<span class="nd">@jit</span><span class="p">(</span><span class="n">nopython</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">SIR_Peng_1D_FD_btcs</span><span class="p">(</span><span class="n">S</span><span class="p">,</span> <span class="n">I</span><span class="p">,</span> <span class="n">R</span><span class="p">,</span> <span class="n">nx</span><span class="p">,</span> <span class="n">dx</span><span class="p">,</span> <span class="n">r0</span><span class="p">,</span> <span class="n">beta_sir</span><span class="p">,</span> <span class="n">gamma_sir</span><span class="p">,</span> <span class="n">nt</span><span class="p">,</span> <span class="n">dt</span><span class="p">):</span>
+    <span class="n">N</span> <span class="o">=</span> <span class="n">S</span> <span class="o">+</span> <span class="n">I</span> <span class="o">+</span> <span class="n">R</span>
+    
+    <span class="n">c_ind</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">nx</span><span class="p">)</span>
+    <span class="n">l_ind</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">roll</span><span class="p">(</span><span class="n">c_ind</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">r_ind</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">roll</span><span class="p">(</span><span class="n">c_ind</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+    
+    <span class="n">hist_of_diffusivity</span> <span class="o">=</span>  <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">nt</span><span class="p">,</span> <span class="n">nx</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nt</span><span class="p">):</span>  <span class="c1"># iterate through time</span>
+        <span class="n">lap_I</span> <span class="o">=</span> <span class="p">(</span><span class="n">I</span><span class="p">[</span><span class="n">l_ind</span><span class="p">]</span> <span class="o">-</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">I</span><span class="p">[</span><span class="n">c_ind</span><span class="p">]</span> <span class="o">+</span> <span class="n">I</span><span class="p">[</span><span class="n">r_ind</span><span class="p">])</span> <span class="o">/</span> <span class="n">dx</span> <span class="o">**</span> <span class="mi">2</span>
+        <span class="n">qS2I_spatial</span> <span class="o">=</span> <span class="p">(</span><span class="n">r0</span> <span class="o">*</span> <span class="n">r0</span> <span class="o">/</span> <span class="mf">8.</span><span class="p">)</span> <span class="o">*</span> <span class="n">lap_I</span>
+        <span class="c1"># qS2I_spatial = np.zeros(nx)</span>
+        
+        <span class="n">hist_of_diffusivity</span><span class="p">[</span><span class="n">n</span><span class="p">]</span> <span class="o">=</span> <span class="n">beta_sir</span> <span class="o">*</span> <span class="n">S</span> <span class="o">*</span> <span class="n">qS2I_spatial</span>
+        <span class="n">qS2I</span> <span class="o">=</span> <span class="n">dt</span> <span class="o">*</span> <span class="n">beta_sir</span> <span class="o">*</span> <span class="n">S</span> <span class="o">*</span> <span class="p">(</span><span class="n">qS2I_spatial</span> <span class="o">+</span> <span class="n">I</span><span class="p">)</span> <span class="o">/</span> <span class="n">N</span>
+        <span class="n">qI2R</span> <span class="o">=</span> <span class="n">dt</span> <span class="o">*</span> <span class="n">gamma_sir</span> <span class="o">*</span> <span class="n">I</span>
+        <span class="n">S</span> <span class="o">=</span> <span class="n">S</span> <span class="o">-</span> <span class="n">qS2I</span>
+        <span class="n">I</span> <span class="o">=</span> <span class="n">I</span> <span class="o">+</span> <span class="n">qS2I</span> <span class="o">-</span> <span class="n">qI2R</span>
+        <span class="n">R</span> <span class="o">=</span> <span class="n">R</span> <span class="o">+</span> <span class="n">qI2R</span>
+
+    <span class="k">return</span> <span class="n">S</span><span class="p">,</span> <span class="n">I</span><span class="p">,</span> <span class="n">R</span><span class="p">,</span> <span class="n">hist_of_diffusivity</span>
+
+
+<span class="nd">@jit</span><span class="p">(</span><span class="n">nopython</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">WSIR_1D_FD_btcs</span><span class="p">(</span><span class="n">S</span><span class="p">,</span> <span class="n">I</span><span class="p">,</span> <span class="n">R</span><span class="p">,</span> <span class="n">nx</span><span class="p">,</span> <span class="n">dx</span><span class="p">,</span> <span class="n">r0</span><span class="p">,</span> <span class="n">beta_sir</span><span class="p">,</span> <span class="n">gamma_sir</span><span class="p">,</span> <span class="n">nt</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="n">beta_W</span><span class="o">=</span><span class="mf">1e2</span><span class="p">):</span>
+    <span class="n">W</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">nx</span><span class="p">)</span>
+    <span class="n">N</span> <span class="o">=</span> <span class="n">S</span> <span class="o">+</span> <span class="n">I</span> <span class="o">+</span> <span class="n">R</span>
+    <span class="n">c_ind</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">nx</span><span class="p">)</span>
+    <span class="n">l_ind</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">roll</span><span class="p">(</span><span class="n">c_ind</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">r_ind</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">roll</span><span class="p">(</span><span class="n">c_ind</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nt</span><span class="p">):</span>  <span class="c1"># iterate through time</span>
+        <span class="n">lap_W</span> <span class="o">=</span> <span class="p">(</span><span class="n">W</span><span class="p">[</span><span class="n">l_ind</span><span class="p">]</span> <span class="o">-</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">W</span><span class="p">[</span><span class="n">c_ind</span><span class="p">]</span> <span class="o">+</span> <span class="n">W</span><span class="p">[</span><span class="n">r_ind</span><span class="p">])</span> <span class="o">/</span> <span class="n">dx</span> <span class="o">**</span> <span class="mi">2</span>
+        <span class="n">qW_spatial</span> <span class="o">=</span> <span class="p">(</span><span class="n">r0</span> <span class="o">*</span> <span class="n">r0</span> <span class="o">/</span> <span class="mf">8.</span><span class="p">)</span><span class="o">*</span><span class="n">lap_W</span>
+        <span class="c1"># qW_spatial = np.zeros(nx)</span>
+
+        <span class="n">qW</span> <span class="o">=</span> <span class="n">dt</span> <span class="o">*</span> <span class="n">beta_W</span> <span class="o">*</span> <span class="p">(</span><span class="n">qW_spatial</span> <span class="o">+</span> <span class="p">(</span><span class="n">I</span> <span class="o">-</span> <span class="n">W</span><span class="p">))</span>
+        <span class="n">qS2I</span> <span class="o">=</span> <span class="n">dt</span> <span class="o">*</span> <span class="n">beta_sir</span> <span class="o">*</span> <span class="n">S</span> <span class="o">*</span> <span class="n">W</span><span class="o">/</span><span class="n">N</span>
+        <span class="n">qI2R</span> <span class="o">=</span> <span class="n">dt</span> <span class="o">*</span> <span class="n">gamma_sir</span> <span class="o">*</span> <span class="n">I</span>
+
+        <span class="n">W</span> <span class="o">=</span> <span class="n">W</span> <span class="o">+</span> <span class="n">qW</span>
+        <span class="n">S</span> <span class="o">=</span> <span class="n">S</span> <span class="o">-</span> <span class="n">qS2I</span>
+        <span class="n">I</span> <span class="o">=</span> <span class="n">I</span> <span class="o">+</span> <span class="n">qS2I</span> <span class="o">-</span> <span class="n">qI2R</span>
+        <span class="n">R</span> <span class="o">=</span> <span class="n">R</span> <span class="o">+</span> <span class="n">qI2R</span>
+        
+    <span class="k">return</span> <span class="n">S</span><span class="p">,</span> <span class="n">I</span><span class="p">,</span> <span class="n">R</span><span class="p">,</span> <span class="n">W</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">S</span><span class="p">,</span> <span class="n">I</span><span class="p">,</span> <span class="n">R</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">SIR_Peng_1D_FD_btcs</span><span class="p">(</span><span class="n">S_IC</span><span class="p">,</span> <span class="n">I_IC</span><span class="p">,</span> <span class="n">R_IC</span><span class="p">,</span> <span class="n">nx</span><span class="p">,</span> <span class="n">dx</span><span class="p">,</span> <span class="n">r0</span><span class="p">,</span> <span class="n">beta_sir</span><span class="p">,</span> <span class="n">gamma_sir</span><span class="p">,</span> <span class="n">ntimesteps</span><span class="p">,</span> <span class="n">dt</span><span class="p">)</span>
+<span class="n">make_wsir_plot_1D</span><span class="p">(</span><span class="n">S</span><span class="p">,</span> <span class="n">I</span><span class="p">,</span> <span class="n">R</span><span class="p">,</span> <span class="n">xspace</span><span class="p">,</span> <span class="n">ntimesteps</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="s1">&#39;SIR-Peng 1D&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../../_images/part1_SIR_1D_SOLUTION_15_0.png" src="../../_images/part1_SIR_1D_SOLUTION_15_0.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">Sw</span><span class="p">,</span> <span class="n">Iw</span><span class="p">,</span> <span class="n">Rw</span><span class="p">,</span> <span class="n">Ww</span> <span class="o">=</span> <span class="n">WSIR_1D_FD_btcs</span><span class="p">(</span><span class="n">S_IC</span><span class="p">,</span> <span class="n">I_IC</span><span class="p">,</span> <span class="n">R_IC</span><span class="p">,</span> <span class="n">nx</span><span class="p">,</span> <span class="n">dx</span><span class="p">,</span> <span class="n">r0</span><span class="p">,</span> <span class="n">beta_sir</span><span class="p">,</span> <span class="n">gamma_sir</span><span class="p">,</span> <span class="n">ntimesteps</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="n">beta_W</span><span class="p">)</span>
+<span class="n">compare_sir_vs_wsir_plot</span><span class="p">((</span><span class="n">S</span><span class="p">,</span> <span class="n">I</span><span class="p">,</span> <span class="n">R</span><span class="p">),</span> <span class="p">(</span><span class="n">Sw</span><span class="p">,</span> <span class="n">Iw</span><span class="p">,</span> <span class="n">Rw</span><span class="p">,</span> <span class="n">Ww</span><span class="p">),</span> <span class="n">beta_W</span><span class="p">,</span> <span class="n">xspace</span><span class="p">,</span> <span class="n">ntimesteps</span><span class="p">,</span> <span class="s1">&#39;SIR-Peng vs WSIR&#39;</span><span class="p">,</span> <span class="n">dt</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../../_images/part1_SIR_1D_SOLUTION_16_0.png" src="../../_images/part1_SIR_1D_SOLUTION_16_0.png" />
+</div>
+</div>
+</div>
+</div>
+<div class="tex2jax_ignore mathjax_ignore section" id="effect-of-varing-spatial-density">
+<h1>Effect of varing spatial density<a class="headerlink" href="#effect-of-varing-spatial-density" title="Permalink to this headline">¶</a></h1>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># signal = 2* np.pi*xspace/max(xspace) </span>
+<span class="c1"># signal = 10*np.ones(nx) + 500*np.sin(signal) </span>
+<span class="c1"># signal += abs(min(signal)) +1</span>
+
+<span class="c1"># N = signal </span>
+<span class="c1"># N[int((nx-1)/4):int(nx/2 + 1)] =  1.2*signal[int((nx-1)/4):int(nx/2 + 1)]</span>
+<span class="c1"># I_IC = 0.05* signal</span>
+
+<span class="n">N</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">nx</span><span class="p">)</span>
+<span class="n">N</span><span class="p">[</span><span class="nb">int</span><span class="p">((</span><span class="n">nx</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">/</span><span class="mi">4</span><span class="p">):</span><span class="nb">int</span><span class="p">(</span><span class="n">nx</span><span class="o">/</span><span class="mi">2</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)]</span> <span class="o">*=</span> <span class="mi">10</span>
+
+<span class="n">I_IC</span> <span class="o">=</span> <span class="mf">0.05</span><span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">nx</span><span class="p">)</span>
+<span class="n">I_IC</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="mi">3</span><span class="o">*</span><span class="p">(</span><span class="n">nx</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">/</span><span class="mi">8</span><span class="p">):</span><span class="nb">int</span><span class="p">(</span><span class="mi">6</span><span class="o">*</span><span class="n">nx</span><span class="o">/</span><span class="mi">8</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)]</span> <span class="o">*=</span> <span class="mi">10</span> 
+
+<span class="n">S_IC</span> <span class="o">=</span> <span class="n">N</span> <span class="o">-</span> <span class="n">I_IC</span>
+<span class="n">R_IC</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">nx</span><span class="p">)</span>
+
+<span class="n">y_lim</span>  <span class="o">=</span> <span class="p">[</span><span class="o">-</span><span class="mf">0.05</span><span class="p">,</span> <span class="mf">1.05</span><span class="o">*</span><span class="nb">max</span><span class="p">(</span><span class="n">N</span><span class="p">)]</span>
+<span class="kn">from</span> <span class="nn">utils.sir_plot_utils</span> <span class="kn">import</span> <span class="n">make_wsir_plot_1D</span>
+<span class="n">make_wsir_plot_1D</span><span class="p">(</span><span class="n">S_IC</span><span class="p">,</span> <span class="n">I_IC</span><span class="p">,</span> <span class="n">R_IC</span><span class="p">,</span> <span class="n">xspace</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;SIR IC&#39;</span><span class="p">,</span> <span class="n">w</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">y_lim</span><span class="o">=</span><span class="n">y_lim</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../../_images/part1_SIR_1D_SOLUTION_18_0.png" src="../../_images/part1_SIR_1D_SOLUTION_18_0.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">S</span><span class="p">,</span> <span class="n">I</span><span class="p">,</span> <span class="n">R</span><span class="p">,</span> <span class="n">hist_of_diffusivity</span> <span class="o">=</span> <span class="n">SIR_Peng_1D_FD_btcs</span><span class="p">(</span><span class="n">S_IC</span><span class="p">,</span> <span class="n">I_IC</span><span class="p">,</span> <span class="n">R_IC</span><span class="p">,</span> <span class="n">nx</span><span class="p">,</span> <span class="n">dx</span><span class="p">,</span> <span class="n">r0</span><span class="p">,</span> <span class="n">beta_sir</span><span class="p">,</span> <span class="n">gamma_sir</span><span class="p">,</span> <span class="n">ntimesteps</span><span class="p">,</span> <span class="n">dt</span><span class="p">)</span>
+
+<span class="n">Sw</span><span class="p">,</span> <span class="n">Iw</span><span class="p">,</span> <span class="n">Rw</span><span class="p">,</span> <span class="n">Ww</span> <span class="o">=</span> <span class="n">WSIR_1D_FD_btcs</span><span class="p">(</span><span class="n">S_IC</span><span class="p">,</span> <span class="n">I_IC</span><span class="p">,</span> <span class="n">R_IC</span><span class="p">,</span> <span class="n">nx</span><span class="p">,</span> <span class="n">dx</span><span class="p">,</span> <span class="n">r0</span><span class="p">,</span> <span class="n">beta_sir</span><span class="p">,</span> <span class="n">gamma_sir</span><span class="p">,</span> <span class="n">ntimesteps</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="n">beta_W</span><span class="p">)</span>
+<span class="n">compare_sir_vs_wsir_plot</span><span class="p">((</span><span class="n">S</span><span class="p">,</span> <span class="n">I</span><span class="p">,</span> <span class="n">R</span><span class="p">),</span> <span class="p">(</span><span class="n">Sw</span><span class="p">,</span> <span class="n">Iw</span><span class="p">,</span> <span class="n">Rw</span><span class="p">,</span> <span class="n">Ww</span><span class="p">),</span> <span class="n">beta_W</span><span class="p">,</span> <span class="n">xspace</span><span class="p">,</span> <span class="n">ntimesteps</span><span class="p">,</span> <span class="s1">&#39;SIR-Peng vs WSIR&#39;</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="n">y_lim</span><span class="o">=</span><span class="n">y_lim</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../../_images/part1_SIR_1D_SOLUTION_19_0.png" src="../../_images/part1_SIR_1D_SOLUTION_19_0.png" />
+</div>
+</div>
+<div class="section" id="influence-of-the-beta-w-relaxation-coefficient">
+<h2>Influence of the <span class="math notranslate nohighlight">\( \beta_W \)</span> relaxation coefficient<a class="headerlink" href="#influence-of-the-beta-w-relaxation-coefficient" title="Permalink to this headline">¶</a></h2>
+<p>For <span class="math notranslate nohighlight">\( \beta_W  \rightarrow \infty \)</span> the W-SIR model converges to the Peng-SIR one.</p>
+<div class="section" id="id1">
+<h3>Exercise<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
+<p>Experiment with different <span class="math notranslate nohighlight">\( \beta_W \)</span> and check the output.
+Tip: You may need to decrease dt.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">beta_W</span> <span class="o">=</span> <span class="mi">10</span><span class="o">*</span><span class="mf">1e3</span> 
+
+<span class="n">total_time</span> <span class="o">=</span> <span class="mf">1e-0</span>
+<span class="n">dt</span> <span class="o">=</span> <span class="mf">0.1</span><span class="o">*</span><span class="mf">1e-5</span>
+<span class="n">ntimesteps</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">total_time</span> <span class="o">/</span> <span class="n">dt</span><span class="p">)</span>
+
+<span class="n">S</span><span class="p">,</span> <span class="n">I</span><span class="p">,</span> <span class="n">R</span><span class="p">,</span> <span class="n">hist_of_diffusivity</span> <span class="o">=</span> <span class="n">SIR_Peng_1D_FD_btcs</span><span class="p">(</span><span class="n">S_IC</span><span class="p">,</span> <span class="n">I_IC</span><span class="p">,</span> <span class="n">R_IC</span><span class="p">,</span> <span class="n">nx</span><span class="p">,</span> <span class="n">dx</span><span class="p">,</span> <span class="n">r0</span><span class="p">,</span> <span class="n">beta_sir</span><span class="p">,</span> <span class="n">gamma_sir</span><span class="p">,</span> <span class="n">ntimesteps</span><span class="p">,</span> <span class="n">dt</span><span class="p">)</span>
+
+<span class="n">Sw</span><span class="p">,</span> <span class="n">Iw</span><span class="p">,</span> <span class="n">Rw</span><span class="p">,</span> <span class="n">Ww</span> <span class="o">=</span> <span class="n">WSIR_1D_FD_btcs</span><span class="p">(</span><span class="n">S_IC</span><span class="p">,</span> <span class="n">I_IC</span><span class="p">,</span> <span class="n">R_IC</span><span class="p">,</span> <span class="n">nx</span><span class="p">,</span> <span class="n">dx</span><span class="p">,</span> <span class="n">r0</span><span class="p">,</span> <span class="n">beta_sir</span><span class="p">,</span> <span class="n">gamma_sir</span><span class="p">,</span> <span class="n">ntimesteps</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="n">beta_W</span><span class="p">)</span>
+<span class="n">compare_sir_vs_wsir_plot</span><span class="p">((</span><span class="n">S</span><span class="p">,</span> <span class="n">I</span><span class="p">,</span> <span class="n">R</span><span class="p">),</span> <span class="p">(</span><span class="n">Sw</span><span class="p">,</span> <span class="n">Iw</span><span class="p">,</span> <span class="n">Rw</span><span class="p">,</span> <span class="n">Ww</span><span class="p">),</span> <span class="n">beta_W</span><span class="p">,</span> <span class="n">xspace</span><span class="p">,</span> <span class="n">ntimesteps</span><span class="p">,</span> <span class="s1">&#39;SIR-Peng vs WSIR&#39;</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="n">y_lim</span><span class="o">=</span><span class="n">y_lim</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../../_images/part1_SIR_1D_SOLUTION_21_0.png" src="../../_images/part1_SIR_1D_SOLUTION_21_0.png" />
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="numbers-or-fractions-revisited-for-curious-readers-only">
+<h2>Numbers or fractions - revisited (for curious readers only)<a class="headerlink" href="#numbers-or-fractions-revisited-for-curious-readers-only" title="Permalink to this headline">¶</a></h2>
+<p>This time, the task is more difficult.
+First, let us remind the quotient rule for laplace operator:</p>
+<p><a class="reference external" href="https://math.stackexchange.com/questions/652730/laplacian-identity">https://math.stackexchange.com/questions/652730/laplacian-identity</a></p>
+<div class="amsmath math notranslate nohighlight">
+\[\begin{align*}
+\Delta\left(\frac{f}{g}\right) &amp;= \frac{1}{g} \Delta f-\frac{2}{g} \nabla\left(\frac{f}{g}\right) \cdot \nabla g-\frac{f}{g^{2}} \Delta g \\
+\rightarrow  \frac{1}{g} \Delta f &amp;= \Delta\left(\frac{f}{g}\right)  + \frac{2}{g} \nabla\left(\frac{f}{g}\right) \cdot \nabla g +\frac{f}{g^{2}} \Delta g
+\end{align*}\]</div>
+<p>Again, we can divide each of the equations by <span class="math notranslate nohighlight">\(N\)</span> to represent them in terms of fractions instead of numbers.
+Consider the spatial equation for <span class="math notranslate nohighlight">\(S\)</span> from [1]:</p>
+<div class="amsmath math notranslate nohighlight" id="equation-ca9db4ba-2790-4ef9-ba30-accfc763576b">
+<span class="eqno">(4)<a class="headerlink" href="#equation-ca9db4ba-2790-4ef9-ba30-accfc763576b" title="Permalink to this equation">¶</a></span>\[\begin{align}
+\frac{\partial}{\partial t} S &amp;= - \beta \frac{S}{N} \left( I + \frac{r^2}{8} \Delta I \right) \hspace{3em} \text{dividing each side by N...} \\ 
+\frac{\partial}{\partial t} \frac{S}{N} &amp;= - \beta \frac{S}{N} \left( \frac{I}{N} + \frac{r^2}{8} \frac{1}{N} \Delta I  \right)
+\end{align}\]</div>
+<p>Substituting the quotient rule for laplace operator:</p>
+<div class="amsmath math notranslate nohighlight">
+\[\begin{align*}
+\frac{\partial}{\partial t} \frac{S}{N} = - \beta \frac{S}{N} \left[ \frac{I}{N} + \frac{r^2}{8} \left[ \Delta\left(\frac{I}{N}\right)  + \frac{2}{N} \nabla\left(\frac{I}{N}\right) \cdot \nabla N +\frac{I}{N^{2}} \Delta N  \right] \right]
+\end{align*}\]</div>
+<p>Introducing fractions <span class="math notranslate nohighlight">\(s = \frac{S}{N}, i = \frac{I}{N}, r = \frac{r}{N}\)</span>:</p>
+<div class="amsmath math notranslate nohighlight">
+\[\begin{align*}
+\frac{\partial}{\partial t} s &amp;= - \beta s \left[ i + \frac{r^2}{8} \left( \Delta i  + 2 \nabla i \cdot \frac{\nabla N}{N} + i \frac{\Delta N}{N}  \right) \right] \\
+\frac{\partial}{\partial t} i &amp;= \beta s \left[ i + \frac{r^2}{8} \left( \Delta i  + 2 \nabla i \cdot \frac{\nabla N}{N} + i \frac{\Delta N}{N}  \right) \right]  - \gamma i \\
+\frac{\partial}{\partial t} r &amp;= \gamma i
+\end{align*}\]</div>
+<p><strong>Alternatively</strong>, one can easily rewrite the initial equation as:</p>
+<div class="amsmath math notranslate nohighlight">
+\[\begin{align*}
+\frac{\partial}{\partial t} s &amp;= -\beta s \left( i + \frac{r^2}{8} \frac{1}{N} \Delta (i N)  \right) \\
+\frac{\partial}{\partial t} i &amp;= \beta s \left( i + \frac{r^2}{8} \frac{1}{N} \Delta (i N)  \right)  - \gamma i \\
+\frac{\partial}{\partial t} r &amp;= \gamma i
+\end{align*}\]</div>
+<p>Notice that <span class="math notranslate nohighlight">\(\Delta (i N)=i \Delta  N + 2 \nabla i \cdot \nabla N + N \Delta  i\)</span>.</p>
+<p><strong>Conclusion</strong></p>
+<p>The attempt to switch from numbers to fractions in spatial model results in more complex form of the equations.</p>
+<p>According to the authors’ experience, the LBM scheme for the latter form is expected to be unstable for large ratio of N (~100-1000).</p>
+</div>
+</div>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            kernelName: "python3",
+            path: "./notebooks/30_SIRModelInSpace"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+              </div>
+              
+        
+            <!-- Previous / next buttons -->
+<div class='prev-next-area'> 
+    <a class='left-prev' id="prev-link" href="../25_diffusion_FD/part2_diffusion_matrix_approach_SOLUTION.html" title="previous page">
+        <i class="fas fa-angle-left"></i>
+        <div class="prev-next-info">
+            <p class="prev-next-subtitle">previous</p>
+            <p class="prev-next-title">Diffusion part 2: matrix approach; implicit and explicit scheme</p>
+        </div>
+    </a>
+    <a class='right-next' id="next-link" href="../40_IntroTCLB/10_SimpleDiffusion.html" title="next page">
+    <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Diffusion equation in TCLB solver</p>
+    </div>
+    <i class="fas fa-angle-right"></i>
+    </a>
+</div>
+        
+        </div>
+    </div>
+    <footer class="footer">
+    <div class="container">
+      <p>
+        
+          By G. Gruszczynski and M. Dzikowski<br/>
+        
+            &copy; Copyright 2021.<br/>
+      </p>
+    </div>
+  </footer>
+</main>
+
+
+      </div>
+    </div>
+  
+  <script src="../../_static/js/index.be7d3bbb2ef33a8344ce.js"></script>
+
+  </body>
+</html>

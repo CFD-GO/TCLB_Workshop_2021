@@ -1,0 +1,510 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Under which conditions one may be lucky enough to not get infected? &#8212; Modelling of epidemic spreading with Lattice Boltzmann Method</title>
+    
+  <link href="../../_static/css/theme.css" rel="stylesheet">
+  <link href="../../_static/css/index.ff1ffe594081f20da1ef19478df9384b.css" rel="stylesheet">
+
+    
+  <link rel="stylesheet"
+    href="../../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    
+      
+
+    
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-book-theme.css?digest=c3fdc42140077d1ad13ad2f1588a4309" />
+    <link rel="stylesheet" type="text/css" href="../../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/panels-main.c949a650a448cc0ae9fd3441c0e17fb0.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/panels-variables.06eb56fa6e07937060861dad626602ad.css" />
+    
+  <link rel="preload" as="script" href="../../_static/js/index.be7d3bbb2ef33a8344ce.js">
+
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/togglebutton.js"></script>
+    <script src="../../_static/clipboard.min.js"></script>
+    <script src="../../_static/copybutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <script src="../../_static/sphinx-book-theme.12a9622fbb08dcb3a2a40b2c02b83a57.js"></script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script async="async" src="https://unpkg.com/thebe@0.5.1/lib/index.js"></script>
+    <script>
+        const thebe_selector = ".thebe"
+        const thebe_selector_input = "pre"
+        const thebe_selector_output = ".output"
+    </script>
+    <script async="async" src="../../_static/sphinx-thebe.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Plotting a vector field" href="part3_SIR_0D_streamlines_SOLUTION.html" />
+    <link rel="prev" title="The simplest, SIR model" href="part1_SIR_0D_SOLUTION.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="None">
+    
+
+    <!-- Google Analytics -->
+    
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<div class="col-12 col-md-3 bd-sidebar site-navigation show" id="site-navigation">
+    
+        <div class="navbar-brand-box">
+    <a class="navbar-brand text-wrap" href="../../index.html">
+      
+        <!-- `logo` is deprecated in Sphinx 4.0, so remove this when we stop supporting 3 -->
+        
+      
+      
+      <img src="../../_static/cfd-go.png" class="logo" alt="logo">
+      
+      
+      <h1 class="site-logo" id="site-title">Modelling of epidemic spreading with Lattice Boltzmann Method</h1>
+      
+    </a>
+</div><form class="bd-search d-flex align-items-center" action="../../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item active">
+        <p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  SIR 0D
+ </span>
+</p>
+<ul class="current nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="part1_SIR_0D_SOLUTION.html">
+   The simplest, SIR model
+  </a>
+ </li>
+ <li class="toctree-l1 current active">
+  <a class="current reference internal" href="#">
+   Under which conditions one may be lucky enough to not get infected?
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="part3_SIR_0D_streamlines_SOLUTION.html">
+   Plotting a vector field
+  </a>
+ </li>
+</ul>
+<p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Diffusion FD
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../25_diffusion_FD/part1_diffusion_and_convolution_SOLUTION.html">
+   Diffusion part 1: the fundamental solution
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../25_diffusion_FD/part2_diffusion_matrix_approach_SOLUTION.html">
+   Diffusion part 2: matrix approach; implicit and explicit scheme
+  </a>
+ </li>
+</ul>
+<p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  SIR 1D
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../30_SIRModelInSpace/part1_SIR_1D_SOLUTION.html">
+   The simple spatial SIR model
+  </a>
+ </li>
+</ul>
+<p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Introduction to TCLB solver
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../40_IntroTCLB/10_SimpleDiffusion.html">
+   Diffusion equation in TCLB solver
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../40_IntroTCLB/11_Dispersion.html">
+   Prepare FD and LBM solution
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../40_IntroTCLB/15_d2q9_diffusion_SpatialSIR_model.html">
+   First shot: spatially variable SIR model with uniform IC
+  </a>
+ </li>
+</ul>
+<p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Solving spatial SIR system in TCLB
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../50_TCLBforSIRModelInSpace/10_SIR_in_PengModified_Model.html">
+   Notes on LBM dt in nonlinear reactions
+  </a>
+ </li>
+</ul>
+
+    </div>
+</nav> <!-- To handle the deprecated key -->
+
+<div class="navbar_extra_footer">
+  Powered by <a href="https://jupyterbook.org">Jupyter Book</a>
+</div>
+
+</div>
+
+
+          
+
+
+          
+<main class="col py-md-3 pl-md-4 bd-content overflow-auto" role="main">
+    
+    <div class="topbar container-xl fixed-top">
+    <div class="topbar-contents row">
+        <div class="col-12 col-md-3 bd-topbar-whitespace site-navigation show"></div>
+        <div class="col pl-md-4 topbar-main">
+            
+            <button id="navbar-toggler" class="navbar-toggler ml-0" type="button" data-toggle="collapse"
+                data-toggle="tooltip" data-placement="bottom" data-target=".site-navigation" aria-controls="navbar-menu"
+                aria-expanded="true" aria-label="Toggle navigation" aria-controls="site-navigation"
+                title="Toggle navigation" data-toggle="tooltip" data-placement="left">
+                <i class="fas fa-bars"></i>
+                <i class="fas fa-arrow-left"></i>
+                <i class="fas fa-arrow-up"></i>
+            </button>
+            
+            
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn" aria-label="Download this page"><i
+            class="fas fa-download"></i></button>
+
+    <div class="dropdown-buttons">
+        <!-- ipynb file if we had a myst markdown file -->
+        
+        <!-- Download raw file -->
+        <a class="dropdown-buttons" href="../../_sources/notebooks/20_SIR_0D/part2_SIR_0D_stability_SOLUTION.ipynb"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Download source file" data-toggle="tooltip"
+                data-placement="left">.ipynb</button></a>
+        <!-- Download PDF via print -->
+        <button type="button" id="download-print" class="btn btn-secondary topbarbtn" title="Print to PDF"
+            onClick="window.print()" data-toggle="tooltip" data-placement="left">.pdf</button>
+    </div>
+</div>
+
+            <!-- Source interaction buttons -->
+
+            <!-- Full screen (wrap in <a> to have style consistency -->
+
+<a class="full-screen-button"><button type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip"
+        data-placement="bottom" onclick="toggleFullScreen()" aria-label="Fullscreen mode"
+        title="Fullscreen mode"><i
+            class="fas fa-expand"></i></button></a>
+
+            <!-- Launch buttons -->
+
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn"
+        aria-label="Launch interactive content"><i class="fas fa-rocket"></i></button>
+    <div class="dropdown-buttons">
+        
+        <a class="binder-button" href="https://mybinder.org/v2/gh/CFD-GO/TCLB_Workshop_2021/master?urlpath=tree/mini_book/notebooks/20_SIR_0D/part2_SIR_0D_stability_SOLUTION.ipynb"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Launch Binder" data-toggle="tooltip"
+                data-placement="left"><img class="binder-button-logo"
+                    src="../../_static/images/logo_binder.svg"
+                    alt="Interact on binder">Binder</button></a>
+        
+        
+        
+        
+    </div>
+</div>
+
+        </div>
+
+        <!-- Table of contents -->
+        <div class="d-none d-md-block col-md-2 bd-toc show">
+            
+            <div class="tocsection onthispage pt-5 pb-3">
+                <i class="fas fa-list"></i> Contents
+            </div>
+            <nav id="bd-toc-nav" aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#">
+   Under which conditions one may be lucky enough to not get infected?
+  </a>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#herd-immunity-vs-r0">
+   Herd immunity vs R0
+  </a>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#stability-of-linear-systems">
+   Stability of linear systems
+  </a>
+  <ul class="visible nav section-nav flex-column">
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#inspirations">
+     Inspirations
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+
+            </nav>
+        </div>
+    </div>
+</div>
+    <div id="main-content" class="row">
+        <div class="col-12 col-md-9 pl-md-3 pr-md-0">
+        
+              <div>
+                
+  <div class="tex2jax_ignore mathjax_ignore section" id="under-which-conditions-one-may-be-lucky-enough-to-not-get-infected">
+<h1>Under which conditions one may be lucky enough to not get infected?<a class="headerlink" href="#under-which-conditions-one-may-be-lucky-enough-to-not-get-infected" title="Permalink to this headline">¶</a></h1>
+<p>Let us denote a small perturbation, <span class="math notranslate nohighlight">\(\varepsilon\)</span>, in the SIR compartments as:</p>
+<div class="amsmath math notranslate nohighlight">
+\[\begin{align*}
+s &amp;= \overline{s} + \varepsilon s \\
+i &amp;= \overline{i} + \varepsilon i \\
+r &amp;= \overline{r} + \varepsilon r \\
+\end{align*}\]</div>
+<p>Consider a system which was initially <strong>at rest</strong> (no infections: <span class="math notranslate nohighlight">\(\overline{s} \neq 0, \overline{i} = 0, \overline{r} = 1 - \overline{s} \)</span>).</p>
+<p>One day, a couple of infectious patients, <span class="math notranslate nohighlight">\( \varepsilon i\)</span>,  have returned from holidays.</p>
+<p>What are the conditions to prevent the epidemy from growth?</p>
+<p>In other words, what proportion of the population should be immunized to eradicate a disease?</p>
+<p>To answer this question, we have to insert the small perturbation into the (nondimensional) system of SIR equations :</p>
+<div class="amsmath math notranslate nohighlight">
+\[\begin{align*}
+\frac{\partial}{\partial \tau} s &amp;= - R_0 s i \\
+\frac{\partial}{\partial \tau} i &amp;= R_0 s i -  i \\
+\frac{\partial}{\partial \tau} r &amp;= i
+\end{align*}\]</div>
+<p>Expanding,</p>
+<div class="amsmath math notranslate nohighlight">
+\[\begin{align*}
+\frac{\partial}{\partial \tau} s &amp;= - R_0 (\overline{s} + \varepsilon s)  \varepsilon i = - R_0 \overline{s} \varepsilon i -  R_0 \overline{s} \varepsilon^2 i \\
+\frac{\partial}{\partial \tau} i &amp;= R_0 (\overline{s} + \varepsilon s) \varepsilon i - \varepsilon i =  R_0 \overline{s} \varepsilon i +  R_0 \overline{s} \varepsilon^2 i  - \varepsilon i \\
+\frac{\partial}{\partial \tau} r &amp;= \varepsilon  i
+\end{align*}\]</div>
+<p>Eliminating the higher order terms, <span class="math notranslate nohighlight">\(\varepsilon^2\)</span>, the condition of decay of the epidemy is:</p>
+<div class="amsmath math notranslate nohighlight">
+\[\begin{align*}
+\frac{\partial}{\partial \tau} i &lt; 0 &amp; \Leftrightarrow ( R_0 \overline{s} - 1 ) \varepsilon i &lt; 0 \\ 
+ &amp; \Leftrightarrow  R_0 \overline{s} &lt; 1
+\end{align*}\]</div>
+<p>Since <span class="math notranslate nohighlight">\( \overline{s} = 1 - \overline{r}\)</span>, the condition can be expressed as:</p>
+<div class="amsmath math notranslate nohighlight">
+\[\begin{align*}
+ \frac{\partial}{\partial \tau} i &lt; 0 &amp; \Leftrightarrow  R_0 (1 - \overline{r}) &lt; 1 \\
+ &amp; \Leftrightarrow \overline{r} &gt; 1 - \frac{1}{R_0}
+\end{align*}\]</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pylab</span> <span class="k">as</span> <span class="nn">pylab</span>
+
+<span class="n">R0</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">1000</span><span class="p">)</span>
+
+<span class="n">params</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;legend.fontsize&#39;</span><span class="p">:</span> <span class="s1">&#39;xx-large&#39;</span><span class="p">,</span>
+          <span class="s1">&#39;figure.figsize&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mi">14</span><span class="p">,</span> <span class="mi">8</span><span class="p">),</span>
+         <span class="s1">&#39;axes.labelsize&#39;</span><span class="p">:</span> <span class="s1">&#39;xx-large&#39;</span><span class="p">,</span>
+         <span class="s1">&#39;axes.titlesize&#39;</span><span class="p">:</span><span class="s1">&#39;xx-large&#39;</span><span class="p">,</span>
+         <span class="s1">&#39;xtick.labelsize&#39;</span><span class="p">:</span><span class="s1">&#39;xx-large&#39;</span><span class="p">,</span>
+         <span class="s1">&#39;ytick.labelsize&#39;</span><span class="p">:</span><span class="s1">&#39;xx-large&#39;</span><span class="p">}</span>
+<span class="n">pylab</span><span class="o">.</span><span class="n">rcParams</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">params</span><span class="p">)</span>
+<span class="n">axes</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">gca</span><span class="p">()</span>
+<span class="n">y</span> <span class="o">=</span>  <span class="mi">1</span> <span class="o">-</span> <span class="mi">1</span><span class="o">/</span><span class="n">R0</span> 
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">R0</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span>
+         <span class="n">color</span><span class="o">=</span><span class="s2">&quot;green&quot;</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">markevery</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">markersize</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s2">&quot;-&quot;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+         <span class="n">label</span><span class="o">=</span><span class="s1">&#39;HIT&#39;</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">fill_between</span><span class="p">(</span><span class="n">R0</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span>  <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">y</span><span class="p">),</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;lightgreen&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Basic reproduction number - R0&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;$\overline</span><span class="si">{r}</span><span class="s1"> $ ~ Herd immunity treshold (HIT)&#39;</span><span class="p">)</span>
+<span class="n">axes</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">])</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Herd Immunity Treshold&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">()</span>
+<span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">gcf</span><span class="p">()</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s2">&quot;Herd_Immunity_Treshold&quot;</span><span class="p">,</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="s1">&#39;tight&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../../_images/part2_SIR_0D_stability_SOLUTION_1_0.png" src="../../_images/part2_SIR_0D_stability_SOLUTION_1_0.png" />
+</div>
+</div>
+</div>
+<div class="tex2jax_ignore mathjax_ignore section" id="herd-immunity-vs-r0">
+<h1>Herd immunity vs R0<a class="headerlink" href="#herd-immunity-vs-r0" title="Permalink to this headline">¶</a></h1>
+<p>And the plot from wikipedia</p>
+<p><img alt="Herd_immunity_threshold_vs_r0" src="../../_images/Herd_immunity_threshold_vs_r0.svg" /></p>
+</div>
+<div class="tex2jax_ignore mathjax_ignore section" id="stability-of-linear-systems">
+<h1>Stability of linear systems<a class="headerlink" href="#stability-of-linear-systems" title="Permalink to this headline">¶</a></h1>
+<p>The perturbed, linearized, 0D SIR system can be expressed in matrix form as:</p>
+<p>$
+\underbrace{</p>
+<div class="amsmath math notranslate nohighlight" id="equation-9a14234f-5234-4412-83df-f35646ed29f8">
+<span class="eqno">(1)<a class="headerlink" href="#equation-9a14234f-5234-4412-83df-f35646ed29f8" title="Permalink to this equation">¶</a></span>\[\begin{bmatrix}
+\dot s \\
+\dot i \\
+\dot r 
+\end{bmatrix}\]</div>
+<p>=
+\underbrace{</p>
+<div class="amsmath math notranslate nohighlight" id="equation-19845a73-8729-4906-90de-ed1f26f5b9cb">
+<span class="eqno">(2)<a class="headerlink" href="#equation-19845a73-8729-4906-90de-ed1f26f5b9cb" title="Permalink to this equation">¶</a></span>\[\begin{bmatrix}
+0 &amp;  - R_0 \overline{s} &amp; 0 \\
+0 &amp;  R_0 \overline{s} -1 &amp; 0 \\
+0 &amp; 1 &amp; 0 
+\end{bmatrix}\]</div>
+<p>\underbrace{</p>
+<div class="amsmath math notranslate nohighlight" id="equation-e084f9a4-c1b7-4b8e-b64a-4c1ca7e6ce73">
+<span class="eqno">(3)<a class="headerlink" href="#equation-e084f9a4-c1b7-4b8e-b64a-4c1ca7e6ce73" title="Permalink to this equation">¶</a></span>\[\begin{bmatrix}
+\varepsilon s \\
+\varepsilon i \\
+\varepsilon r 
+\end{bmatrix}\]</div>
+<p>$</p>
+<p>where <span class="math notranslate nohighlight">\(\dot s\)</span> denotes <span class="math notranslate nohighlight">\(\frac{\partial}{\partial \tau} s\)</span>.</p>
+<p>The stability condition for the continous system is <span class="math notranslate nohighlight">\(Re(eigenvalues(\mathbb{A})) &lt; \boldsymbol{0}\)</span> (all real parts of the eigenvalues of <span class="math notranslate nohighlight">\(\mathbb{A}\)</span> are negative).</p>
+<p>Intuition: for ODE, <span class="math notranslate nohighlight">\(\dot x = \lambda x \rightarrow x = C e^{\lambda t}\)</span></p>
+<p>Again, calculating <span class="math notranslate nohighlight">\(eigenvalues(\mathbb{A})\)</span> we obtain condition <span class="math notranslate nohighlight">\(R_0 \overline{s} - 1&lt; 0 \Leftrightarrow \overline{r} &gt; 1 - \frac{1}{R_0} \)</span>.</p>
+<p>The matrix notation would be even more useful if one would like to consider additional couplings to the SIR system (like loss of the immunity of the recovered).</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">sympy</span> <span class="k">as</span> <span class="nn">sy</span>
+<span class="n">R0</span><span class="p">,</span><span class="n">s</span> <span class="o">=</span> <span class="n">sy</span><span class="o">.</span><span class="n">symbols</span><span class="p">(</span><span class="s1">&#39;R0 s&#39;</span><span class="p">)</span> 
+
+<span class="n">A</span> <span class="o">=</span> <span class="n">sy</span><span class="o">.</span><span class="n">Matrix</span><span class="p">([[</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="n">R0</span><span class="o">*</span><span class="n">s</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> 
+               <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">R0</span><span class="o">*</span><span class="n">s</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+               <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">]])</span>                                                                                       
+ 
+<span class="n">A</span><span class="o">.</span><span class="n">eigenvals</span><span class="p">()</span> <span class="c1">#returns eigenvalues and their algebraic multiplicity</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{R0*s - 1: 1, 0: 2}
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="inspirations">
+<h2>Inspirations<a class="headerlink" href="#inspirations" title="Permalink to this headline">¶</a></h2>
+<p>Herd Immunity Treshold</p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://en.wikipedia.org/wiki/Basic_reproduction_number">https://en.wikipedia.org/wiki/Basic_reproduction_number</a></p></li>
+</ul>
+<p>Stability of linear systems</p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://en.wikipedia.org/wiki/Stability_theory">https://en.wikipedia.org/wiki/Stability_theory</a></p></li>
+<li><p><a class="reference external" href="https://www.youtube.com/watch?v=nyqJJdhReiA&amp;amp;list=PLMrJAkhIeNNR20Mz-VpzgfQs5zrYi085m&amp;amp;index=2&amp;amp;ab_channel=SteveBrunton">https://www.youtube.com/watch?v=nyqJJdhReiA&amp;amp;list=PLMrJAkhIeNNR20Mz-VpzgfQs5zrYi085m&amp;amp;index=2&amp;amp;ab_channel=SteveBrunton</a></p></li>
+<li><p><a class="reference external" href="https://www.youtube.com/watch?v=h7nJ6ZL4Lf0&amp;amp;list=PLMrJAkhIeNNR20Mz-VpzgfQs5zrYi085m&amp;amp;index=3&amp;amp;ab_channel=SteveBrunton">https://www.youtube.com/watch?v=h7nJ6ZL4Lf0&amp;amp;list=PLMrJAkhIeNNR20Mz-VpzgfQs5zrYi085m&amp;amp;index=3&amp;amp;ab_channel=SteveBrunton</a></p></li>
+</ul>
+</div>
+</div>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            kernelName: "python3",
+            path: "./notebooks/20_SIR_0D"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+              </div>
+              
+        
+            <!-- Previous / next buttons -->
+<div class='prev-next-area'> 
+    <a class='left-prev' id="prev-link" href="part1_SIR_0D_SOLUTION.html" title="previous page">
+        <i class="fas fa-angle-left"></i>
+        <div class="prev-next-info">
+            <p class="prev-next-subtitle">previous</p>
+            <p class="prev-next-title">The simplest, SIR model</p>
+        </div>
+    </a>
+    <a class='right-next' id="next-link" href="part3_SIR_0D_streamlines_SOLUTION.html" title="next page">
+    <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Plotting a vector field</p>
+    </div>
+    <i class="fas fa-angle-right"></i>
+    </a>
+</div>
+        
+        </div>
+    </div>
+    <footer class="footer">
+    <div class="container">
+      <p>
+        
+          By G. Gruszczynski and M. Dzikowski<br/>
+        
+            &copy; Copyright 2021.<br/>
+      </p>
+    </div>
+  </footer>
+</main>
+
+
+      </div>
+    </div>
+  
+  <script src="../../_static/js/index.be7d3bbb2ef33a8344ce.js"></script>
+
+  </body>
+</html>

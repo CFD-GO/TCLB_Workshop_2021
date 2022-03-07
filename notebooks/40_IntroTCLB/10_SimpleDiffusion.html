@@ -1,0 +1,1491 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Diffusion equation in TCLB solver &#8212; Modelling of epidemic spreading with Lattice Boltzmann Method</title>
+    
+  <link href="../../_static/css/theme.css" rel="stylesheet">
+  <link href="../../_static/css/index.ff1ffe594081f20da1ef19478df9384b.css" rel="stylesheet">
+
+    
+  <link rel="stylesheet"
+    href="../../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    
+      
+
+    
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-book-theme.css?digest=c3fdc42140077d1ad13ad2f1588a4309" />
+    <link rel="stylesheet" type="text/css" href="../../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/panels-main.c949a650a448cc0ae9fd3441c0e17fb0.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/panels-variables.06eb56fa6e07937060861dad626602ad.css" />
+    
+  <link rel="preload" as="script" href="../../_static/js/index.be7d3bbb2ef33a8344ce.js">
+
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/togglebutton.js"></script>
+    <script src="../../_static/clipboard.min.js"></script>
+    <script src="../../_static/copybutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <script src="../../_static/sphinx-book-theme.12a9622fbb08dcb3a2a40b2c02b83a57.js"></script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script async="async" src="https://unpkg.com/thebe@0.5.1/lib/index.js"></script>
+    <script>
+        const thebe_selector = ".thebe"
+        const thebe_selector_input = "pre"
+        const thebe_selector_output = ".output"
+    </script>
+    <script async="async" src="../../_static/sphinx-thebe.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Prepare FD and LBM solution" href="11_Dispersion.html" />
+    <link rel="prev" title="The simple spatial SIR model" href="../30_SIRModelInSpace/part1_SIR_1D_SOLUTION.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="None">
+    
+
+    <!-- Google Analytics -->
+    
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<div class="col-12 col-md-3 bd-sidebar site-navigation show" id="site-navigation">
+    
+        <div class="navbar-brand-box">
+    <a class="navbar-brand text-wrap" href="../../index.html">
+      
+        <!-- `logo` is deprecated in Sphinx 4.0, so remove this when we stop supporting 3 -->
+        
+      
+      
+      <img src="../../_static/cfd-go.png" class="logo" alt="logo">
+      
+      
+      <h1 class="site-logo" id="site-title">Modelling of epidemic spreading with Lattice Boltzmann Method</h1>
+      
+    </a>
+</div><form class="bd-search d-flex align-items-center" action="../../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item active">
+        <p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  SIR 0D
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../20_SIR_0D/part1_SIR_0D_SOLUTION.html">
+   The simplest, SIR model
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../20_SIR_0D/part2_SIR_0D_stability_SOLUTION.html">
+   Under which conditions one may be lucky enough to not get infected?
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../20_SIR_0D/part3_SIR_0D_streamlines_SOLUTION.html">
+   Plotting a vector field
+  </a>
+ </li>
+</ul>
+<p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Diffusion FD
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../25_diffusion_FD/part1_diffusion_and_convolution_SOLUTION.html">
+   Diffusion part 1: the fundamental solution
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../25_diffusion_FD/part2_diffusion_matrix_approach_SOLUTION.html">
+   Diffusion part 2: matrix approach; implicit and explicit scheme
+  </a>
+ </li>
+</ul>
+<p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  SIR 1D
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../30_SIRModelInSpace/part1_SIR_1D_SOLUTION.html">
+   The simple spatial SIR model
+  </a>
+ </li>
+</ul>
+<p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Introduction to TCLB solver
+ </span>
+</p>
+<ul class="current nav bd-sidenav">
+ <li class="toctree-l1 current active">
+  <a class="current reference internal" href="#">
+   Diffusion equation in TCLB solver
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="11_Dispersion.html">
+   Prepare FD and LBM solution
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="15_d2q9_diffusion_SpatialSIR_model.html">
+   First shot: spatially variable SIR model with uniform IC
+  </a>
+ </li>
+</ul>
+<p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Solving spatial SIR system in TCLB
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../50_TCLBforSIRModelInSpace/10_SIR_in_PengModified_Model.html">
+   Notes on LBM dt in nonlinear reactions
+  </a>
+ </li>
+</ul>
+
+    </div>
+</nav> <!-- To handle the deprecated key -->
+
+<div class="navbar_extra_footer">
+  Powered by <a href="https://jupyterbook.org">Jupyter Book</a>
+</div>
+
+</div>
+
+
+          
+
+
+          
+<main class="col py-md-3 pl-md-4 bd-content overflow-auto" role="main">
+    
+    <div class="topbar container-xl fixed-top">
+    <div class="topbar-contents row">
+        <div class="col-12 col-md-3 bd-topbar-whitespace site-navigation show"></div>
+        <div class="col pl-md-4 topbar-main">
+            
+            <button id="navbar-toggler" class="navbar-toggler ml-0" type="button" data-toggle="collapse"
+                data-toggle="tooltip" data-placement="bottom" data-target=".site-navigation" aria-controls="navbar-menu"
+                aria-expanded="true" aria-label="Toggle navigation" aria-controls="site-navigation"
+                title="Toggle navigation" data-toggle="tooltip" data-placement="left">
+                <i class="fas fa-bars"></i>
+                <i class="fas fa-arrow-left"></i>
+                <i class="fas fa-arrow-up"></i>
+            </button>
+            
+            
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn" aria-label="Download this page"><i
+            class="fas fa-download"></i></button>
+
+    <div class="dropdown-buttons">
+        <!-- ipynb file if we had a myst markdown file -->
+        
+        <!-- Download raw file -->
+        <a class="dropdown-buttons" href="../../_sources/notebooks/40_IntroTCLB/10_SimpleDiffusion.ipynb"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Download source file" data-toggle="tooltip"
+                data-placement="left">.ipynb</button></a>
+        <!-- Download PDF via print -->
+        <button type="button" id="download-print" class="btn btn-secondary topbarbtn" title="Print to PDF"
+            onClick="window.print()" data-toggle="tooltip" data-placement="left">.pdf</button>
+    </div>
+</div>
+
+            <!-- Source interaction buttons -->
+
+            <!-- Full screen (wrap in <a> to have style consistency -->
+
+<a class="full-screen-button"><button type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip"
+        data-placement="bottom" onclick="toggleFullScreen()" aria-label="Fullscreen mode"
+        title="Fullscreen mode"><i
+            class="fas fa-expand"></i></button></a>
+
+            <!-- Launch buttons -->
+
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn"
+        aria-label="Launch interactive content"><i class="fas fa-rocket"></i></button>
+    <div class="dropdown-buttons">
+        
+        <a class="binder-button" href="https://mybinder.org/v2/gh/CFD-GO/TCLB_Workshop_2021/master?urlpath=tree/mini_book/notebooks/40_IntroTCLB/10_SimpleDiffusion.ipynb"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Launch Binder" data-toggle="tooltip"
+                data-placement="left"><img class="binder-button-logo"
+                    src="../../_static/images/logo_binder.svg"
+                    alt="Interact on binder">Binder</button></a>
+        
+        
+        
+        
+    </div>
+</div>
+
+        </div>
+
+        <!-- Table of contents -->
+        <div class="d-none d-md-block col-md-2 bd-toc show">
+            
+            <div class="tocsection onthispage pt-5 pb-3">
+                <i class="fas fa-list"></i> Contents
+            </div>
+            <nav id="bd-toc-nav" aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#">
+   Diffusion equation in TCLB solver
+  </a>
+  <ul class="visible nav section-nav flex-column">
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#the-d2q9-reaction-diffusion-system-xxxx-models">
+     The d2q9_reaction_diffusion_system_XXXX models
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#d2q9-reaction-diffusion-system-simplediffusion">
+       d2q9_reaction_diffusion_system_SimpleDiffusion
+      </a>
+     </li>
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#d2q9-reaction-diffusion-system-allencahn">
+       d2q9_reaction_diffusion_system_AllenCahn
+      </a>
+     </li>
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#d2q9-reaction-diffusion-system-sir-simplelaplace">
+       d2q9_reaction_diffusion_system_SIR_SimpleLaplace
+      </a>
+     </li>
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#d2q9-reaction-diffusion-system-sir-modifiedpeng">
+       d2q9_reaction_diffusion_system_SIR_ModifiedPeng
+      </a>
+     </li>
+    </ul>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#what-is-included-in-this-environment">
+     What is included in this environment
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#tclb-solver">
+     TCLB solver
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#basic-configuration-file">
+   Basic configuration file
+  </a>
+  <ul class="visible nav section-nav flex-column">
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#and-let-s-run-it">
+     and let’s run it:
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#using-tclbconfig-writer-class">
+   Using TCLBConfig writer class
+  </a>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#rinside-periodic-ic-and-comparison-with-finite-difference">
+   RInside: periodic IC and comparison with Finite Difference
+  </a>
+  <ul class="visible nav section-nav flex-column">
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#let-s-create-initial-data-file">
+     Let’s create initial “data file”
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#now-the-xml-configuration">
+     Now the XML configuration
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#solution-obtained-from-tclb">
+     Solution obtained from TCLB
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#comparison-with-backward-time-central-space-fd">
+     Comparison with Backward Time - Central Space FD
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#rinside-read-an-image-as-initial-condition">
+   RInside: read an image as initial condition
+  </a>
+  <ul class="visible nav section-nav flex-column">
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#let-s-check-if-it-work-we-use-an-image-of-a-m-18a-dromader-airplane-as-initial-condition">
+     Let’s check if it work - we use an image of a M-18A Dromader airplane as initial condition ;)
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#the-clbc-object-could-be-reused-something-could-be-appended-to-it-after-save-parameters-could-bo-overwritten">
+       The CLBc object could be reused (something could be appended to it after save, parameters could bo overwritten)
+      </a>
+     </li>
+    </ul>
+   </li>
+  </ul>
+ </li>
+</ul>
+
+            </nav>
+        </div>
+    </div>
+</div>
+    <div id="main-content" class="row">
+        <div class="col-12 col-md-9 pl-md-3 pr-md-0">
+        
+              <div>
+                
+  <div class="tex2jax_ignore mathjax_ignore section" id="diffusion-equation-in-tclb-solver">
+<h1>Diffusion equation in TCLB solver<a class="headerlink" href="#diffusion-equation-in-tclb-solver" title="Permalink to this headline">¶</a></h1>
+<p>In this workshop we will cover basic conceptions related to TCLB solver. We will not dive into detail of TCLB compilation or model development - it is out of scope of this tutorial and is covered in other materials.</p>
+<div class="section" id="the-d2q9-reaction-diffusion-system-xxxx-models">
+<h2>The d2q9_reaction_diffusion_system_XXXX models<a class="headerlink" href="#the-d2q9-reaction-diffusion-system-xxxx-models" title="Permalink to this headline">¶</a></h2>
+<p>This TCLB model is a collection of Reaction-Diffusion Partial/Ordinary differential equations systems. Basically, the model is build to solve systems in form:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\frac{\partial{\mathbf{DRE}_1(x,t)}}{\partial t}  = \mathrm{Diffusivity\_DRE}_1 \nabla \mathbf{DRE}_1(x,t) + R_1(\mathbb{RHS}) \\
+... \\
+\frac{\partial{\mathbf{DRE}_i(x,t)}}{\partial t} = \mathrm{Diffusivity\_DRE}_i \nabla \mathbf{DRE}_i(x,t) + R_i(\mathbb{RHS})\\
+\frac{d{\mathbf{ODE}_1(x,t)}}{dt} =  F_1(\mathbb{RHS}) \\
+... \\
+\frac{d{\mathbf{ODE}_i(x,t)}}{dt} =  F_i(\mathbb{RHS}) 
+\end{split}\]</div>
+<p>Where <span class="math notranslate nohighlight">\(DRE_1(x,t)\)</span> is spatially variable field, solution of first Diffusion-Reaction equation, and <span class="math notranslate nohighlight">\(ODE_1(x,t)\)</span> is solution of Ordinary Differential Equation at point <span class="math notranslate nohighlight">\(x\)</span>. Both equations are solved using second order, implicit midpoint scheme. Spatial discretisation of DRE is performed using LBM method - details could be found in [X]. The right hend side vector is equall
+$<span class="math notranslate nohighlight">\(
+\mathbb{RHS} = \left[ DRE_i(x,t), ODE_i(x,t) \right]
+\)</span>$</p>
+<p>Most of the models have meaningfull names for <span class="math notranslate nohighlight">\(\mathbf{DRE_i}\)</span> variables and params, provided below.</p>
+<p>At point of writing, supported model are:</p>
+<div class="section" id="d2q9-reaction-diffusion-system-simplediffusion">
+<h3>d2q9_reaction_diffusion_system_SimpleDiffusion<a class="headerlink" href="#d2q9-reaction-diffusion-system-simplediffusion" title="Permalink to this headline">¶</a></h3>
+<div class="math notranslate nohighlight">
+\[
+\frac{\partial{\mathbf{PHI}(x,t)}}{\partial t} = \mathbf{Diffusivity\_PHI} \nabla \mathbf{PHI}(x,t)
+\]</div>
+<p>or</p>
+<div class="math notranslate nohighlight">
+\[
+\frac{\partial{\phi(x,t)}}{\partial t} = \nu \nabla \phi(x,t)
+\]</div>
+</div>
+<div class="section" id="d2q9-reaction-diffusion-system-allencahn">
+<h3>d2q9_reaction_diffusion_system_AllenCahn<a class="headerlink" href="#d2q9-reaction-diffusion-system-allencahn" title="Permalink to this headline">¶</a></h3>
+<div class="math notranslate nohighlight">
+\[
+\frac{\partial{\mathbf{PHI}(x,t)}}{\partial t} = \mathbf{Diffusivity\_PHI} \nabla \mathbf{PHI}(x,t) + \mathbf{Lambda}*\mathbf{PHI}(x,t)*(1-\mathbf{PHI}(x,t))
+\]</div>
+<p>or</p>
+<div class="math notranslate nohighlight">
+\[
+\frac{\partial{\phi(x,t)}}{\partial t} = \nu \nabla \phi(x,t) + C\phi(1-\phi)
+\]</div>
+</div>
+<div class="section" id="d2q9-reaction-diffusion-system-sir-simplelaplace">
+<h3>d2q9_reaction_diffusion_system_SIR_SimpleLaplace<a class="headerlink" href="#d2q9-reaction-diffusion-system-sir-simplelaplace" title="Permalink to this headline">¶</a></h3>
+<p>This simple spatial extension of SIR model, by addition of diffusivity $<span class="math notranslate nohighlight">\(\nabla \left( S,I,R \right)\)</span>$ to every term</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\frac{\partial}{\partial t} \mathbf{S} = - \mathbf{Beta} * \mathbf{S}* \mathbf{I}  + \mathbf{Diffusivity\_S} \nabla \mathbf{S}\\
+\frac{\partial}{\partial t} \mathbf{I} = \mathbf{Beta} * \mathbf{S}* \mathbf{I} - \mathbf{Gamma} * \mathbf{I}  + \mathbf{Diffusivity\_I} \nabla \mathbf{I} \\
+\frac{\partial}{\partial t} \mathbf{R} = \mathbf{Gamma}*  \mathbf{I} +  \mathbf{Diffusivity\_R} \nabla \mathbf{R}
+\end{split}\]</div>
+<p>or</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\frac{\partial}{\partial t} S = - \beta \frac{S}{N}I  + \nu_S \nabla S\\
+\frac{\partial}{\partial t} I = \beta \frac{S}{N}I - \gamma I  + \nu_I \nabla I \\
+\frac{\partial}{\partial t} R = \gamma I +  \nu_R \nabla R
+\end{split}\]</div>
+<p>for <span class="math notranslate nohighlight">\(N=1\)</span></p>
+</div>
+<div class="section" id="d2q9-reaction-diffusion-system-sir-modifiedpeng">
+<h3>d2q9_reaction_diffusion_system_SIR_ModifiedPeng<a class="headerlink" href="#d2q9-reaction-diffusion-system-sir-modifiedpeng" title="Permalink to this headline">¶</a></h3>
+<p>or the WSIR model, aleready referenced in this workshop</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\frac{\partial}{\partial t} \mathbf{W} = \mathbf{Beta_w} * \left[(\mathbf{I}-\mathbf{W}) \right]  + \mathbf{Diffusivity\_W} \nabla \mathbf{W}\\
+\frac{\partial}{\partial t} \mathbf{S} = - \mathbf{Beta} * \frac{\mathbf{S}*\mathbf{W}}{\mathbf{N}}*  \\
+\frac{\partial}{\partial t} \mathbf{I} = \mathbf{Beta} * \frac{\mathbf{S}*\mathbf{W}}{\mathbf{N}} - \mathbf{Gamma} * \mathbf{I} \\
+\frac{\partial}{\partial t} \mathbf{R} = \mathbf{Gamma}*  \mathbf{I}
+\end{split}\]</div>
+<p>or</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\frac{\partial}{\partial t} W = \beta_W \left[\frac{r^2}{8}W + (I-W) \right] \\
+\frac{\partial}{\partial t} S = - \beta \frac{S}{N}W\\
+\frac{\partial}{\partial t} I = \beta \frac{S}{N}W - \gamma I \\
+\frac{\partial}{\partial t} R = \gamma I
+\end{split}\]</div>
+<p>Keep in mind that for consistency, it’s recomended to set
+$<span class="math notranslate nohighlight">\(
+\mathbf{Diffusivity\_W} = \mathbf{Beta_w} * \frac{r^2}{8}
+\)</span>$</p>
+<p>Additionally, list of models could be extracted via:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">!</span> tclbmake d2q9_reaction_diffusion_system/list
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>TCLB_PATH:  /home/mdzik/_TCLB/TCLB
+                                                 AllenCahn SIR_ModifiedPeng
+d2q9_reaction_diffusion_system_AllenCahn                 X                -
+d2q9_reaction_diffusion_system_SIR_ModifiedPeng          -                X
+d2q9_reaction_diffusion_system_SIR_SimpleLaplace         -                -
+d2q9_reaction_diffusion_system_SimpleDiffusion           -                -
+                                                 SIR_SimpleLaplace
+d2q9_reaction_diffusion_system_AllenCahn                         -
+d2q9_reaction_diffusion_system_SIR_ModifiedPeng                  -
+d2q9_reaction_diffusion_system_SIR_SimpleLaplace                 X
+d2q9_reaction_diffusion_system_SimpleDiffusion                   -
+                                                 SimpleDiffusion
+d2q9_reaction_diffusion_system_AllenCahn                       -
+d2q9_reaction_diffusion_system_SIR_ModifiedPeng                -
+d2q9_reaction_diffusion_system_SIR_SimpleLaplace               -
+d2q9_reaction_diffusion_system_SimpleDiffusion                 X
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="what-is-included-in-this-environment">
+<h2>What is included in this environment<a class="headerlink" href="#what-is-included-in-this-environment" title="Permalink to this headline">¶</a></h2>
+<p>To run TCLB model us ipython shell binding:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>! tclb ModelName ConfigurationFile.xml 
+</pre></div>
+</div>
+<p>This will effectivelu run (in the curren working directory)</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$TCLB_PATH/CLB/ModelName/main ConfigurationFile.xml
+</pre></div>
+</div>
+<p>in your Jupyter/Binder.  We will use</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>! tclb ModelName ConfigurationFile.xml  &gt; /dev/null &amp;&amp; echo &quot;DONE!&quot;
+</pre></div>
+</div>
+<p>to supress output in most cases.</p>
+</div>
+<div class="section" id="tclb-solver">
+<h2>TCLB solver<a class="headerlink" href="#tclb-solver" title="Permalink to this headline">¶</a></h2>
+<p>As you might noticed TCLB is a set of models (like d2q9). TCLB uses XML as source of configuration plus limited numebr of command line options which will be covered latter. There is a python library that helps you build XML on-the-fly if You like.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">h5py</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">from</span> <span class="nn">display_xml</span> <span class="kn">import</span> <span class="n">XML</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="tex2jax_ignore mathjax_ignore section" id="basic-configuration-file">
+<h1>Basic configuration file<a class="headerlink" href="#basic-configuration-file" title="Permalink to this headline">¶</a></h1>
+<p>Let’s solve diffusion equation, on 100x100 domain with diffusivity <span class="math notranslate nohighlight">\(\nu=1/6\)</span></p>
+<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;CLBConfig</span> <span class="na">version=</span><span class="s">&quot;2.0&quot;</span> <span class="na">output=</span><span class="s">&quot;output/SimpleDiffusion/&quot;</span><span class="nt">&gt;</span> <span class="c">&lt;!-- The root xml element --&gt;</span>
+  <span class="nt">&lt;Geometry</span> <span class="na">nx=</span><span class="s">&quot;100&quot;</span> <span class="na">ny=</span><span class="s">&quot;100&quot;</span><span class="nt">&gt;</span> <span class="c">&lt;!-- Mesh size, by default nz=1. MPI divisions are along X --&gt;</span>
+    <span class="nt">&lt;None</span> <span class="na">name=</span><span class="s">&quot;city&quot;</span><span class="nt">&gt;</span> <span class="c">&lt;!--Named zone or BC, part of the mesh that could be referenced in Model section  --&gt;</span>
+      <span class="nt">&lt;Box</span> <span class="na">dx=</span><span class="s">&quot;35&quot;</span> <span class="na">nx=</span><span class="s">&quot;30&quot;</span><span class="nt">/&gt;</span> <span class="c">&lt;!-- Markers/geometrical descriptions of the parent zone --&gt;</span>
+    <span class="nt">&lt;/None&gt;</span>
+  <span class="nt">&lt;/Geometry&gt;</span>
+  <span class="nt">&lt;Model&gt;</span> <span class="c">&lt;!-- Here we set the model parameters, like viscosity --&gt;</span>
+    <span class="nt">&lt;Param</span> <span class="na">name=</span><span class="s">&quot;Diffusivity_DRE_1&quot;</span> <span class="na">value=</span><span class="s">&quot;0.1666&quot;</span><span class="nt">/&gt;</span> <span class="c">&lt;!-- or Diffusivity for Diffusive-Reactive-Equation #1  --&gt;</span>
+    <span class="nt">&lt;Param</span> <span class="na">name=</span><span class="s">&quot;Init_DRE_1&quot;</span> <span class="na">value=</span><span class="s">&quot;-0.5&quot;</span><span class="nt">/&gt;</span> <span class="c">&lt;!-- Initial value for Diffusive-Reactive-Equation #1  --&gt;</span>
+    <span class="nt">&lt;Param</span> <span class="na">name=</span><span class="s">&quot;Init_DRE_1&quot;</span> <span class="na">value=</span><span class="s">&quot;0.5&quot;</span> <span class="na">zone=</span><span class="s">&quot;city&quot;</span><span class="nt">/&gt;</span> <span class="c">&lt;!-- Initial value for Diffusive-Reactive-Equation #1  in Zone City --&gt;</span>
+  <span class="nt">&lt;/Model&gt;</span>
+  <span class="nt">&lt;HDF5/&gt;</span> <span class="c">&lt;!-- Save at t=0  --&gt;</span>
+  <span class="nt">&lt;Solve</span> <span class="na">Iterations=</span><span class="s">&quot;200&quot;</span><span class="nt">&gt;</span> <span class="c">&lt;!-- Iterate 100 iterations --&gt;</span>
+    <span class="nt">&lt;HDF5</span> <span class="na">Iterations=</span><span class="s">&quot;10&quot;</span><span class="nt">/&gt;</span> <span class="c">&lt;!-- Save HDF5 every 10, HDF5 could be replaced by VTK --&gt;</span>
+  <span class="nt">&lt;/Solve&gt;</span>
+<span class="nt">&lt;/CLBConfig&gt;</span>
+</pre></div>
+</div>
+<div class="section" id="and-let-s-run-it">
+<h2>and let’s run it:<a class="headerlink" href="#and-let-s-run-it" title="Permalink to this headline">¶</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">!</span> tclb d2q9_reaction_diffusion_system_SimpleDiffusion SimpleDiffusion.xml 
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>MPMD: TCLB: local:0/1 work:0/1 ---  connected to:
+[  ] <span class=" -Color -Color-Bold -Color-Bold-Green">-------------------------------------------------------------------------</span>
+[  ] <span class=" -Color -Color-Bold -Color-Bold-Green">-  CLB version:       v6.5.0-71-g352b9281                               -</span>
+[  ] <span class=" -Color -Color-Bold -Color-Bold-Green">-        Model: d2q9_reaction_diffusion_system_SimpleDiffusion                  </span>
+[  ] <span class=" -Color -Color-Bold -Color-Bold-Green">             -</span>
+[  ] <span class=" -Color -Color-Bold -Color-Bold-Green">-------------------------------------------------------------------------</span>
+[  ] <span class=" -Color -Color-Bold -Color-Bold-Green">Setting output path to: SimpleDiffusion</span>
+[  ] <span class=" -Color -Color-Bold">Discarding 1 comments</span>
+[ 0] <span class=" -Color -Color-Bold">Running on CPU</span>
+[ 0] <span class=" -Color -Color-Yellow">WARNING: </span><span class=" -Color -Color-Bold -Color-Bold-Yellow">No &quot;Units&quot; element in config file</span>
+[  ] <span class=" -Color -Color-Green">Mesh size in config file: 100x100x1</span>
+[  ] <span class=" -Color -Color-Bold">Global lattice size: 100x100x1</span>
+[  ] <span class=" -Color -Color-Green">Max region size: 10000. Mesh size 10000. Overhead:  0%</span>
+[  ] <span class=" -Color -Color-Bold">Local lattice size: 100x100x1</span>
+Hello allocator!
+[  ] <span class=" -Color -Color-Bold">  Threads  |      Action</span>
+[  ] <span class=" -Color -Color-Bold">    1x1    | Primal , NoGlobals , InitFromExternal</span>
+[  ] <span class=" -Color -Color-Bold">    1x1    | Tangent , NoGlobals , InitFromExternal</span>
+[  ] <span class=" -Color -Color-Bold">    1x1    | Optimize , NoGlobals , InitFromExternal</span>
+[  ] <span class=" -Color -Color-Bold">    1x1    | SteadyAdjoint , NoGlobals , InitFromExternal</span>
+[  ] <span class=" -Color -Color-Bold">    1x1    | Primal , IntegrateGlobals , InitFromExternal</span>
+[  ] <span class=" -Color -Color-Bold">    1x1    | Tangent , IntegrateGlobals , InitFromExternal</span>
+[  ] <span class=" -Color -Color-Bold">    1x1    | Optimize , IntegrateGlobals , InitFromExternal</span>
+[  ] <span class=" -Color -Color-Bold">    1x1    | SteadyAdjoint , IntegrateGlobals , InitFromExternal</span>
+[  ] <span class=" -Color -Color-Bold">    1x1    | Primal , OnlyObjective , InitFromExternal</span>
+[  ] <span class=" -Color -Color-Bold">    1x1    | Tangent , OnlyObjective , InitFromExternal</span>
+[  ] <span class=" -Color -Color-Bold">    1x1    | Optimize , OnlyObjective , InitFromExternal</span>
+[  ] <span class=" -Color -Color-Bold">    1x1    | SteadyAdjoint , OnlyObjective , InitFromExternal</span>
+[  ] <span class=" -Color -Color-Bold">    1x1    | Primal , NoGlobals , BaseIteration</span>
+[  ] <span class=" -Color -Color-Bold">    1x1    | Tangent , NoGlobals , BaseIteration</span>
+[  ] <span class=" -Color -Color-Bold">    1x1    | Optimize , NoGlobals , BaseIteration</span>
+[  ] <span class=" -Color -Color-Bold">    1x1    | SteadyAdjoint , NoGlobals , BaseIteration</span>
+[  ] <span class=" -Color -Color-Bold">    1x1    | Primal , IntegrateGlobals , BaseIteration</span>
+[  ] <span class=" -Color -Color-Bold">    1x1    | Tangent , IntegrateGlobals , BaseIteration</span>
+[  ] <span class=" -Color -Color-Bold">    1x1    | Optimize , IntegrateGlobals , BaseIteration</span>
+[  ] <span class=" -Color -Color-Bold">    1x1    | SteadyAdjoint , IntegrateGlobals , BaseIteration</span>
+[  ] <span class=" -Color -Color-Bold">    1x1    | Primal , OnlyObjective , BaseIteration</span>
+[  ] <span class=" -Color -Color-Bold">    1x1    | Tangent , OnlyObjective , BaseIteration</span>
+[  ] <span class=" -Color -Color-Bold">    1x1    | Optimize , OnlyObjective , BaseIteration</span>
+[  ] <span class=" -Color -Color-Bold">    1x1    | SteadyAdjoint , OnlyObjective , BaseIteration</span>
+[  ] <span class=" -Color -Color-Bold">    1x1    | Primal , NoGlobals , BaseInit</span>
+[  ] <span class=" -Color -Color-Bold">    1x1    | Tangent , NoGlobals , BaseInit</span>
+[  ] <span class=" -Color -Color-Bold">    1x1    | Optimize , NoGlobals , BaseInit</span>
+[  ] <span class=" -Color -Color-Bold">    1x1    | SteadyAdjoint , NoGlobals , BaseInit</span>
+[  ] <span class=" -Color -Color-Bold">    1x1    | Primal , IntegrateGlobals , BaseInit</span>
+[  ] <span class=" -Color -Color-Bold">    1x1    | Tangent , IntegrateGlobals , BaseInit</span>
+[  ] <span class=" -Color -Color-Bold">    1x1    | Optimize , IntegrateGlobals , BaseInit</span>
+[  ] <span class=" -Color -Color-Bold">    1x1    | SteadyAdjoint , IntegrateGlobals , BaseInit</span>
+[  ] <span class=" -Color -Color-Bold">    1x1    | Primal , OnlyObjective , BaseInit</span>
+[  ] <span class=" -Color -Color-Bold">    1x1    | Tangent , OnlyObjective , BaseInit</span>
+[  ] <span class=" -Color -Color-Bold">    1x1    | Optimize , OnlyObjective , BaseInit</span>
+[  ] <span class=" -Color -Color-Bold">    1x1    | SteadyAdjoint , OnlyObjective , BaseInit</span>
+[  ] <span class=" -Color -Color-Bold -Color-Bold-Green">[0] Cumulative allocation of 1619520 b (1.6 MB)</span>
+[  ] <span class=" -Color -Color-Bold">Creating geom size:10000</span>
+[  ] <span class=" -Color -Color-Bold -Color-Bold-Green">Setting output path to: SimpleDiffusion</span>
+[  ] <span class=" -Color -Color-Bold -Color-Bold-Green">Setting output path to: output/SimpleDiffusion/SimpleDiffusion</span>
+[  ] <span class=" -Color -Color-Bold">loading geometry ...</span>
+[  ] <span class=" -Color -Color-Bold">Setting number of zones to 2</span>
+[  ] <span class=" -Color -Color-Bold">Setting Diffusivity_PHI to 0.1666 (0.166600)</span>
+[  ] <span class=" -Color -Color-Bold">[0] Settings [Diffusivity for _PHI] to 0.166600</span>
+[  ] <span class=" -Color -Color-Bold">Setting Init_PHI in zone  (-1) to -0.5 (-0.500000)</span>
+[  ] <span class=" -Color -Color-Bold">Setting Init_PHI in zone city (1) to 0.5 (0.500000)</span>
+[  ] <span class=" -Color -Color-Bold">Initializing Lattice ...</span>
+[  ] <span class=" -Color -Color-Bold">Callback HDF5 with no Iterations attribute</span>==] 2373h  2m
+[  ] <span class=" -Color -Color-Bold">Negotiated HDF5 chunks: 1x100x100[x3]</span>
+[  ] <span class=" -Color -Color-Bold">       0 it writing hdf5</span>
+[  ] <span class=" -Color -Color-Bold">Setting action Solve at 200.000000 iterations</span>
+[  ] <span class=" -Color -Color-Bold">Setting callback HDF5 at 10.000000 iterations</span>
+[  ] <span class=" -Color -Color-Bold">Negotiated HDF5 chunks: 1x100x100[x3]</span>
+[  ] <span class=" -Color -Color-Bold">Adding HDF5 to the solver hands</span>
+[  ] <span class=" -Color -Color-Bold">    53.0 MLBUps      8.58 GB/s [====================]</span>2m
+[  ] <span class=" -Color -Color-Bold">      10 it writing hdf5</span>
+[  ] <span class=" -Color -Color-Bold">    53.9 MLBUps      8.74 GB/s [====================]</span>
+[  ] <span class=" -Color -Color-Bold">      20 it writing hdf5</span>
+[  ] <span class=" -Color -Color-Bold">    17.8 MLBUps      2.89 GB/s [====================]</span>
+[  ] <span class=" -Color -Color-Bold">      30 it writing hdf5</span>
+[  ] <span class=" -Color -Color-Bold">    17.7 MLBUps      2.86 GB/s [====================]</span>
+[  ] <span class=" -Color -Color-Bold">      40 it writing hdf5</span>
+[  ] <span class=" -Color -Color-Bold">    17.8 MLBUps      2.88 GB/s [====================]</span>
+[  ] <span class=" -Color -Color-Bold">      50 it writing hdf5</span>
+[  ] <span class=" -Color -Color-Bold">    17.5 MLBUps      2.84 GB/s [====================]</span>
+[  ] <span class=" -Color -Color-Bold">      60 it writing hdf5</span>
+[  ] <span class=" -Color -Color-Bold">    17.4 MLBUps      2.83 GB/s [====================]</span>
+[  ] <span class=" -Color -Color-Bold">      70 it writing hdf5</span>
+[  ] <span class=" -Color -Color-Bold">    16.2 MLBUps      2.62 GB/s [====================]</span>
+[  ] <span class=" -Color -Color-Bold">      80 it writing hdf5</span>
+[  ] <span class=" -Color -Color-Bold">    17.5 MLBUps      2.84 GB/s [====================]</span>
+[  ] <span class=" -Color -Color-Bold">      90 it writing hdf5</span>
+[  ] <span class=" -Color -Color-Bold">     7.4 MLBUps      1.20 GB/s [====================]</span>
+[  ] <span class=" -Color -Color-Bold">     100 it writing hdf5</span>
+[  ] <span class=" -Color -Color-Bold">    16.8 MLBUps      2.72 GB/s [====================]</span>
+[  ] <span class=" -Color -Color-Bold">     110 it writing hdf5</span>
+[  ] <span class=" -Color -Color-Bold">    18.0 MLBUps      2.92 GB/s [====================]</span>
+[  ] <span class=" -Color -Color-Bold">     120 it writing hdf5</span>
+[  ] <span class=" -Color -Color-Bold">    18.1 MLBUps      2.93 GB/s [====================]</span>
+[  ] <span class=" -Color -Color-Bold">     130 it writing hdf5</span>
+[  ] <span class=" -Color -Color-Bold">    18.2 MLBUps      2.95 GB/s [====================]</span>
+[  ] <span class=" -Color -Color-Bold">     140 it writing hdf5</span>
+[  ] <span class=" -Color -Color-Bold">    18.8 MLBUps      3.05 GB/s [====================]</span>
+[  ] <span class=" -Color -Color-Bold">     150 it writing hdf5</span>
+[  ] <span class=" -Color -Color-Bold">    18.8 MLBUps      3.05 GB/s [====================]</span>
+[  ] <span class=" -Color -Color-Bold">     160 it writing hdf5</span>
+[  ] <span class=" -Color -Color-Bold">     8.3 MLBUps      1.35 GB/s [====================]</span>
+[  ] <span class=" -Color -Color-Bold">     170 it writing hdf5</span>
+[  ] <span class=" -Color -Color-Bold">    18.5 MLBUps      2.99 GB/s [====================]</span>
+[  ] <span class=" -Color -Color-Bold">     180 it writing hdf5</span>
+[  ] <span class=" -Color -Color-Bold">    17.8 MLBUps      2.88 GB/s [====================]</span>
+[  ] <span class=" -Color -Color-Bold">     190 it writing hdf5</span>
+[  ] <span class=" -Color -Color-Bold">    18.4 MLBUps      2.98 GB/s [====================]</span>
+[  ] <span class=" -Color -Color-Bold">     200 it writing hdf5</span>
+[  ] <span class=" -Color -Color-Bold">Total duration: 1.161041 s = 0.019351 min = 0.000323 h</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">TimeSteps</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">200</span><span class="p">,</span><span class="mi">10</span><span class="p">):</span>
+    <span class="n">f</span> <span class="o">=</span> <span class="n">h5py</span><span class="o">.</span><span class="n">File</span><span class="p">(</span><span class="s1">&#39;./output/SimpleDiffusion/SimpleDiffusion_HDF5_</span><span class="si">%08d</span><span class="s1">.h5&#39;</span><span class="o">%</span><span class="k">i</span>)    
+    <span class="n">TimeSteps</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">f</span><span class="p">[</span><span class="s1">&#39;PHI&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">,:,:])</span>
+    
+<span class="n">TimeSteps</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">TimeSteps</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span><span class="mi">8</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">TimeSteps</span><span class="p">[:</span><span class="mi">5</span><span class="p">,</span><span class="mi">25</span><span class="p">,</span><span class="mi">20</span><span class="p">:</span><span class="mi">80</span><span class="p">]</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="s1">&#39;o-&#39;</span><span class="p">);</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">which</span><span class="o">=</span><span class="s1">&#39;both&#39;</span><span class="p">);</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;X&#39;</span><span class="p">);</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;$\Phi$&#39;</span><span class="p">);</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../../_images/10_SimpleDiffusion_7_0.png" src="../../_images/10_SimpleDiffusion_7_0.png" />
+</div>
+</div>
+<p>We could also extract 1D image</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">TimeSteps</span><span class="p">[</span><span class="mi">5</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.image.AxesImage at 0x7fde646a9f40&gt;
+</pre></div>
+</div>
+<img alt="../../_images/10_SimpleDiffusion_9_1.png" src="../../_images/10_SimpleDiffusion_9_1.png" />
+</div>
+</div>
+</div>
+</div>
+<div class="tex2jax_ignore mathjax_ignore section" id="using-tclbconfig-writer-class">
+<h1>Using TCLBConfig writer class<a class="headerlink" href="#using-tclbconfig-writer-class" title="Permalink to this headline">¶</a></h1>
+<p>Now, we are gona generate same XML file using XML library. A nice think is that we could use it to do some parametric studies. It also does limited “syntax” check.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">CLB.CLBXMLWriter</span> <span class="k">as</span> <span class="nn">CLBXML</span>   
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">CLBc</span> <span class="o">=</span> <span class="n">CLBXML</span><span class="o">.</span><span class="n">CLBConfigWriter</span><span class="p">(</span> <span class="p">)</span>
+
+<span class="n">CLBc</span><span class="o">.</span><span class="n">addGeomParam</span><span class="p">(</span><span class="s1">&#39;nx&#39;</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
+<span class="n">CLBc</span><span class="o">.</span><span class="n">addGeomParam</span><span class="p">(</span><span class="s1">&#39;ny&#39;</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
+
+<span class="n">CLBc</span><span class="o">.</span><span class="n">addNone</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;city&quot;</span><span class="p">)</span>
+<span class="n">CLBc</span><span class="o">.</span><span class="n">addBox</span><span class="p">(</span><span class="n">dx</span><span class="o">=</span><span class="mi">35</span><span class="p">,</span> <span class="n">nx</span><span class="o">=</span><span class="mi">35</span><span class="p">)</span>
+
+<span class="n">params</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;Diffusivity_PHI&quot;</span><span class="p">:</span><span class="mf">0.1666</span><span class="p">,</span>
+        <span class="s2">&quot;Init_PHI&quot;</span><span class="p">:</span><span class="o">-</span><span class="mf">0.5</span>
+<span class="p">}</span>
+
+<span class="n">CLBc</span><span class="o">.</span><span class="n">addModelParams</span><span class="p">(</span><span class="n">params</span><span class="p">)</span>
+
+<span class="n">params</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;Init_PHI&quot;</span><span class="p">:</span><span class="mf">0.5</span>
+<span class="p">}</span>
+
+<span class="n">CLBc</span><span class="o">.</span><span class="n">addHDF5</span><span class="p">()</span>
+<span class="n">CLBc</span><span class="o">.</span><span class="n">addModelParams</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">zone</span><span class="o">=</span><span class="s1">&#39;city&#39;</span><span class="p">)</span>
+<span class="n">solve</span> <span class="o">=</span> <span class="n">CLBc</span><span class="o">.</span><span class="n">addSolve</span><span class="p">(</span><span class="n">iterations</span><span class="o">=</span><span class="mi">200</span><span class="p">)</span>
+<span class="n">CLBc</span><span class="o">.</span><span class="n">addHDF5</span><span class="p">(</span><span class="n">Iterations</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="n">solve</span><span class="p">)</span>
+   
+<span class="n">CLBc</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;SimpleDiffusionByCLBXMLWriter.xml&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Apart from float representation, the resulting file is identical</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">f</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;SimpleDiffusionByCLBXMLWriter.xml&#39;</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span>
+<span class="n">XML</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">readlines</span><span class="p">()))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html">
+    <div class=ae3055693-7ed5-427f-b921-2ea7bf53f385> 
+        <style>
+            div.ae3055693-7ed5-427f-b921-2ea7bf53f385 pre { line-height: 125%; }
+div.ae3055693-7ed5-427f-b921-2ea7bf53f385 td.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+div.ae3055693-7ed5-427f-b921-2ea7bf53f385 span.linenos { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+div.ae3055693-7ed5-427f-b921-2ea7bf53f385 td.linenos .special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+div.ae3055693-7ed5-427f-b921-2ea7bf53f385 span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+div.ae3055693-7ed5-427f-b921-2ea7bf53f385 .hll { background-color: #ffffcc }
+div.ae3055693-7ed5-427f-b921-2ea7bf53f385 .c { color: #408080; font-style: italic } /* Comment */
+div.ae3055693-7ed5-427f-b921-2ea7bf53f385 .err { border: 1px solid #FF0000 } /* Error */
+div.ae3055693-7ed5-427f-b921-2ea7bf53f385 .k { color: #008000; font-weight: bold } /* Keyword */
+div.ae3055693-7ed5-427f-b921-2ea7bf53f385 .o { color: #666666 } /* Operator */
+div.ae3055693-7ed5-427f-b921-2ea7bf53f385 .ch { color: #408080; font-style: italic } /* Comment.Hashbang */
+div.ae3055693-7ed5-427f-b921-2ea7bf53f385 .cm { color: #408080; font-style: italic } /* Comment.Multiline */
+div.ae3055693-7ed5-427f-b921-2ea7bf53f385 .cp { color: #BC7A00 } /* Comment.Preproc */
+div.ae3055693-7ed5-427f-b921-2ea7bf53f385 .cpf { color: #408080; font-style: italic } /* Comment.PreprocFile */
+div.ae3055693-7ed5-427f-b921-2ea7bf53f385 .c1 { color: #408080; font-style: italic } /* Comment.Single */
+div.ae3055693-7ed5-427f-b921-2ea7bf53f385 .cs { color: #408080; font-style: italic } /* Comment.Special */
+div.ae3055693-7ed5-427f-b921-2ea7bf53f385 .gd { color: #A00000 } /* Generic.Deleted */
+div.ae3055693-7ed5-427f-b921-2ea7bf53f385 .ge { font-style: italic } /* Generic.Emph */
+div.ae3055693-7ed5-427f-b921-2ea7bf53f385 .gr { color: #FF0000 } /* Generic.Error */
+div.ae3055693-7ed5-427f-b921-2ea7bf53f385 .gh { color: #000080; font-weight: bold } /* Generic.Heading */
+div.ae3055693-7ed5-427f-b921-2ea7bf53f385 .gi { color: #00A000 } /* Generic.Inserted */
+div.ae3055693-7ed5-427f-b921-2ea7bf53f385 .go { color: #888888 } /* Generic.Output */
+div.ae3055693-7ed5-427f-b921-2ea7bf53f385 .gp { color: #000080; font-weight: bold } /* Generic.Prompt */
+div.ae3055693-7ed5-427f-b921-2ea7bf53f385 .gs { font-weight: bold } /* Generic.Strong */
+div.ae3055693-7ed5-427f-b921-2ea7bf53f385 .gu { color: #800080; font-weight: bold } /* Generic.Subheading */
+div.ae3055693-7ed5-427f-b921-2ea7bf53f385 .gt { color: #0044DD } /* Generic.Traceback */
+div.ae3055693-7ed5-427f-b921-2ea7bf53f385 .kc { color: #008000; font-weight: bold } /* Keyword.Constant */
+div.ae3055693-7ed5-427f-b921-2ea7bf53f385 .kd { color: #008000; font-weight: bold } /* Keyword.Declaration */
+div.ae3055693-7ed5-427f-b921-2ea7bf53f385 .kn { color: #008000; font-weight: bold } /* Keyword.Namespace */
+div.ae3055693-7ed5-427f-b921-2ea7bf53f385 .kp { color: #008000 } /* Keyword.Pseudo */
+div.ae3055693-7ed5-427f-b921-2ea7bf53f385 .kr { color: #008000; font-weight: bold } /* Keyword.Reserved */
+div.ae3055693-7ed5-427f-b921-2ea7bf53f385 .kt { color: #B00040 } /* Keyword.Type */
+div.ae3055693-7ed5-427f-b921-2ea7bf53f385 .m { color: #666666 } /* Literal.Number */
+div.ae3055693-7ed5-427f-b921-2ea7bf53f385 .s { color: #BA2121 } /* Literal.String */
+div.ae3055693-7ed5-427f-b921-2ea7bf53f385 .na { color: #7D9029 } /* Name.Attribute */
+div.ae3055693-7ed5-427f-b921-2ea7bf53f385 .nb { color: #008000 } /* Name.Builtin */
+div.ae3055693-7ed5-427f-b921-2ea7bf53f385 .nc { color: #0000FF; font-weight: bold } /* Name.Class */
+div.ae3055693-7ed5-427f-b921-2ea7bf53f385 .no { color: #880000 } /* Name.Constant */
+div.ae3055693-7ed5-427f-b921-2ea7bf53f385 .nd { color: #AA22FF } /* Name.Decorator */
+div.ae3055693-7ed5-427f-b921-2ea7bf53f385 .ni { color: #999999; font-weight: bold } /* Name.Entity */
+div.ae3055693-7ed5-427f-b921-2ea7bf53f385 .ne { color: #D2413A; font-weight: bold } /* Name.Exception */
+div.ae3055693-7ed5-427f-b921-2ea7bf53f385 .nf { color: #0000FF } /* Name.Function */
+div.ae3055693-7ed5-427f-b921-2ea7bf53f385 .nl { color: #A0A000 } /* Name.Label */
+div.ae3055693-7ed5-427f-b921-2ea7bf53f385 .nn { color: #0000FF; font-weight: bold } /* Name.Namespace */
+div.ae3055693-7ed5-427f-b921-2ea7bf53f385 .nt { color: #008000; font-weight: bold } /* Name.Tag */
+div.ae3055693-7ed5-427f-b921-2ea7bf53f385 .nv { color: #19177C } /* Name.Variable */
+div.ae3055693-7ed5-427f-b921-2ea7bf53f385 .ow { color: #AA22FF; font-weight: bold } /* Operator.Word */
+div.ae3055693-7ed5-427f-b921-2ea7bf53f385 .w { color: #bbbbbb } /* Text.Whitespace */
+div.ae3055693-7ed5-427f-b921-2ea7bf53f385 .mb { color: #666666 } /* Literal.Number.Bin */
+div.ae3055693-7ed5-427f-b921-2ea7bf53f385 .mf { color: #666666 } /* Literal.Number.Float */
+div.ae3055693-7ed5-427f-b921-2ea7bf53f385 .mh { color: #666666 } /* Literal.Number.Hex */
+div.ae3055693-7ed5-427f-b921-2ea7bf53f385 .mi { color: #666666 } /* Literal.Number.Integer */
+div.ae3055693-7ed5-427f-b921-2ea7bf53f385 .mo { color: #666666 } /* Literal.Number.Oct */
+div.ae3055693-7ed5-427f-b921-2ea7bf53f385 .sa { color: #BA2121 } /* Literal.String.Affix */
+div.ae3055693-7ed5-427f-b921-2ea7bf53f385 .sb { color: #BA2121 } /* Literal.String.Backtick */
+div.ae3055693-7ed5-427f-b921-2ea7bf53f385 .sc { color: #BA2121 } /* Literal.String.Char */
+div.ae3055693-7ed5-427f-b921-2ea7bf53f385 .dl { color: #BA2121 } /* Literal.String.Delimiter */
+div.ae3055693-7ed5-427f-b921-2ea7bf53f385 .sd { color: #BA2121; font-style: italic } /* Literal.String.Doc */
+div.ae3055693-7ed5-427f-b921-2ea7bf53f385 .s2 { color: #BA2121 } /* Literal.String.Double */
+div.ae3055693-7ed5-427f-b921-2ea7bf53f385 .se { color: #BB6622; font-weight: bold } /* Literal.String.Escape */
+div.ae3055693-7ed5-427f-b921-2ea7bf53f385 .sh { color: #BA2121 } /* Literal.String.Heredoc */
+div.ae3055693-7ed5-427f-b921-2ea7bf53f385 .si { color: #BB6688; font-weight: bold } /* Literal.String.Interpol */
+div.ae3055693-7ed5-427f-b921-2ea7bf53f385 .sx { color: #008000 } /* Literal.String.Other */
+div.ae3055693-7ed5-427f-b921-2ea7bf53f385 .sr { color: #BB6688 } /* Literal.String.Regex */
+div.ae3055693-7ed5-427f-b921-2ea7bf53f385 .s1 { color: #BA2121 } /* Literal.String.Single */
+div.ae3055693-7ed5-427f-b921-2ea7bf53f385 .ss { color: #19177C } /* Literal.String.Symbol */
+div.ae3055693-7ed5-427f-b921-2ea7bf53f385 .bp { color: #008000 } /* Name.Builtin.Pseudo */
+div.ae3055693-7ed5-427f-b921-2ea7bf53f385 .fm { color: #0000FF } /* Name.Function.Magic */
+div.ae3055693-7ed5-427f-b921-2ea7bf53f385 .vc { color: #19177C } /* Name.Variable.Class */
+div.ae3055693-7ed5-427f-b921-2ea7bf53f385 .vg { color: #19177C } /* Name.Variable.Global */
+div.ae3055693-7ed5-427f-b921-2ea7bf53f385 .vi { color: #19177C } /* Name.Variable.Instance */
+div.ae3055693-7ed5-427f-b921-2ea7bf53f385 .vm { color: #19177C } /* Name.Variable.Magic */
+div.ae3055693-7ed5-427f-b921-2ea7bf53f385 .il { color: #666666 } /* Literal.Number.Integer.Long */
+        </style>
+        <div class="highlight"><pre><span></span><span class="nt">&lt;CLBConfig</span> <span class="na">version=</span><span class="s">&quot;2.0&quot;</span> <span class="na">output=</span><span class="s">&quot;output/&quot;</span><span class="nt">&gt;</span>
+  <span class="c">&lt;!--Created using CLBConfigWriter--&gt;</span>
+  <span class="nt">&lt;Geometry</span> <span class="na">predef=</span><span class="s">&quot;none&quot;</span> <span class="na">model=</span><span class="s">&quot;MRT&quot;</span> <span class="na">nx=</span><span class="s">&quot;100.0000000000000000&quot;</span> <span class="na">ny=</span><span class="s">&quot;100.0000000000000000&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;None</span> <span class="na">name=</span><span class="s">&quot;city&quot;</span><span class="nt">&gt;</span>
+      <span class="nt">&lt;Box</span> <span class="na">dx=</span><span class="s">&quot;35&quot;</span> <span class="na">nx=</span><span class="s">&quot;35&quot;</span><span class="nt">/&gt;</span>
+    <span class="nt">&lt;/None&gt;</span>
+  <span class="nt">&lt;/Geometry&gt;</span>
+  <span class="nt">&lt;Model&gt;</span>
+    <span class="nt">&lt;Param</span> <span class="na">name=</span><span class="s">&quot;Diffusivity_PHI&quot;</span> <span class="na">value=</span><span class="s">&quot;0.1666000000000000&quot;</span><span class="nt">/&gt;</span>
+    <span class="nt">&lt;Param</span> <span class="na">name=</span><span class="s">&quot;Init_PHI&quot;</span> <span class="na">value=</span><span class="s">&quot;-0.5000000000000000&quot;</span><span class="nt">/&gt;</span>
+    <span class="nt">&lt;Param</span> <span class="na">name=</span><span class="s">&quot;Init_PHI&quot;</span> <span class="na">value=</span><span class="s">&quot;0.5000000000000000&quot;</span> <span class="na">zone=</span><span class="s">&quot;city&quot;</span><span class="nt">/&gt;</span>
+  <span class="nt">&lt;/Model&gt;</span>
+  <span class="nt">&lt;HDF5/&gt;</span>
+  <span class="nt">&lt;Solve</span> <span class="na">Iterations=</span><span class="s">&quot;200&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;HDF5</span> <span class="na">Iterations=</span><span class="s">&quot;10&quot;</span><span class="nt">/&gt;</span>
+  <span class="nt">&lt;/Solve&gt;</span>
+<span class="nt">&lt;/CLBConfig&gt;</span>
+</pre></div>
+
+    </div>
+</div></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">!</span> tclb d2q9_reaction_diffusion_system_SimpleDiffusion SimpleDiffusionByCLBXMLWriter.xml &gt; /dev/null <span class="o">&amp;&amp;</span> <span class="nb">echo</span> <span class="s2">&quot;DONE!&quot;</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Hello allocator!
+DONE!
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">TimeSteps2</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">200</span><span class="p">,</span><span class="mi">10</span><span class="p">):</span>
+    <span class="n">f</span> <span class="o">=</span> <span class="n">h5py</span><span class="o">.</span><span class="n">File</span><span class="p">(</span><span class="s1">&#39;./output/SimpleDiffusionByCLBXMLWriter_HDF5_</span><span class="si">%08d</span><span class="s1">.h5&#39;</span><span class="o">%</span><span class="k">i</span>)    
+    <span class="n">TimeSteps2</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">f</span><span class="p">[</span><span class="s1">&#39;PHI&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">,:,:])</span>
+    
+<span class="n">TimeSteps2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">TimeSteps2</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span><span class="mi">8</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">TimeSteps2</span><span class="p">[:</span><span class="mi">5</span><span class="p">,</span><span class="mi">25</span><span class="p">,</span><span class="mi">20</span><span class="p">:</span><span class="mi">80</span><span class="p">]</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="s1">&#39;o-&#39;</span><span class="p">);</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">which</span><span class="o">=</span><span class="s1">&#39;both&#39;</span><span class="p">);</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;X&#39;</span><span class="p">);</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;$\Phi$&#39;</span><span class="p">);</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../../_images/10_SimpleDiffusion_16_0.png" src="../../_images/10_SimpleDiffusion_16_0.png" />
+</div>
+</div>
+</div>
+<div class="tex2jax_ignore mathjax_ignore section" id="rinside-periodic-ic-and-comparison-with-finite-difference">
+<h1>RInside: periodic IC and comparison with Finite Difference<a class="headerlink" href="#rinside-periodic-ic-and-comparison-with-finite-difference" title="Permalink to this headline">¶</a></h1>
+<p>Let’s create initial condition, we will start in python</p>
+<p>R inside block is build as</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">CLBc</span><span class="o">.</span><span class="n">addRunR</span><span class="p">(</span><span class="nb">eval</span><span class="o">=</span>\
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">some &lt;- r_code</span>
+<span class="sd">&quot;&quot;&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>which will result in XML as:</p>
+<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;RunR&gt;</span>
+<span class="cp">&lt;![CDATA[</span>
+<span class="cp">   some &lt;- r_code</span>
+<span class="cp">]]&gt;</span>
+<span class="nt">&lt;/RunR&gt;</span>
+</pre></div>
+</div>
+<p>Notice, that <code class="docutils literal notranslate"><span class="pre">&lt;</span></code> in some cases got converted into <code class="docutils literal notranslate"><span class="pre">&amp;lt;</span></code>. This is XML character escaping. Keep the CDATA element and all be OK :)</p>
+<p>Outmost usable part of R-TCLB integration are accessors to internal Fields:</p>
+<p><code class="docutils literal notranslate"><span class="pre">r</span> <span class="pre">Solver.Fields.FIELDNAME[]</span> <span class="pre">=</span> <span class="pre">SAMESHAPEVARIABLE;</span> </code></p>
+<p>and Actions/Stages:</p>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">Solver.Actions.InitFromExternalAction</span><span class="p">();</span>
+</pre></div>
+</div>
+<p>You could also call standard R functions inside (Full R should be avalible - it’s embeded interpreter, see RInside upstream documentation for details/limitations if you need):</p>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">init</span> <span class="o">=</span> <span class="nf">read.table</span><span class="p">(</span><span class="s">&quot;initial.csv&quot;</span><span class="p">,</span> <span class="n">header</span> <span class="o">=</span> <span class="kc">FALSE</span><span class="p">,</span> <span class="n">sep</span> <span class="o">=</span> <span class="s">&quot;&quot;</span><span class="p">,</span> <span class="n">dec</span> <span class="o">=</span> <span class="s">&quot;.&quot;</span><span class="p">);</span>
+</pre></div>
+</div>
+<div class="section" id="let-s-create-initial-data-file">
+<h2>Let’s create initial “data file”<a class="headerlink" href="#let-s-create-initial-data-file" title="Permalink to this headline">¶</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">u_ic</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">200</span><span class="p">)</span>
+<span class="n">u_ic</span><span class="p">[</span><span class="mi">75</span><span class="p">:</span><span class="o">-</span><span class="mi">75</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">u_ic</span><span class="p">)</span>
+<span class="n">np</span><span class="o">.</span><span class="n">savetxt</span><span class="p">(</span><span class="s2">&quot;initial.csv&quot;</span><span class="p">,</span> <span class="n">u_ic</span><span class="p">,</span> <span class="n">delimiter</span><span class="o">=</span><span class="s2">&quot;,&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../../_images/10_SimpleDiffusion_21_0.png" src="../../_images/10_SimpleDiffusion_21_0.png" />
+</div>
+</div>
+</div>
+<div class="section" id="now-the-xml-configuration">
+<h2>Now the XML configuration<a class="headerlink" href="#now-the-xml-configuration" title="Permalink to this headline">¶</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">CLBc</span> <span class="o">=</span> <span class="n">CLBXML</span><span class="o">.</span><span class="n">CLBConfigWriter</span><span class="p">(</span> <span class="p">)</span>
+
+<span class="n">CLBc</span><span class="o">.</span><span class="n">addGeomParam</span><span class="p">(</span><span class="s1">&#39;nx&#39;</span><span class="p">,</span> <span class="mi">200</span><span class="p">)</span>
+<span class="n">CLBc</span><span class="o">.</span><span class="n">addGeomParam</span><span class="p">(</span><span class="s1">&#39;ny&#39;</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
+
+
+<span class="n">CLBc</span><span class="o">.</span><span class="n">addRunR</span><span class="p">(</span><span class="nb">eval</span><span class="o">=</span>\
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    init = read.table(&quot;initial.csv&quot;, header = FALSE, sep = &quot;&quot;, dec = &quot;.&quot;);</span>
+<span class="sd">    Solver$Fields$Init_PHI_External[] = init[,1];</span>
+<span class="sd">    Solver$Actions$InitFromExternalAction();</span>
+<span class="sd">&quot;&quot;&quot;</span><span class="p">)</span>
+
+    
+<span class="n">params</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;Diffusivity_PHI&quot;</span><span class="p">:</span><span class="mf">0.1666</span><span class="p">,</span>
+        <span class="s2">&quot;Init_PHI&quot;</span><span class="p">:</span><span class="o">-</span><span class="mf">0.5</span>
+<span class="p">}</span>
+
+<span class="n">CLBc</span><span class="o">.</span><span class="n">addModelParams</span><span class="p">(</span><span class="n">params</span><span class="p">)</span>
+
+
+<span class="n">CLBc</span><span class="o">.</span><span class="n">addHDF5</span><span class="p">()</span>
+<span class="n">solve</span> <span class="o">=</span> <span class="n">CLBc</span><span class="o">.</span><span class="n">addSolve</span><span class="p">(</span><span class="n">iterations</span><span class="o">=</span><span class="mi">200</span><span class="p">)</span>
+<span class="n">CLBc</span><span class="o">.</span><span class="n">addHDF5</span><span class="p">(</span><span class="n">Iterations</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="n">solve</span><span class="p">)</span>
+   
+<span class="n">CLBc</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;SimpleDiffusionWithRinside.xml&#39;</span><span class="p">)</span>
+
+<span class="n">f</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;SimpleDiffusionWithRinside.xml&#39;</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span>
+<span class="n">XML</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">readlines</span><span class="p">()))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html">
+    <div class=a40022b4f-11fe-4ad5-846e-cc1b48397e0f> 
+        <style>
+            div.a40022b4f-11fe-4ad5-846e-cc1b48397e0f pre { line-height: 125%; }
+div.a40022b4f-11fe-4ad5-846e-cc1b48397e0f td.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+div.a40022b4f-11fe-4ad5-846e-cc1b48397e0f span.linenos { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+div.a40022b4f-11fe-4ad5-846e-cc1b48397e0f td.linenos .special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+div.a40022b4f-11fe-4ad5-846e-cc1b48397e0f span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+div.a40022b4f-11fe-4ad5-846e-cc1b48397e0f .hll { background-color: #ffffcc }
+div.a40022b4f-11fe-4ad5-846e-cc1b48397e0f .c { color: #408080; font-style: italic } /* Comment */
+div.a40022b4f-11fe-4ad5-846e-cc1b48397e0f .err { border: 1px solid #FF0000 } /* Error */
+div.a40022b4f-11fe-4ad5-846e-cc1b48397e0f .k { color: #008000; font-weight: bold } /* Keyword */
+div.a40022b4f-11fe-4ad5-846e-cc1b48397e0f .o { color: #666666 } /* Operator */
+div.a40022b4f-11fe-4ad5-846e-cc1b48397e0f .ch { color: #408080; font-style: italic } /* Comment.Hashbang */
+div.a40022b4f-11fe-4ad5-846e-cc1b48397e0f .cm { color: #408080; font-style: italic } /* Comment.Multiline */
+div.a40022b4f-11fe-4ad5-846e-cc1b48397e0f .cp { color: #BC7A00 } /* Comment.Preproc */
+div.a40022b4f-11fe-4ad5-846e-cc1b48397e0f .cpf { color: #408080; font-style: italic } /* Comment.PreprocFile */
+div.a40022b4f-11fe-4ad5-846e-cc1b48397e0f .c1 { color: #408080; font-style: italic } /* Comment.Single */
+div.a40022b4f-11fe-4ad5-846e-cc1b48397e0f .cs { color: #408080; font-style: italic } /* Comment.Special */
+div.a40022b4f-11fe-4ad5-846e-cc1b48397e0f .gd { color: #A00000 } /* Generic.Deleted */
+div.a40022b4f-11fe-4ad5-846e-cc1b48397e0f .ge { font-style: italic } /* Generic.Emph */
+div.a40022b4f-11fe-4ad5-846e-cc1b48397e0f .gr { color: #FF0000 } /* Generic.Error */
+div.a40022b4f-11fe-4ad5-846e-cc1b48397e0f .gh { color: #000080; font-weight: bold } /* Generic.Heading */
+div.a40022b4f-11fe-4ad5-846e-cc1b48397e0f .gi { color: #00A000 } /* Generic.Inserted */
+div.a40022b4f-11fe-4ad5-846e-cc1b48397e0f .go { color: #888888 } /* Generic.Output */
+div.a40022b4f-11fe-4ad5-846e-cc1b48397e0f .gp { color: #000080; font-weight: bold } /* Generic.Prompt */
+div.a40022b4f-11fe-4ad5-846e-cc1b48397e0f .gs { font-weight: bold } /* Generic.Strong */
+div.a40022b4f-11fe-4ad5-846e-cc1b48397e0f .gu { color: #800080; font-weight: bold } /* Generic.Subheading */
+div.a40022b4f-11fe-4ad5-846e-cc1b48397e0f .gt { color: #0044DD } /* Generic.Traceback */
+div.a40022b4f-11fe-4ad5-846e-cc1b48397e0f .kc { color: #008000; font-weight: bold } /* Keyword.Constant */
+div.a40022b4f-11fe-4ad5-846e-cc1b48397e0f .kd { color: #008000; font-weight: bold } /* Keyword.Declaration */
+div.a40022b4f-11fe-4ad5-846e-cc1b48397e0f .kn { color: #008000; font-weight: bold } /* Keyword.Namespace */
+div.a40022b4f-11fe-4ad5-846e-cc1b48397e0f .kp { color: #008000 } /* Keyword.Pseudo */
+div.a40022b4f-11fe-4ad5-846e-cc1b48397e0f .kr { color: #008000; font-weight: bold } /* Keyword.Reserved */
+div.a40022b4f-11fe-4ad5-846e-cc1b48397e0f .kt { color: #B00040 } /* Keyword.Type */
+div.a40022b4f-11fe-4ad5-846e-cc1b48397e0f .m { color: #666666 } /* Literal.Number */
+div.a40022b4f-11fe-4ad5-846e-cc1b48397e0f .s { color: #BA2121 } /* Literal.String */
+div.a40022b4f-11fe-4ad5-846e-cc1b48397e0f .na { color: #7D9029 } /* Name.Attribute */
+div.a40022b4f-11fe-4ad5-846e-cc1b48397e0f .nb { color: #008000 } /* Name.Builtin */
+div.a40022b4f-11fe-4ad5-846e-cc1b48397e0f .nc { color: #0000FF; font-weight: bold } /* Name.Class */
+div.a40022b4f-11fe-4ad5-846e-cc1b48397e0f .no { color: #880000 } /* Name.Constant */
+div.a40022b4f-11fe-4ad5-846e-cc1b48397e0f .nd { color: #AA22FF } /* Name.Decorator */
+div.a40022b4f-11fe-4ad5-846e-cc1b48397e0f .ni { color: #999999; font-weight: bold } /* Name.Entity */
+div.a40022b4f-11fe-4ad5-846e-cc1b48397e0f .ne { color: #D2413A; font-weight: bold } /* Name.Exception */
+div.a40022b4f-11fe-4ad5-846e-cc1b48397e0f .nf { color: #0000FF } /* Name.Function */
+div.a40022b4f-11fe-4ad5-846e-cc1b48397e0f .nl { color: #A0A000 } /* Name.Label */
+div.a40022b4f-11fe-4ad5-846e-cc1b48397e0f .nn { color: #0000FF; font-weight: bold } /* Name.Namespace */
+div.a40022b4f-11fe-4ad5-846e-cc1b48397e0f .nt { color: #008000; font-weight: bold } /* Name.Tag */
+div.a40022b4f-11fe-4ad5-846e-cc1b48397e0f .nv { color: #19177C } /* Name.Variable */
+div.a40022b4f-11fe-4ad5-846e-cc1b48397e0f .ow { color: #AA22FF; font-weight: bold } /* Operator.Word */
+div.a40022b4f-11fe-4ad5-846e-cc1b48397e0f .w { color: #bbbbbb } /* Text.Whitespace */
+div.a40022b4f-11fe-4ad5-846e-cc1b48397e0f .mb { color: #666666 } /* Literal.Number.Bin */
+div.a40022b4f-11fe-4ad5-846e-cc1b48397e0f .mf { color: #666666 } /* Literal.Number.Float */
+div.a40022b4f-11fe-4ad5-846e-cc1b48397e0f .mh { color: #666666 } /* Literal.Number.Hex */
+div.a40022b4f-11fe-4ad5-846e-cc1b48397e0f .mi { color: #666666 } /* Literal.Number.Integer */
+div.a40022b4f-11fe-4ad5-846e-cc1b48397e0f .mo { color: #666666 } /* Literal.Number.Oct */
+div.a40022b4f-11fe-4ad5-846e-cc1b48397e0f .sa { color: #BA2121 } /* Literal.String.Affix */
+div.a40022b4f-11fe-4ad5-846e-cc1b48397e0f .sb { color: #BA2121 } /* Literal.String.Backtick */
+div.a40022b4f-11fe-4ad5-846e-cc1b48397e0f .sc { color: #BA2121 } /* Literal.String.Char */
+div.a40022b4f-11fe-4ad5-846e-cc1b48397e0f .dl { color: #BA2121 } /* Literal.String.Delimiter */
+div.a40022b4f-11fe-4ad5-846e-cc1b48397e0f .sd { color: #BA2121; font-style: italic } /* Literal.String.Doc */
+div.a40022b4f-11fe-4ad5-846e-cc1b48397e0f .s2 { color: #BA2121 } /* Literal.String.Double */
+div.a40022b4f-11fe-4ad5-846e-cc1b48397e0f .se { color: #BB6622; font-weight: bold } /* Literal.String.Escape */
+div.a40022b4f-11fe-4ad5-846e-cc1b48397e0f .sh { color: #BA2121 } /* Literal.String.Heredoc */
+div.a40022b4f-11fe-4ad5-846e-cc1b48397e0f .si { color: #BB6688; font-weight: bold } /* Literal.String.Interpol */
+div.a40022b4f-11fe-4ad5-846e-cc1b48397e0f .sx { color: #008000 } /* Literal.String.Other */
+div.a40022b4f-11fe-4ad5-846e-cc1b48397e0f .sr { color: #BB6688 } /* Literal.String.Regex */
+div.a40022b4f-11fe-4ad5-846e-cc1b48397e0f .s1 { color: #BA2121 } /* Literal.String.Single */
+div.a40022b4f-11fe-4ad5-846e-cc1b48397e0f .ss { color: #19177C } /* Literal.String.Symbol */
+div.a40022b4f-11fe-4ad5-846e-cc1b48397e0f .bp { color: #008000 } /* Name.Builtin.Pseudo */
+div.a40022b4f-11fe-4ad5-846e-cc1b48397e0f .fm { color: #0000FF } /* Name.Function.Magic */
+div.a40022b4f-11fe-4ad5-846e-cc1b48397e0f .vc { color: #19177C } /* Name.Variable.Class */
+div.a40022b4f-11fe-4ad5-846e-cc1b48397e0f .vg { color: #19177C } /* Name.Variable.Global */
+div.a40022b4f-11fe-4ad5-846e-cc1b48397e0f .vi { color: #19177C } /* Name.Variable.Instance */
+div.a40022b4f-11fe-4ad5-846e-cc1b48397e0f .vm { color: #19177C } /* Name.Variable.Magic */
+div.a40022b4f-11fe-4ad5-846e-cc1b48397e0f .il { color: #666666 } /* Literal.Number.Integer.Long */
+        </style>
+        <div class="highlight"><pre><span></span><span class="nt">&lt;CLBConfig</span> <span class="na">version=</span><span class="s">&quot;2.0&quot;</span> <span class="na">output=</span><span class="s">&quot;output/&quot;</span><span class="nt">&gt;</span>
+  <span class="c">&lt;!--Created using CLBConfigWriter--&gt;</span>
+  <span class="nt">&lt;Geometry</span> <span class="na">predef=</span><span class="s">&quot;none&quot;</span> <span class="na">model=</span><span class="s">&quot;MRT&quot;</span> <span class="na">nx=</span><span class="s">&quot;200.0000000000000000&quot;</span> <span class="na">ny=</span><span class="s">&quot;100.0000000000000000&quot;</span><span class="nt">/&gt;</span>
+  <span class="nt">&lt;Model&gt;</span>
+    <span class="nt">&lt;Param</span> <span class="na">name=</span><span class="s">&quot;Diffusivity_PHI&quot;</span> <span class="na">value=</span><span class="s">&quot;0.1666000000000000&quot;</span><span class="nt">/&gt;</span>
+    <span class="nt">&lt;Param</span> <span class="na">name=</span><span class="s">&quot;Init_PHI&quot;</span> <span class="na">value=</span><span class="s">&quot;-0.5000000000000000&quot;</span><span class="nt">/&gt;</span>
+  <span class="nt">&lt;/Model&gt;</span>
+  <span class="nt">&lt;RunR&gt;</span>
+    init = read.table(&quot;initial.csv&quot;, header = FALSE, sep = &quot;&quot;, dec = &quot;.&quot;);
+    Solver$Fields$Init_PHI_External[] = init[,1];
+    Solver$Actions$InitFromExternalAction();
+<span class="nt">&lt;/RunR&gt;</span>
+  <span class="nt">&lt;HDF5/&gt;</span>
+  <span class="nt">&lt;Solve</span> <span class="na">Iterations=</span><span class="s">&quot;200&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;HDF5</span> <span class="na">Iterations=</span><span class="s">&quot;10&quot;</span><span class="nt">/&gt;</span>
+  <span class="nt">&lt;/Solve&gt;</span>
+<span class="nt">&lt;/CLBConfig&gt;</span>
+</pre></div>
+
+    </div>
+</div></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">!</span> tclb d2q9_reaction_diffusion_system_SimpleDiffusion SimpleDiffusionWithRinside.xml &gt; /dev/null <span class="o">&amp;&amp;</span> <span class="nb">echo</span> <span class="s1">&#39;DONE!&#39;</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Hello allocator!
+DONE!
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="solution-obtained-from-tclb">
+<h2>Solution obtained from TCLB<a class="headerlink" href="#solution-obtained-from-tclb" title="Permalink to this headline">¶</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">TimeSteps2</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">200</span><span class="p">,</span><span class="mi">10</span><span class="p">):</span>
+    <span class="n">f</span> <span class="o">=</span> <span class="n">h5py</span><span class="o">.</span><span class="n">File</span><span class="p">(</span><span class="s1">&#39;./output/SimpleDiffusionWithRinside_HDF5_</span><span class="si">%08d</span><span class="s1">.h5&#39;</span><span class="o">%</span><span class="k">i</span>)    
+    <span class="n">TimeSteps2</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">f</span><span class="p">[</span><span class="s1">&#39;PHI&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">,:,:])</span>
+    
+<span class="n">TimeSteps2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">TimeSteps2</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span><span class="mi">8</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">TimeSteps2</span><span class="p">[:</span><span class="mi">5</span><span class="p">,</span><span class="mi">25</span><span class="p">,:]</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="s1">&#39;-&#39;</span><span class="p">);</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">which</span><span class="o">=</span><span class="s1">&#39;both&#39;</span><span class="p">);</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;X&#39;</span><span class="p">);</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;$\Phi$&#39;</span><span class="p">);</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../../_images/10_SimpleDiffusion_26_0.png" src="../../_images/10_SimpleDiffusion_26_0.png" />
+</div>
+</div>
+</div>
+<div class="section" id="comparison-with-backward-time-central-space-fd">
+<h2>Comparison with Backward Time - Central Space FD<a class="headerlink" href="#comparison-with-backward-time-central-space-fd" title="Permalink to this headline">¶</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">btcs</span><span class="p">(</span><span class="n">u_IC</span><span class="p">,</span> <span class="n">nu</span><span class="p">,</span> <span class="n">nx</span><span class="p">,</span> <span class="n">nt</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="n">dx</span><span class="p">):</span>
+    
+    <span class="n">un_icfd</span> <span class="o">=</span> <span class="n">u_IC</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+    <span class="n">A</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">nx</span><span class="p">,</span> <span class="n">nx</span><span class="p">))</span>
+    
+    
+    
+    <span class="n">Beta_FD</span> <span class="o">=</span> <span class="n">dt</span> <span class="o">*</span> <span class="n">nu</span> <span class="o">/</span> <span class="p">(</span><span class="n">dx</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span> 
+    <span class="c1"># nt += 100</span>
+    <span class="n">last_index_in_matrix</span> <span class="o">=</span> <span class="n">nx</span> <span class="o">-</span><span class="mi">1</span> 
+    <span class="c1"># the BC  - use one sided FD            </span>
+    <span class="n">A</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span><span class="o">-</span><span class="n">Beta_FD</span>     <span class="c1"># forward FD</span>
+    <span class="n">A</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mi">2</span><span class="o">*</span><span class="n">Beta_FD</span>     <span class="c1"># forward FD </span>
+    <span class="n">A</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="n">Beta_FD</span>      <span class="c1"># forward FD </span>
+    <span class="n">A</span><span class="p">[</span><span class="n">last_index_in_matrix</span><span class="p">,</span> <span class="n">last_index_in_matrix</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="n">Beta_FD</span>   <span class="c1"># backward FD </span>
+    <span class="n">A</span><span class="p">[</span><span class="n">last_index_in_matrix</span><span class="p">,</span> <span class="n">last_index_in_matrix</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mi">2</span><span class="o">*</span><span class="n">Beta_FD</span>  <span class="c1"># backward FD </span>
+    <span class="n">A</span><span class="p">[</span><span class="n">last_index_in_matrix</span><span class="p">,</span> <span class="n">last_index_in_matrix</span><span class="p">]</span> <span class="o">=</span>  <span class="mi">1</span><span class="o">-</span><span class="n">Beta_FD</span>   <span class="c1"># backward FD </span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">last_index_in_matrix</span><span class="p">):</span> 
+        <span class="n">A</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="n">Beta_FD</span>        <span class="c1"># left of the diagonal</span>
+        <span class="n">A</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">+</span> <span class="mi">2</span><span class="o">*</span><span class="n">Beta_FD</span>     <span class="c1"># the diagonal</span>
+        <span class="n">A</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="n">Beta_FD</span>         <span class="c1"># right of the diagonal   </span>
+
+    <span class="n">A_inv</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">inv</span><span class="p">(</span><span class="n">A</span><span class="p">)</span>
+    <span class="n">solution</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+    <span class="n">solution</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">u_ic</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nt</span><span class="p">):</span>  <span class="c1">#loop for values of n from 0 to nt, so it will run nt times</span>
+        <span class="n">un_icfd</span> <span class="o">=</span> <span class="n">A_inv</span><span class="nd">@un_icfd</span>
+        <span class="n">solution</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">un_icfd</span><span class="p">)</span>
+    
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">solution</span><span class="p">)</span>
+        
+    
+<span class="n">solution</span> <span class="o">=</span> <span class="n">btcs</span><span class="p">(</span><span class="n">u_ic</span><span class="p">,</span> <span class="mf">0.1666</span><span class="p">,</span> <span class="n">u_ic</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">200</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">5</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">TimeSteps2</span><span class="p">[</span><span class="mi">5</span><span class="p">,</span><span class="mi">25</span><span class="p">,:]</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="s1">&#39;k-&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;TCLB&#39;</span><span class="p">);</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">solution</span><span class="p">[</span><span class="mi">0</span><span class="p">,:],</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Initial Condition&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">solution</span><span class="p">[</span><span class="mi">50</span><span class="p">,:],</span> <span class="s1">&#39;--&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Implicit Time, Central Space FD&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">which</span><span class="o">=</span><span class="s1">&#39;both&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../../_images/10_SimpleDiffusion_29_0.png" src="../../_images/10_SimpleDiffusion_29_0.png" />
+</div>
+</div>
+</div>
+</div>
+<div class="tex2jax_ignore mathjax_ignore section" id="rinside-read-an-image-as-initial-condition">
+<h1>RInside: read an image as initial condition<a class="headerlink" href="#rinside-read-an-image-as-initial-condition" title="Permalink to this headline">¶</a></h1>
+<p>Firstly - we need to install locally aditional R package - <strong>jpeg</strong>, to enable us interaction with JPEG files. We could install it locally, bu keep it mind, that if you are using it at BinderHub, this is temparary</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">!</span> mkdir -p r_packages
+<span class="o">!</span> <span class="nb">echo</span> <span class="s1">&#39;install.packages(&quot;jpeg&quot;, repos=&quot;http://cran.r-project.org&quot;, lib=&quot;r_packages&quot;)&#39;</span> <span class="p">|</span> /usr/bin/R --slave
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>trying URL &#39;http://cran.r-project.org/src/contrib/jpeg_0.1-9.tar.gz&#39;
+Content type &#39;application/x-gzip&#39; length 18596 bytes (18 KB)
+==================================================
+downloaded 18 KB
+
+* installing *source* package &#39;jpeg&#39; ...
+** package &#39;jpeg&#39; successfully unpacked and MD5 sums checked
+** using staged installation
+** libs
+gcc -std=gnu99 -I&quot;/usr/share/R/include&quot; -DNDEBUG     -fpic  -g -O2 -fdebug-prefix-map=/build/r-base-jbaK_j/r-base-3.6.3=. -fstack-protector-strong -Wformat -Werror=format-security -Wdate-time -D_FORTIFY_SOURCE=2 -g  -c read.c -o read.o
+gcc -std=gnu99 -I&quot;/usr/share/R/include&quot; -DNDEBUG     -fpic  -g -O2 -fdebug-prefix-map=/build/r-base-jbaK_j/r-base-3.6.3=. -fstack-protector-strong -Wformat -Werror=format-security -Wdate-time -D_FORTIFY_SOURCE=2 -g  -c reg.c -o reg.o
+gcc -std=gnu99 -I&quot;/usr/share/R/include&quot; -DNDEBUG     -fpic  -g -O2 -fdebug-prefix-map=/build/r-base-jbaK_j/r-base-3.6.3=. -fstack-protector-strong -Wformat -Werror=format-security -Wdate-time -D_FORTIFY_SOURCE=2 -g  -c write.c -o write.o
+gcc -std=gnu99 -shared -L/usr/lib/R/lib -Wl,-Bsymbolic-functions -Wl,-z,relro -o jpeg.so read.o reg.o write.o -ljpeg -L/usr/lib/R/lib -lR
+installing to /home/mdzik/_TCLB/TCLB_binder/IDUB/workshops/40_draft_IntroTCLB/r_packages/00LOCK-jpeg/00new/jpeg/libs
+** R
+** inst
+** byte-compile and prepare package for lazy loading
+** help
+*** installing help indices
+** building package indices
+** testing if installed package can be loaded from temporary location
+** checking absolute paths in shared objects and dynamic libraries
+** testing if installed package can be loaded from final location
+** testing if installed package keeps a record of temporary installation path
+* DONE (jpeg)
+
+The downloaded source packages are in
+	&#39;/tmp/Rtmpy76tOo/downloaded_packages&#39;
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="let-s-check-if-it-work-we-use-an-image-of-a-m-18a-dromader-airplane-as-initial-condition">
+<h2>Let’s check if it work - we use an image of a M-18A Dromader airplane as initial condition ;)<a class="headerlink" href="#let-s-check-if-it-work-we-use-an-image-of-a-m-18a-dromader-airplane-as-initial-condition" title="Permalink to this headline">¶</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">CLBc</span> <span class="o">=</span> <span class="n">CLBXML</span><span class="o">.</span><span class="n">CLBConfigWriter</span><span class="p">(</span> <span class="p">)</span>
+
+<span class="n">CLBc</span><span class="o">.</span><span class="n">addGeomParam</span><span class="p">(</span><span class="s1">&#39;nx&#39;</span><span class="p">,</span> <span class="mi">640</span><span class="p">)</span>
+<span class="n">CLBc</span><span class="o">.</span><span class="n">addGeomParam</span><span class="p">(</span><span class="s1">&#39;ny&#39;</span><span class="p">,</span> <span class="mi">480</span><span class="p">)</span>
+
+
+<span class="n">CLBc</span><span class="o">.</span><span class="n">addRunR</span><span class="p">(</span><span class="nb">eval</span><span class="o">=</span>\
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    library(&#39;jpeg&#39;, lib=&quot;r_packages&quot;)</span>
+<span class="sd">    </span>
+<span class="sd">    myurl &lt;- &quot;https://upload.wikimedia.org/wikipedia/commons/thumb/a/a5/M-18A_Dromader_CALM.jpg/640px-M-18A_Dromader_CALM.jpg&quot;</span>
+<span class="sd">    z &lt;- tempfile()</span>
+<span class="sd">    download.file(myurl,z,mode=&quot;wb&quot;, quiet=TRUE);</span>
+<span class="sd">    pic &lt;- readJPEG(z);</span>
+<span class="sd">    file.remove(z) # cleanup</span>
+
+<span class="sd">    Solver$Fields$Init_PHI_External[] = t(pic[,,1]);</span>
+<span class="sd">    Solver$Actions$InitFromExternalAction();</span>
+<span class="sd">&quot;&quot;&quot;</span><span class="p">)</span>
+
+    
+<span class="n">params</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;Diffusivity_PHI&quot;</span><span class="p">:</span><span class="mf">0.1666</span><span class="p">,</span>
+        <span class="s2">&quot;Init_PHI&quot;</span><span class="p">:</span><span class="o">-</span><span class="mf">0.5</span>
+<span class="p">}</span>
+
+<span class="n">CLBc</span><span class="o">.</span><span class="n">addModelParams</span><span class="p">(</span><span class="n">params</span><span class="p">)</span>
+
+<span class="n">CLBc</span><span class="o">.</span><span class="n">addHDF5</span><span class="p">()</span>  
+<span class="n">CLBc</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;SimpleDiffusionOfDromader.xml&#39;</span><span class="p">)</span>
+
+
+<span class="o">!</span> tclb d2q9_reaction_diffusion_system_SimpleDiffusion SimpleDiffusionOfDromader.xml &gt; /dev/null <span class="o">&amp;&amp;</span> <span class="nb">echo</span> <span class="s2">&quot;DONE&quot;</span>
+
+<span class="n">i</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="n">f</span> <span class="o">=</span> <span class="n">h5py</span><span class="o">.</span><span class="n">File</span><span class="p">(</span><span class="s1">&#39;./output/SimpleDiffusionOfDromader_HDF5_</span><span class="si">%08d</span><span class="s1">.h5&#39;</span><span class="o">%</span><span class="k">i</span>)    
+<span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">f</span><span class="p">[</span><span class="s1">&#39;PHI&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">,:,:])</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">colorbar</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Hello allocator!
+DONE
+</pre></div>
+</div>
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.colorbar.Colorbar at 0x7fde64a98460&gt;
+</pre></div>
+</div>
+<img alt="../../_images/10_SimpleDiffusion_34_2.png" src="../../_images/10_SimpleDiffusion_34_2.png" />
+</div>
+</div>
+<div class="section" id="the-clbc-object-could-be-reused-something-could-be-appended-to-it-after-save-parameters-could-bo-overwritten">
+<h3>The CLBc object could be reused (something could be appended to it after save, parameters could bo overwritten)<a class="headerlink" href="#the-clbc-object-could-be-reused-something-could-be-appended-to-it-after-save-parameters-could-bo-overwritten" title="Permalink to this headline">¶</a></h3>
+<p>XML for diffusion of the example image will look like that:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">solve</span> <span class="o">=</span> <span class="n">CLBc</span><span class="o">.</span><span class="n">addSolve</span><span class="p">(</span><span class="n">iterations</span><span class="o">=</span><span class="mi">200</span><span class="p">)</span>
+<span class="n">CLBc</span><span class="o">.</span><span class="n">addHDF5</span><span class="p">(</span><span class="n">Iterations</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="n">solve</span><span class="p">)</span>
+<span class="n">CLBc</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;SimpleDiffusionOfDromader_withIterations.xml&#39;</span><span class="p">)</span>
+<span class="n">f</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;SimpleDiffusionOfDromader_withIterations.xml&#39;</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span>
+<span class="n">XML</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">readlines</span><span class="p">()))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html">
+    <div class=a56ebad39-c6e8-488a-ba4a-ec8272825d6d> 
+        <style>
+            div.a56ebad39-c6e8-488a-ba4a-ec8272825d6d pre { line-height: 125%; }
+div.a56ebad39-c6e8-488a-ba4a-ec8272825d6d td.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+div.a56ebad39-c6e8-488a-ba4a-ec8272825d6d span.linenos { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+div.a56ebad39-c6e8-488a-ba4a-ec8272825d6d td.linenos .special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+div.a56ebad39-c6e8-488a-ba4a-ec8272825d6d span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+div.a56ebad39-c6e8-488a-ba4a-ec8272825d6d .hll { background-color: #ffffcc }
+div.a56ebad39-c6e8-488a-ba4a-ec8272825d6d .c { color: #408080; font-style: italic } /* Comment */
+div.a56ebad39-c6e8-488a-ba4a-ec8272825d6d .err { border: 1px solid #FF0000 } /* Error */
+div.a56ebad39-c6e8-488a-ba4a-ec8272825d6d .k { color: #008000; font-weight: bold } /* Keyword */
+div.a56ebad39-c6e8-488a-ba4a-ec8272825d6d .o { color: #666666 } /* Operator */
+div.a56ebad39-c6e8-488a-ba4a-ec8272825d6d .ch { color: #408080; font-style: italic } /* Comment.Hashbang */
+div.a56ebad39-c6e8-488a-ba4a-ec8272825d6d .cm { color: #408080; font-style: italic } /* Comment.Multiline */
+div.a56ebad39-c6e8-488a-ba4a-ec8272825d6d .cp { color: #BC7A00 } /* Comment.Preproc */
+div.a56ebad39-c6e8-488a-ba4a-ec8272825d6d .cpf { color: #408080; font-style: italic } /* Comment.PreprocFile */
+div.a56ebad39-c6e8-488a-ba4a-ec8272825d6d .c1 { color: #408080; font-style: italic } /* Comment.Single */
+div.a56ebad39-c6e8-488a-ba4a-ec8272825d6d .cs { color: #408080; font-style: italic } /* Comment.Special */
+div.a56ebad39-c6e8-488a-ba4a-ec8272825d6d .gd { color: #A00000 } /* Generic.Deleted */
+div.a56ebad39-c6e8-488a-ba4a-ec8272825d6d .ge { font-style: italic } /* Generic.Emph */
+div.a56ebad39-c6e8-488a-ba4a-ec8272825d6d .gr { color: #FF0000 } /* Generic.Error */
+div.a56ebad39-c6e8-488a-ba4a-ec8272825d6d .gh { color: #000080; font-weight: bold } /* Generic.Heading */
+div.a56ebad39-c6e8-488a-ba4a-ec8272825d6d .gi { color: #00A000 } /* Generic.Inserted */
+div.a56ebad39-c6e8-488a-ba4a-ec8272825d6d .go { color: #888888 } /* Generic.Output */
+div.a56ebad39-c6e8-488a-ba4a-ec8272825d6d .gp { color: #000080; font-weight: bold } /* Generic.Prompt */
+div.a56ebad39-c6e8-488a-ba4a-ec8272825d6d .gs { font-weight: bold } /* Generic.Strong */
+div.a56ebad39-c6e8-488a-ba4a-ec8272825d6d .gu { color: #800080; font-weight: bold } /* Generic.Subheading */
+div.a56ebad39-c6e8-488a-ba4a-ec8272825d6d .gt { color: #0044DD } /* Generic.Traceback */
+div.a56ebad39-c6e8-488a-ba4a-ec8272825d6d .kc { color: #008000; font-weight: bold } /* Keyword.Constant */
+div.a56ebad39-c6e8-488a-ba4a-ec8272825d6d .kd { color: #008000; font-weight: bold } /* Keyword.Declaration */
+div.a56ebad39-c6e8-488a-ba4a-ec8272825d6d .kn { color: #008000; font-weight: bold } /* Keyword.Namespace */
+div.a56ebad39-c6e8-488a-ba4a-ec8272825d6d .kp { color: #008000 } /* Keyword.Pseudo */
+div.a56ebad39-c6e8-488a-ba4a-ec8272825d6d .kr { color: #008000; font-weight: bold } /* Keyword.Reserved */
+div.a56ebad39-c6e8-488a-ba4a-ec8272825d6d .kt { color: #B00040 } /* Keyword.Type */
+div.a56ebad39-c6e8-488a-ba4a-ec8272825d6d .m { color: #666666 } /* Literal.Number */
+div.a56ebad39-c6e8-488a-ba4a-ec8272825d6d .s { color: #BA2121 } /* Literal.String */
+div.a56ebad39-c6e8-488a-ba4a-ec8272825d6d .na { color: #7D9029 } /* Name.Attribute */
+div.a56ebad39-c6e8-488a-ba4a-ec8272825d6d .nb { color: #008000 } /* Name.Builtin */
+div.a56ebad39-c6e8-488a-ba4a-ec8272825d6d .nc { color: #0000FF; font-weight: bold } /* Name.Class */
+div.a56ebad39-c6e8-488a-ba4a-ec8272825d6d .no { color: #880000 } /* Name.Constant */
+div.a56ebad39-c6e8-488a-ba4a-ec8272825d6d .nd { color: #AA22FF } /* Name.Decorator */
+div.a56ebad39-c6e8-488a-ba4a-ec8272825d6d .ni { color: #999999; font-weight: bold } /* Name.Entity */
+div.a56ebad39-c6e8-488a-ba4a-ec8272825d6d .ne { color: #D2413A; font-weight: bold } /* Name.Exception */
+div.a56ebad39-c6e8-488a-ba4a-ec8272825d6d .nf { color: #0000FF } /* Name.Function */
+div.a56ebad39-c6e8-488a-ba4a-ec8272825d6d .nl { color: #A0A000 } /* Name.Label */
+div.a56ebad39-c6e8-488a-ba4a-ec8272825d6d .nn { color: #0000FF; font-weight: bold } /* Name.Namespace */
+div.a56ebad39-c6e8-488a-ba4a-ec8272825d6d .nt { color: #008000; font-weight: bold } /* Name.Tag */
+div.a56ebad39-c6e8-488a-ba4a-ec8272825d6d .nv { color: #19177C } /* Name.Variable */
+div.a56ebad39-c6e8-488a-ba4a-ec8272825d6d .ow { color: #AA22FF; font-weight: bold } /* Operator.Word */
+div.a56ebad39-c6e8-488a-ba4a-ec8272825d6d .w { color: #bbbbbb } /* Text.Whitespace */
+div.a56ebad39-c6e8-488a-ba4a-ec8272825d6d .mb { color: #666666 } /* Literal.Number.Bin */
+div.a56ebad39-c6e8-488a-ba4a-ec8272825d6d .mf { color: #666666 } /* Literal.Number.Float */
+div.a56ebad39-c6e8-488a-ba4a-ec8272825d6d .mh { color: #666666 } /* Literal.Number.Hex */
+div.a56ebad39-c6e8-488a-ba4a-ec8272825d6d .mi { color: #666666 } /* Literal.Number.Integer */
+div.a56ebad39-c6e8-488a-ba4a-ec8272825d6d .mo { color: #666666 } /* Literal.Number.Oct */
+div.a56ebad39-c6e8-488a-ba4a-ec8272825d6d .sa { color: #BA2121 } /* Literal.String.Affix */
+div.a56ebad39-c6e8-488a-ba4a-ec8272825d6d .sb { color: #BA2121 } /* Literal.String.Backtick */
+div.a56ebad39-c6e8-488a-ba4a-ec8272825d6d .sc { color: #BA2121 } /* Literal.String.Char */
+div.a56ebad39-c6e8-488a-ba4a-ec8272825d6d .dl { color: #BA2121 } /* Literal.String.Delimiter */
+div.a56ebad39-c6e8-488a-ba4a-ec8272825d6d .sd { color: #BA2121; font-style: italic } /* Literal.String.Doc */
+div.a56ebad39-c6e8-488a-ba4a-ec8272825d6d .s2 { color: #BA2121 } /* Literal.String.Double */
+div.a56ebad39-c6e8-488a-ba4a-ec8272825d6d .se { color: #BB6622; font-weight: bold } /* Literal.String.Escape */
+div.a56ebad39-c6e8-488a-ba4a-ec8272825d6d .sh { color: #BA2121 } /* Literal.String.Heredoc */
+div.a56ebad39-c6e8-488a-ba4a-ec8272825d6d .si { color: #BB6688; font-weight: bold } /* Literal.String.Interpol */
+div.a56ebad39-c6e8-488a-ba4a-ec8272825d6d .sx { color: #008000 } /* Literal.String.Other */
+div.a56ebad39-c6e8-488a-ba4a-ec8272825d6d .sr { color: #BB6688 } /* Literal.String.Regex */
+div.a56ebad39-c6e8-488a-ba4a-ec8272825d6d .s1 { color: #BA2121 } /* Literal.String.Single */
+div.a56ebad39-c6e8-488a-ba4a-ec8272825d6d .ss { color: #19177C } /* Literal.String.Symbol */
+div.a56ebad39-c6e8-488a-ba4a-ec8272825d6d .bp { color: #008000 } /* Name.Builtin.Pseudo */
+div.a56ebad39-c6e8-488a-ba4a-ec8272825d6d .fm { color: #0000FF } /* Name.Function.Magic */
+div.a56ebad39-c6e8-488a-ba4a-ec8272825d6d .vc { color: #19177C } /* Name.Variable.Class */
+div.a56ebad39-c6e8-488a-ba4a-ec8272825d6d .vg { color: #19177C } /* Name.Variable.Global */
+div.a56ebad39-c6e8-488a-ba4a-ec8272825d6d .vi { color: #19177C } /* Name.Variable.Instance */
+div.a56ebad39-c6e8-488a-ba4a-ec8272825d6d .vm { color: #19177C } /* Name.Variable.Magic */
+div.a56ebad39-c6e8-488a-ba4a-ec8272825d6d .il { color: #666666 } /* Literal.Number.Integer.Long */
+        </style>
+        <div class="highlight"><pre><span></span><span class="nt">&lt;CLBConfig</span> <span class="na">version=</span><span class="s">&quot;2.0&quot;</span> <span class="na">output=</span><span class="s">&quot;output/&quot;</span><span class="nt">&gt;</span>
+  <span class="c">&lt;!--Created using CLBConfigWriter--&gt;</span>
+  <span class="nt">&lt;Geometry</span> <span class="na">predef=</span><span class="s">&quot;none&quot;</span> <span class="na">model=</span><span class="s">&quot;MRT&quot;</span> <span class="na">nx=</span><span class="s">&quot;640.0000000000000000&quot;</span> <span class="na">ny=</span><span class="s">&quot;480.0000000000000000&quot;</span><span class="nt">/&gt;</span>
+  <span class="nt">&lt;Model&gt;</span>
+    <span class="nt">&lt;Param</span> <span class="na">name=</span><span class="s">&quot;Diffusivity_PHI&quot;</span> <span class="na">value=</span><span class="s">&quot;0.1666000000000000&quot;</span><span class="nt">/&gt;</span>
+    <span class="nt">&lt;Param</span> <span class="na">name=</span><span class="s">&quot;Init_PHI&quot;</span> <span class="na">value=</span><span class="s">&quot;-0.5000000000000000&quot;</span><span class="nt">/&gt;</span>
+  <span class="nt">&lt;/Model&gt;</span>
+  <span class="nt">&lt;RunR&gt;</span>
+    library(&#39;jpeg&#39;, lib=&quot;r_packages&quot;)
+
+    myurl <span class="ni">&amp;lt;</span>- &quot;https://upload.wikimedia.org/wikipedia/commons/thumb/a/a5/M-18A_Dromader_CALM.jpg/640px-M-18A_Dromader_CALM.jpg&quot;
+    z <span class="ni">&amp;lt;</span>- tempfile()
+    download.file(myurl,z,mode=&quot;wb&quot;, quiet=TRUE);
+    pic <span class="ni">&amp;lt;</span>- readJPEG(z);
+    file.remove(z) # cleanup
+
+    Solver$Fields$Init_PHI_External[] = t(pic[,,1]);
+    Solver$Actions$InitFromExternalAction();
+<span class="nt">&lt;/RunR&gt;</span>
+  <span class="nt">&lt;HDF5/&gt;</span>
+  <span class="nt">&lt;Solve</span> <span class="na">Iterations=</span><span class="s">&quot;200&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;HDF5</span> <span class="na">Iterations=</span><span class="s">&quot;10&quot;</span><span class="nt">/&gt;</span>
+  <span class="nt">&lt;/Solve&gt;</span>
+<span class="nt">&lt;/CLBConfig&gt;</span>
+</pre></div>
+
+    </div>
+</div></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">!</span> tclb d2q9_reaction_diffusion_system_SimpleDiffusion SimpleDiffusionOfDromader_withIterations.xml &gt; /dev/null <span class="o">&amp;&amp;</span> <span class="nb">echo</span> <span class="s2">&quot;DONE&quot;</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Hello allocator!
+DONE
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">200</span><span class="p">,</span><span class="mi">50</span><span class="p">):</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+    <span class="n">f</span> <span class="o">=</span> <span class="n">h5py</span><span class="o">.</span><span class="n">File</span><span class="p">(</span><span class="s1">&#39;./output/SimpleDiffusionOfDromader_withIterations_HDF5_</span><span class="si">%08d</span><span class="s1">.h5&#39;</span><span class="o">%</span><span class="k">i</span>)    
+    <span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">f</span><span class="p">[</span><span class="s1">&#39;PHI&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">,:,:])</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../../_images/10_SimpleDiffusion_38_0.png" src="../../_images/10_SimpleDiffusion_38_0.png" />
+<img alt="../../_images/10_SimpleDiffusion_38_1.png" src="../../_images/10_SimpleDiffusion_38_1.png" />
+<img alt="../../_images/10_SimpleDiffusion_38_2.png" src="../../_images/10_SimpleDiffusion_38_2.png" />
+<img alt="../../_images/10_SimpleDiffusion_38_3.png" src="../../_images/10_SimpleDiffusion_38_3.png" />
+</div>
+</div>
+</div>
+</div>
+</div>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            kernelName: "python3",
+            path: "./notebooks/40_IntroTCLB"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+              </div>
+              
+        
+            <!-- Previous / next buttons -->
+<div class='prev-next-area'> 
+    <a class='left-prev' id="prev-link" href="../30_SIRModelInSpace/part1_SIR_1D_SOLUTION.html" title="previous page">
+        <i class="fas fa-angle-left"></i>
+        <div class="prev-next-info">
+            <p class="prev-next-subtitle">previous</p>
+            <p class="prev-next-title">The simple spatial SIR model</p>
+        </div>
+    </a>
+    <a class='right-next' id="next-link" href="11_Dispersion.html" title="next page">
+    <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Prepare FD and LBM solution</p>
+    </div>
+    <i class="fas fa-angle-right"></i>
+    </a>
+</div>
+        
+        </div>
+    </div>
+    <footer class="footer">
+    <div class="container">
+      <p>
+        
+          By G. Gruszczynski and M. Dzikowski<br/>
+        
+            &copy; Copyright 2021.<br/>
+      </p>
+    </div>
+  </footer>
+</main>
+
+
+      </div>
+    </div>
+  
+  <script src="../../_static/js/index.be7d3bbb2ef33a8344ce.js"></script>
+
+  </body>
+</html>
