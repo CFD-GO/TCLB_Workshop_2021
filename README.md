@@ -12,11 +12,11 @@ pip install -r requirements.txt
 jupyter lab
 ```
 
-# Create a Jupyter book
+## Create a Jupyter book
 
 A short example showing how to write a lecture series using Jupyter Book 2.0.
 
-## Building a Jupyter Book
+### Building a Jupyter Book
 
 Run the following command in your terminal:
 
@@ -56,7 +56,7 @@ jb build workshops/ --builder pdfhtml # this uses weird converter
 to_pdf_1by1.sh
 ```
 
-## Publishing this Jupyter Book
+### Publishing this Jupyter Book
 
 The `build/html` directory can be published to some kind of `gh-pages`.
 
