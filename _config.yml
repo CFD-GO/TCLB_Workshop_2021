@@ -1,0 +1,54 @@
+title : Modelling of epidemic spreading with Lattice Boltzmann Method
+author: G. Gruszczynski and M. Dzikowski
+logo: 'cfd-go.png'
+
+# https://jupyterbook.org/customize/config.html
+
+# Short description about the book
+description: >-
+  Role of diffusion-reaction equations in epidemic modelling 
+
+only_build_toc_files: true  # https://github.com/executablebooks/jupyter-book/pull/1123
+
+sphinx:
+  config:
+    mathjax_path: https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js
+
+execute:
+  execute_notebooks           : cache # Whether to execute notebooks at build time. Must be one of ("auto", "force", "cache", "off")
+
+# HTML-specific settings
+html:
+  home_page_in_navbar         : false
+
+# Interact link settings
+notebook_interface            : "notebook"
+
+# Launch button settings
+repository:
+  url                         : https://github.com/CFD-GO/TCLB_Workshop_2021
+  path_to_book                : "mini_book"
+
+binder:
+  binderhub_url               : "https://mybinder.org"
+  text                        : "Launch binder"
+
+# LaTeX settings
+bibtex_bibfiles:
+   - _bibliography/references.bib
+latex:
+  latex_engine                : "xelatex"
+  latex_documents:
+    targetname: book.tex
+
+# jb build mini_book/ --builder pdfhtml does not render \(...\) math
+# https://jupyterbook.org/content/math.html
+# https://github.com/executablebooks/MyST-Parser/pull/123
+# https://myst-parser.readthedocs.io/en/latest/syntax/reference.html
+parse:
+  myst_enable_extensions:
+    # don't forget to list any other extensions you want enabled,
+    # including those that are enabled by default!
+    - amsmath
+    - dollarmath
+  # myst_url_schemes: ['mailto', 'http', 'https', 'blahblah']

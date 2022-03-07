@@ -1,0 +1,5 @@
+# Role of diffusion-reaction equations in epidemic modelling
+
+The lattice Boltzmann method (LBM) is a widely used numerical scheme for solving both the Navier-Stokes equation (NSE) and advection-diﬀusion problems. Its popularity has signiﬁcantly risen in the recent three decades due to its ability to handle complex boundary shapes and its relative ease of implementation and parallelisation. Furthermore, its mesoscopic formulation allows physics to be introduced at a lower level than, for example, a ﬁnite-volume or ﬁnite-element discretisation of the governing equations may allow.
+
+The generic model encapsulated in the TCLB environment can be compiled to solve different sets of advection-reaction-diffusion equations coupled with Navier-Stokes equations. Apart from forecasting the epidemic dynamics, the model can handle problems like phase change or rock dissolution.

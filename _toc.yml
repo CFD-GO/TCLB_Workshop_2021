@@ -1,0 +1,26 @@
+format: jb-book
+root: notebooks/index
+options:  # The options key will be applied to all chapters, but not sub-sections
+  numbered: True
+parts:
+  - caption: SIR 0D
+    chapters:
+    - file: notebooks/20_SIR_0D/part1_SIR_0D_SOLUTION
+    - file: notebooks/20_SIR_0D/part2_SIR_0D_stability_SOLUTION
+    - file: notebooks/20_SIR_0D/part3_SIR_0D_streamlines_SOLUTION
+  - caption: Diffusion FD
+    chapters:
+    - file: notebooks/25_diffusion_FD/part1_diffusion_and_convolution_SOLUTION
+    - file: notebooks/25_diffusion_FD/part2_diffusion_matrix_approach_SOLUTION
+  - caption: SIR 1D
+    chapters:
+    - file: notebooks/30_SIRModelInSpace/part1_SIR_1D_SOLUTION
+  - caption: Introduction to TCLB solver
+    chapters:
+    - file: notebooks/40_IntroTCLB/10_SimpleDiffusion
+    - file: notebooks/40_IntroTCLB/11_Dispersion
+    - file: notebooks/40_IntroTCLB/15_d2q9_diffusion_SpatialSIR_model
+  - caption: Solving spatial SIR system in TCLB
+    chapters:
+    - file: notebooks/50_TCLBforSIRModelInSpace/10_SIR_in_PengModified_Model
+  
