@@ -27,6 +27,7 @@ notebook_interface            : "notebook"
 # Launch button settings
 repository:
   url                         : https://github.com/CFD-GO/TCLB_Workshop_2021
+  branch                      : "main"
   path_to_book                : "mini_book"
 
 binder:

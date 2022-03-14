@@ -13,5 +13,6 @@ pandas
 jupyter-book
 pyppeteer
 notebook-as-pdf
-pyppeteer-install
+pyppeteer
 ghp-import
+
