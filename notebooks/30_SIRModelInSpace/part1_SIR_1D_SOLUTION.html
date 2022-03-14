@@ -37,20 +37,22 @@
     <script src="../../_static/jquery.js"></script>
     <script src="../../_static/underscore.js"></script>
     <script src="../../_static/doctools.js"></script>
-    <script src="../../_static/togglebutton.js"></script>
     <script src="../../_static/clipboard.min.js"></script>
     <script src="../../_static/copybutton.js"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../../_static/togglebutton.js"></script>
     <script>var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
-    <script src="../../_static/sphinx-book-theme.12a9622fbb08dcb3a2a40b2c02b83a57.js"></script>
-    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
-    <script async="async" src="https://unpkg.com/thebe@0.5.1/lib/index.js"></script>
-    <script>
-        const thebe_selector = ".thebe"
-        const thebe_selector_input = "pre"
-        const thebe_selector_output = ".output"
-    </script>
+    <script src="../../_static/sphinx-book-theme.d59cb220de22ca1c485ebbdc042f0030.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
     <script async="async" src="../../_static/sphinx-thebe.js"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
     <link rel="next" title="Diffusion equation in TCLB solver" href="../40_IntroTCLB/10_SimpleDiffusion.html" />
@@ -221,7 +223,7 @@
                 data-placement="left">.ipynb</button></a>
         <!-- Download PDF via print -->
         <button type="button" id="download-print" class="btn btn-secondary topbarbtn" title="Print to PDF"
-            onClick="window.print()" data-toggle="tooltip" data-placement="left">.pdf</button>
+                onclick="printPdf(this)" data-toggle="tooltip" data-placement="left">.pdf</button>
     </div>
 </div>
 
@@ -241,7 +243,7 @@
         aria-label="Launch interactive content"><i class="fas fa-rocket"></i></button>
     <div class="dropdown-buttons">
         
-        <a class="binder-button" href="https://mybinder.org/v2/gh/CFD-GO/TCLB_Workshop_2021/master?urlpath=tree/mini_book/notebooks/30_SIRModelInSpace/part1_SIR_1D_SOLUTION.ipynb"><button type="button"
+        <a class="binder-button" href="https://mybinder.org/v2/gh/CFD-GO/TCLB_Workshop_2021/main?urlpath=tree/mini_book/notebooks/30_SIRModelInSpace/part1_SIR_1D_SOLUTION.ipynb"><button type="button"
                 class="btn btn-secondary topbarbtn" title="Launch Binder" data-toggle="tooltip"
                 data-placement="left"><img class="binder-button-logo"
                     src="../../_static/images/logo_binder.svg"
@@ -256,7 +258,7 @@
         </div>
 
         <!-- Table of contents -->
-        <div class="d-none d-md-block col-md-2 bd-toc show">
+        <div class="d-none d-md-block col-md-2 bd-toc show noprint">
             
             <div class="tocsection onthispage pt-5 pb-3">
                 <i class="fas fa-list"></i> Contents
@@ -401,7 +403,155 @@
 </div>
     <div id="main-content" class="row">
         <div class="col-12 col-md-9 pl-md-3 pr-md-0">
-        
+            <!-- Table of contents that is only displayed when printing the page -->
+            <div id="jb-print-docs-body" class="onlyprint">
+                <h1>The simple spatial SIR model</h1>
+                <!-- Table of contents -->
+                <div id="print-main-content">
+                    <div id="jb-print-toc">
+                        
+                        <div>
+                            <h2> Contents </h2>
+                        </div>
+                        <nav aria-label="Page">
+                            <ul class="visible nav section-nav flex-column">
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#">
+   The simple spatial SIR model
+  </a>
+  <ul class="visible nav section-nav flex-column">
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#the-case-1d-queue">
+     The case - 1D queue
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#the-spatial-effect">
+     The spatial effect
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#choice-of-the-infectious-operator">
+     Choice of the “infectious” operator
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#comparison-of-infectious-operators-in-the-frequency-domain">
+     Comparison of “infectious” operators in the frequency domain
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#notice">
+       Notice:
+      </a>
+     </li>
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#remarks">
+       Remarks
+      </a>
+     </li>
+    </ul>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#the-spatial-sir-system">
+     The spatial SIR system
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#the-low-diffusivity-issue-and-the-spatial-wsir-remedy">
+     The low diffusivity issue and the spatial WSIR remedy
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#the-nondimensional-form-equations-revisited">
+     The nondimensional form equations - revisited
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#remarks-on-other-sir-diffusion-models">
+     Remarks on other SIR-diffusion models
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#similarity-numbers-in-sir-like-models">
+   Similarity numbers in SIR-like models
+  </a>
+  <ul class="visible nav section-nav flex-column">
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#the-fourier-number">
+     The Fourier number
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#the-second-damkohler-number">
+     The (second) Damköhler number
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#sir-with-independent-naive-diffusion">
+       SIR with
+       <em>
+        independent
+       </em>
+       (naive) diffusion
+      </a>
+     </li>
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#sir-peng">
+       SIR-Peng
+      </a>
+     </li>
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#wsir">
+       WSIR
+      </a>
+     </li>
+    </ul>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#exercise">
+     Exercise
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#effect-of-varing-spatial-density">
+   Effect of varing spatial density
+  </a>
+  <ul class="visible nav section-nav flex-column">
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#influence-of-the-beta-w-relaxation-coefficient">
+     Influence of the
+     <span class="math notranslate nohighlight">
+      \( \beta_W \)
+     </span>
+     relaxation coefficient
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#id1">
+       Exercise
+      </a>
+     </li>
+    </ul>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#numbers-or-fractions-revisited-for-curious-readers-only">
+     Numbers or fractions - revisited (for curious readers only)
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+
+                        </nav>
+                    </div>
+                </div>
+            </div>
+            
               <div>
                 
   <div class="tex2jax_ignore mathjax_ignore section" id="the-simple-spatial-sir-model">
@@ -443,28 +593,28 @@ W = I \star P(r)
 <div class="section" id="choice-of-the-infectious-operator">
 <h2>Choice of the “infectious” operator<a class="headerlink" href="#choice-of-the-infectious-operator" title="Permalink to this headline">¶</a></h2>
 <p>Let us investigate four basic distributions.</p>
-<ol class="arabic simple">
+<ol class="simple">
 <li><p>The simplest choice is to assume, that an individual can get become infected (with constant probability) if he/she is located within a <em><strong>circe</strong></em> of radius <span class="math notranslate nohighlight">\(r\)</span>.</p></li>
 </ol>
 <div class="math notranslate nohighlight">
 \[
 W = I \star [\text{disc of radius r}],
 \]</div>
-<ol class="arabic simple">
+<ol class="simple">
 <li><p>which can be (explicitly) approximated as [1],</p></li>
 </ol>
 <div class="math notranslate nohighlight">
 \[
 W \approx I + \frac{r^2}{8} \Delta I.
 \]</div>
-<ol class="arabic simple">
+<ol class="simple">
 <li><p>An alternative (implicit) approximation is,</p></li>
 </ol>
 <div class="math notranslate nohighlight">
 \[
 W - \frac{r^2}{8} \Delta W \approx I 
 \]</div>
-<ol class="arabic simple">
+<ol class="simple">
 <li><p>Finally, assuming, that the probability of getting infected at some distance has a normal distribution,</p></li>
 </ol>
 <div class="math notranslate nohighlight">
@@ -921,8 +1071,8 @@ First, let us remind the quotient rule for laplace operator:</p>
 \end{align*}\]</div>
 <p>Again, we can divide each of the equations by <span class="math notranslate nohighlight">\(N\)</span> to represent them in terms of fractions instead of numbers.
 Consider the spatial equation for <span class="math notranslate nohighlight">\(S\)</span> from [1]:</p>
-<div class="amsmath math notranslate nohighlight" id="equation-6f6ee3a9-1574-48a2-9864-24f69e9e08d5">
-<span class="eqno">(4)<a class="headerlink" href="#equation-6f6ee3a9-1574-48a2-9864-24f69e9e08d5" title="Permalink to this equation">¶</a></span>\[\begin{align}
+<div class="amsmath math notranslate nohighlight" id="equation-6800dd95-6f44-478a-a033-162a3e9aacac">
+<span class="eqno">(4)<a class="headerlink" href="#equation-6800dd95-6f44-478a-a033-162a3e9aacac" title="Permalink to this equation">¶</a></span>\[\begin{align}
 \frac{\partial}{\partial t} S &amp;= - \beta \frac{S}{N} \left( I + \frac{r^2}{8} \Delta I \right) \hspace{3em} \text{dividing each side by N...} \\ 
 \frac{\partial}{\partial t} \frac{S}{N} &amp;= - \beta \frac{S}{N} \left( \frac{I}{N} + \frac{r^2}{8} \frac{1}{N} \Delta I  \right)
 \end{align}\]</div>
@@ -974,8 +1124,8 @@ Consider the spatial equation for <span class="math notranslate nohighlight">\(S
 
               </div>
               
-        
-            <!-- Previous / next buttons -->
+            
+                <!-- Previous / next buttons -->
 <div class='prev-next-area'> 
     <a class='left-prev' id="prev-link" href="../25_diffusion_FD/part2_diffusion_matrix_approach_SOLUTION.html" title="previous page">
         <i class="fas fa-angle-left"></i>
@@ -992,19 +1142,17 @@ Consider the spatial equation for <span class="math notranslate nohighlight">\(S
     <i class="fas fa-angle-right"></i>
     </a>
 </div>
-        
+            
         </div>
     </div>
     <footer class="footer">
-    <div class="container">
-      <p>
-        
-          By G. Gruszczynski and M. Dzikowski<br/>
-        
-            &copy; Copyright 2021.<br/>
-      </p>
-    </div>
-  </footer>
+  <p>
+    
+      By G. Gruszczynski and M. Dzikowski<br/>
+    
+        &copy; Copyright 2021.<br/>
+  </p>
+</footer>
 </main>
 
 
